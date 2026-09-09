@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Boss1_Phase1
   m_EditorClassIdentifier: 
   duration: 2
-  movementDirection: {x: 1, y: 1}
+  movementDirection: {x: 0, y: 0}
   attacks:
-  - {fileID: 11400000, guid: 09b492611ab50fa47ab922d340afd8df, type: 2}
   - {fileID: 11400000, guid: 09b492611ab50fa47ab922d340afd8df, type: 2}
   attackCooldowns:
   - 0.9

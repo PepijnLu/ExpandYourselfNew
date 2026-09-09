@@ -10,7 +10,7 @@ public class BulletHellEditor : EditorWindow
 
     private readonly float cameraZoom = 60f;
 
-    private IntegerField bulletAmountField, bulletAngleField;
+    private IntegerField bulletAmountField, bulletSpreadField, bulletAngleField, originAngleField;
     List<GameObject> bullets;
 
     [MenuItem("Window/UI Toolkit/BulletHellEditor")]
@@ -36,11 +36,22 @@ public class BulletHellEditor : EditorWindow
 
         // Bullet Amount
         bulletAmountField = new IntegerField("Bullet Amount");
+            bulletAmountField.value = 4;
             rootVisualElement.Add(bulletAmountField);
+
+        // Bullet Spread
+        bulletSpreadField = new IntegerField("Bullet Spread");
+            bulletSpreadField.value = 180;
+            rootVisualElement.Add(bulletSpreadField);
 
         // Bullet Angle
         bulletAngleField = new IntegerField("Bullet Angle");
+            bulletAngleField.value = 45;
             rootVisualElement.Add(bulletAngleField);
+
+        // Origin Angle
+        originAngleField = new IntegerField("Origin Angle");
+            rootVisualElement.Add(originAngleField);
 
         Button createButton = new Button(() =>
             {
@@ -86,6 +97,8 @@ public class BulletHellEditor : EditorWindow
         previewBox.Add(previewGUI);
 
         bulletAmountField.RegisterValueChangedCallback(UpdateBulletCount);
+        bulletSpreadField.RegisterValueChangedCallback(UpdateBulletCount);
+        originAngleField.RegisterValueChangedCallback(UpdateBulletCount);
 
         // Keep repainting so the preview can animate.
         previewGUI.schedule.Execute(() =>
@@ -93,17 +106,24 @@ public class BulletHellEditor : EditorWindow
             previewGUI.MarkDirtyRepaint();
         }).Every(16);
 
+        UpdateBulletCount();
+
     }
 
     private void UpdateBulletCount(ChangeEvent<int> evt)
     {
-        float bulletAmount = evt.newValue;
-        float bulletSpread = 360;
-        float bulletStartAngle = 0;
+        UpdateBulletCount();
+    }
+
+    private void UpdateBulletCount()
+    {
+        float bulletAmount = bulletAmountField.value;
+        float bulletSpread = bulletSpreadField.value;
+        float bulletStartAngle = originAngleField.value;
 
         if (bullets != null)
         {
-            foreach(GameObject bullet in bullets)
+            foreach (GameObject bullet in bullets)
             {
                 DestroyImmediate(bullet);
             }
@@ -116,7 +136,7 @@ public class BulletHellEditor : EditorWindow
 
         float angleStep = 0;
 
-        if(bulletAmount == 1)
+        if (bulletAmount == 1)
         {
             angleStep = 0;
         }
@@ -145,7 +165,6 @@ public class BulletHellEditor : EditorWindow
             bullets.Add(newBullet);
             preview.AddSingleGO(newBullet);
         }
-
     }
 
     private void CreatePreview()
@@ -181,16 +200,13 @@ public class BulletHellEditor : EditorWindow
         );
 
         // Camera looks directly at the sphere's center
-        preview.camera.transform.position =
-            new Vector3(0, 0, -10);
-
+        preview.camera.transform.position = new Vector3(0, 0, -10);
         preview.camera.transform.LookAt(Vector3.zero);
 
         preview.BeginPreview(rect, GUIStyle.none);
 
         preview.camera.clearFlags = CameraClearFlags.Color;
-        preview.camera.backgroundColor =
-            new Color(0.18f, 0.18f, 0.18f);
+        preview.camera.backgroundColor = new Color(0.18f, 0.18f, 0.18f);
 
         preview.camera.Render();
 
