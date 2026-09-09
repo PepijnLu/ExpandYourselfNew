@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,7 +10,7 @@ public class BulletHellEditor : EditorWindow
 
     private readonly float cameraZoom = 60f;
 
-    private IntegerField bulletAmountField;
+    private IntegerField bulletAmountField, bulletAngleField;
     List<GameObject> bullets;
 
     [MenuItem("Window/UI Toolkit/BulletHellEditor")]
@@ -33,9 +34,13 @@ public class BulletHellEditor : EditorWindow
         //nameField = new TextField("Player Name");
         //rootVisualElement.Add(nameField);
 
-        // Button
+        // Bullet Amount
         bulletAmountField = new IntegerField("Bullet Amount");
             rootVisualElement.Add(bulletAmountField);
+
+        // Bullet Angle
+        bulletAngleField = new IntegerField("Bullet Angle");
+            rootVisualElement.Add(bulletAngleField);
 
         Button createButton = new Button(() =>
             {
@@ -122,6 +127,7 @@ public class BulletHellEditor : EditorWindow
         float startAngle = bulletSpread / 2f;
         startAngle += bulletStartAngle;
 
+        //Create New Bullets
         for (int i = 0; i < bulletAmount; i++)
         {
             float bulletAngle = startAngle + i * angleStep;
@@ -132,15 +138,10 @@ public class BulletHellEditor : EditorWindow
                 Mathf.Sin(bulletAngle * Mathf.Deg2Rad)
             );
 
-            Debug.Log($"New angle step: {angleStep}");
+            Quaternion bulletRotation =
+                 Quaternion.Euler(0f, 0f, bulletAngle);
 
-            Vector2 position = direction;
-
-            //Bullet newBullet = Instantiate(bullet, transform.position, transform.rotation);
-            //newBullet.InitializeBullet(2f, bulletDirection);
-
-
-            GameObject newBullet = CreateCircle(direction, .3f);
+            GameObject newBullet = CreateCircle(direction, bulletRotation, .3f, Color.red);
             bullets.Add(newBullet);
             preview.AddSingleGO(newBullet);
         }
@@ -162,13 +163,17 @@ public class BulletHellEditor : EditorWindow
         preview.lights[1].intensity = 1.0f;
 
         // Add starting circle to the preview scene
-        preview.AddSingleGO(CreateCircle(new Vector2(0, 0), 1));
+        GameObject startCircle = CreateCircle(new Vector2(0, 0), Quaternion.identity, 1, Color.grey);
+        preview.AddSingleGO(startCircle);
+
+        Debug.Log($"Created preview: Location {startCircle.transform.position}, {startCircle.transform.localScale}");
     }
 
     private void DrawPreview()
     {
         if (preview == null)
             return;
+
 
         Rect rect = GUILayoutUtility.GetRect(
             600,
@@ -197,16 +202,78 @@ public class BulletHellEditor : EditorWindow
             ScaleMode.StretchToFill
         );
 
+        Handles.BeginGUI();
 
+        if (bullets != null)
+        {
+            foreach(GameObject bullet in  bullets)
+            {
+                if(bullet) DrawBulletDirection(rect, bullet.transform.position, bulletAngleField.value, 100, bullet.transform.rotation);
+            }
+
+        }
+        Handles.EndGUI();
     }
 
-    private GameObject CreateCircle(Vector2 circlePosition, float circleSize)
+    private GameObject CreateCircle(Vector2 circlePosition, Quaternion circleRotation, float circleSize, Color color)
     {
-        GameObject newCircle = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        newCircle.transform.localScale = new Vector2(circleSize, circleSize);
-        newCircle.transform.position = circlePosition;
-        return newCircle;
+        GameObject bulletPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Bullet.prefab");
+
+        if (bulletPrefab == null) return null;
+
+        GameObject newBullet =
+            PrefabUtility.InstantiatePrefab(bulletPrefab) as GameObject;
+
+        if (newBullet == null)
+        {
+            Debug.LogError($"Could not load prefab at: {"Assets/Prefabs/Bullet.prefab"}");
+            return null;
+        }
+
+        newBullet.transform.localScale = new Vector2(circleSize, circleSize);
+        newBullet.transform.position = circlePosition;
+        newBullet.transform.rotation = circleRotation;  
+        newBullet.GetComponent<SpriteRenderer>().color = color;
+        return newBullet;
     }
+
+    private void DrawBulletDirection(
+     Rect rect,
+     Vector2 bulletPosition,
+     float angle,
+     float length,
+     Quaternion bulletRotation)
+    {
+        Quaternion directionRotation =
+            bulletRotation * Quaternion.Euler(0, 0, angle);
+
+        Vector2 direction =
+            directionRotation * Vector2.right;
+
+        Vector2 endPosition =
+            bulletPosition + direction * length;
+
+        float zoom = 87f;
+
+        // Convert to GUI coordinates relative to the rect
+        Vector2 start = new Vector2(
+            rect.width / 2f + bulletPosition.x * zoom,
+            rect.height / 2f - bulletPosition.y * zoom
+        );
+
+        Vector2 end = new Vector2(
+            rect.width / 2f + endPosition.x * zoom,
+            rect.height / 2f - endPosition.y * zoom
+        );
+
+        // Clip everything drawn inside this rectangle
+        GUI.BeginClip(rect);
+
+        Handles.DrawLine(start, end);
+
+        GUI.EndClip();
+    }
+
     private void OnEnable()
     {
         CreatePreview();

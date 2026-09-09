@@ -461,7 +461,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0414b9d18819e4240b36f7883267735b, type: 2}
   - {fileID: 11400000, guid: a74c66ef34975d44f8416622896f7e93, type: 2}
   baseMoveSpeed: 2
-  bullet: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}
+  bullet: {fileID: 0}
 --- !u!212 &1286284090
 SpriteRenderer:
   m_ObjectHideFlags: 0
