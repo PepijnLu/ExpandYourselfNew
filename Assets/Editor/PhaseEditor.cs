@@ -13,7 +13,7 @@ public class PhaseEditor : VisualElement
     ObjectField phaseField;
     VisualElement rowContainer;
 
-    EnemyPhase currentPhase;
+    public EnemyPhase currentPhase;
     public PhaseEditor(BulletHellEditor _bulletHellEditor)
     {
         style.backgroundColor = Color.blue;

@@ -90,7 +90,7 @@ public class PatternEditor : VisualElement
             bulletSpreadField.value = currentPattern.bulletSpread;
             bulletAngleField.value = currentPattern.bulletAngle;
 
-            bulletHellEditor.UpdateBulletCount(currentPattern.bulletAmount, currentPattern.bulletSpread, currentPattern.bulletAngle, true);
+            bulletHellEditor.bossEnemy.UpdateBulletCount(currentPattern.bulletAmount, currentPattern.bulletSpread, currentPattern.bulletAngle, true, bulletHellEditor.AddBulletsToPreview);
             saveButton.enabledSelf = true;
         }
         else
