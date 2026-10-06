@@ -26,7 +26,7 @@ public class BulletHellEditor : EditorWindow
     int phasesAmount;
     int previewingPhase;
     float phaseWaitTimer;
-    float lastTime;
+    double lastTime;
 
     [MenuItem("Window/UI Toolkit/BulletHellEditor")]
     public static void ShowExample()
@@ -172,14 +172,15 @@ public class BulletHellEditor : EditorWindow
 
     private void PreviewUpdate()
     {
-        float deltaTime = Time.time - lastTime;
+        double currentTime = EditorApplication.timeSinceStartup;
+        float deltaTime = (float)(currentTime - lastTime);
 
         if(playingPreview)
         {
             bossEnemy.PreviewUpdate(deltaTime, AddBulletsToPreview);
         }
 
-        lastTime = Time.time;
+        lastTime = currentTime;
     }
 
     void SwitchPreviewMode(bool _newModeIsPhase)
@@ -227,8 +228,9 @@ public class BulletHellEditor : EditorWindow
         preview = new PreviewRenderUtility();
 
         // Camera
-        preview.camera.fieldOfView = cameraZoom;
         preview.camera.orthographic = true;
+        preview.camera.orthographicSize = 10;
+        preview.camera.transform.position = new Vector3(0, 0, -10);
 
         // Lighting
         preview.lights[0].intensity = 1.4f;
@@ -240,11 +242,18 @@ public class BulletHellEditor : EditorWindow
         GameObject bossEnemyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/BossEnemy.prefab");
         GameObject bossEnemyGO = PrefabUtility.InstantiatePrefab(bossEnemyPrefab) as GameObject;
 
-        preview.AddSingleGO(bossEnemyGO.gameObject);
+        preview.AddSingleGO(bossEnemyGO);
 
         bossEnemy = bossEnemyGO.GetComponent<BossEnemy>();
         bossEnemy.inTool = true;
 
+        //Add placeholder background
+        GameObject backgroundPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/ScreenSizeBG.prefab");
+        GameObject backgroundGO = PrefabUtility.InstantiatePrefab(backgroundPrefab) as GameObject;
+
+        preview.AddSingleGO(backgroundGO);
+
+        lastTime = EditorApplication.timeSinceStartup;
     }
 
     private void DrawPreview()
@@ -304,8 +313,11 @@ public class BulletHellEditor : EditorWindow
             patternEditor.enabledSelf = false;
             phaseEditor.enabledSelf = false;
 
-            //0 for testing first phase 
-            bossEnemy.StartPhase(phaseEditor.currentPhase);
+            if (phasePreview)
+            {
+                //0 for testing first phase 
+                bossEnemy.StartPhase(phaseEditor.currentPhase);
+            }
         }
         else
         {

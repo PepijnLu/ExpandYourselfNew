@@ -19,19 +19,19 @@ MonoBehaviour:
     waitTime: 0
     bulletPattern: {fileID: 11400000, guid: 59f2ed13e2341a64d9a4589c1530465d, type: 2}
   - attackType: 0
-    waitTime: 0.1
+    waitTime: 1
     bulletPattern: {fileID: 0}
   - attackType: 1
     waitTime: 0
     bulletPattern: {fileID: 11400000, guid: cc30d5eee2fbcfb41b12ca9aa6048545, type: 2}
   - attackType: 0
-    waitTime: 0.1
+    waitTime: 1
     bulletPattern: {fileID: 0}
   - attackType: 1
     waitTime: 0
     bulletPattern: {fileID: 11400000, guid: 59f2ed13e2341a64d9a4589c1530465d, type: 2}
   - attackType: 0
-    waitTime: 0.1
+    waitTime: 1
     bulletPattern: {fileID: 0}
   - attackType: 1
     waitTime: 0

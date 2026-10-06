@@ -8,6 +8,16 @@ public class Bullet : MonoBehaviour
     public Vector2 bulletDirection;
     bool initialized;
 
+    float startTime;
+    bool didTheDebugThnig;
+    Vector3 debugStartPosition;
+
+    private void Start()
+    {
+        debugStartPosition = transform.position;
+        startTime = 0;
+        didTheDebugThnig = false;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -17,13 +27,23 @@ public class Bullet : MonoBehaviour
     public void PreviewUpdate(float _deltaTime)
     {
         transform.position += new Vector3(bulletDirection.x * bulletSpeed * _deltaTime, bulletDirection.y * bulletSpeed * _deltaTime, 0);
-    }
 
-    private void FixedUpdate()
-    {
-        if (!initialized) return;
+        startTime += _deltaTime;
 
-        transform.position += new Vector3(bulletDirection.x * bulletSpeed * Time.deltaTime, bulletDirection.y * bulletSpeed * Time.deltaTime, 0);
+        if (startTime >= 1 && !didTheDebugThnig)
+        {
+            Vector3 displacement = transform.position - debugStartPosition;
+
+            Debug.Log(
+                $"Start: {debugStartPosition}\n" +
+                $"End: {transform.position}\n" +
+                $"Displacement: {displacement}\n" +
+                $"Simulated time: {startTime}\n" +
+                $"Speed: {bulletSpeed}"
+            );
+
+            didTheDebugThnig = true;
+        }
     }
 
     public void InitializeBullet(float _bulletSpeed, Vector2 _bulletDirection, Vector3 _bulletStartPosition)

@@ -21,16 +21,27 @@ public class BossEnemy : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        currentPhase = phaseList[0];
+        StartPhase(currentPhase);
     }
 
     // Update is called once per frame
     void Update()
     {
+        HandlePhase(Time.deltaTime, null);
 
+        foreach (Bullet bullet in bullets)
+        {
+            bullet.PreviewUpdate(Time.deltaTime);
+        }
+
+        Debug.Log($"Delta time: {Time.deltaTime}");
     }
 
     public void StartPhase(EnemyPhase _newPhase)
     {
+        if (_newPhase == null) return;
+
         currentPhase = _newPhase;
 
         totalPhaseAttacks = currentPhase.attacks.Count;
@@ -46,6 +57,8 @@ public class BossEnemy : MonoBehaviour
         {
             bullet.PreviewUpdate(_deltaTime);
         }
+
+        Debug.Log($"Delta time: {_deltaTime}");
     }
 
     void HandlePhase(float _deltaTime, Action<List<Bullet>> _updateBulletCallback)
@@ -141,7 +154,7 @@ public class BossEnemy : MonoBehaviour
 
         Vector2 bulletDirection = GetBulletDirection(_bulletAngle, _bulletRotation);
 
-        float bulletSpeed = 5;
+        float bulletSpeed = 2;
 
         newBullet.InitializeBullet(bulletSpeed, bulletDirection, _bulletPosition);
         bullets.Add(newBullet);

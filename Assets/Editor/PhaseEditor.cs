@@ -131,28 +131,21 @@ public class PhaseEditor : VisualElement
     }
     void SavePhaseSO()
     {
-        for(int i = 0; i < phaseRows.Count; i++)
+        currentPhase.attacks.Clear();
+
+        foreach (PhaseRow row in phaseRows)
         {
-            AttackType rowAttackType = (AttackType)phaseRows[i].phaseTypeField.value;
-            float rowWaitTime = phaseRows[i].waitTimeField.value;
-            BulletPattern rowBulletPattern = (BulletPattern)phaseRows[i].patternField.value;
+            AttackType rowAttackType = (AttackType)row.phaseTypeField.value;
+            float rowWaitTime = row.waitTimeField.value;
+            BulletPattern rowBulletPattern = (BulletPattern)row.patternField.value;
 
-            if (i < currentPhase.attacks.Count)
-            {
-                currentPhase.attacks[i].attackType = rowAttackType;
-                currentPhase.attacks[i].waitTime = rowWaitTime;
-                currentPhase.attacks[i].bulletPattern = rowBulletPattern;
-            }
-            else
-            {
-                EnemyAttack newAttack = new();
+            EnemyAttack newAttack = new();
 
-                newAttack.attackType = rowAttackType;
-                newAttack.waitTime = rowWaitTime;
-                newAttack.bulletPattern = rowBulletPattern;
+            newAttack.attackType = rowAttackType;
+            newAttack.waitTime = rowWaitTime;
+            newAttack.bulletPattern = rowBulletPattern;
 
-                currentPhase.attacks.Add(newAttack);
-            }
+            currentPhase.attacks.Add(newAttack);
         }
 
         EditorUtility.SetDirty(currentPhase);
