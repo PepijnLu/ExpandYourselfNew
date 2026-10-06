@@ -10,13 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a85d3cd598b87f14a9c11a7eee62228f, type: 3}
-  m_Name: Boss1_Phase2
+  m_Name: phase1test
   m_EditorClassIdentifier: 
-  duration: 1
-  movementDirection: {x: -1, y: -1}
-  attacks:
-  - {fileID: 11400000, guid: 013e64f607ceb27438fea24663ffbe22, type: 2}
-  - {fileID: 11400000, guid: 013e64f607ceb27438fea24663ffbe22, type: 2}
-  attackCooldowns:
-  - 0.4
-  - 0.4
+  duration: 0
+  movementDirection: {x: 0, y: 0}

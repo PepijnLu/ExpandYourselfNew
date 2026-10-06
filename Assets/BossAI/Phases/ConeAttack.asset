@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a85d3cd598b87f14a9c11a7eee62228f, type: 3}
+  m_Name: ConeAttack
+  m_EditorClassIdentifier: 
+  duration: 0
+  movementDirection: {x: 0, y: 0}
+  attacks:
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 59f2ed13e2341a64d9a4589c1530465d, type: 2}
+  - attackType: 0
+    waitTime: 0.1
+    bulletPattern: {fileID: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: cc30d5eee2fbcfb41b12ca9aa6048545, type: 2}
+  - attackType: 0
+    waitTime: 0.1
+    bulletPattern: {fileID: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 59f2ed13e2341a64d9a4589c1530465d, type: 2}
+  - attackType: 0
+    waitTime: 0.1
+    bulletPattern: {fileID: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: cc30d5eee2fbcfb41b12ca9aa6048545, type: 2}

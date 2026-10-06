@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &372020681606019026
+--- !u!1 &3768670971937494497
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,38 +8,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3281983307236039411}
-  - component: {fileID: 3028538160134824668}
-  - component: {fileID: 6154068675008969671}
+  - component: {fileID: 8256537349747365588}
+  - component: {fileID: 2480573082658397090}
+  - component: {fileID: 3249192547453426024}
   m_Layer: 0
-  m_Name: Bullet
+  m_Name: BossEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3281983307236039411
+--- !u!4 &8256537349747365588
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 372020681606019026}
+  m_GameObject: {fileID: 3768670971937494497}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &3028538160134824668
+--- !u!212 &2480573082658397090
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 372020681606019026}
+  m_GameObject: {fileID: 3768670971937494497}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -88,16 +88,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6154068675008969671
+--- !u!114 &3249192547453426024
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 372020681606019026}
+  m_GameObject: {fileID: 3768670971937494497}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 710034cf30d6aaf40b0d79cbdbebc71f, type: 3}
+  m_Script: {fileID: 11500000, guid: 369f34510184a21498bc25fb4e9acaec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletDirection: {x: 0, y: 0}
+  phaseList:
+  - {fileID: 11400000, guid: e88e9af95047b3446aa3b2b0b8e6bf7f, type: 2}
+  baseMoveSpeed: 0
+  tempBulletPrefab: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}

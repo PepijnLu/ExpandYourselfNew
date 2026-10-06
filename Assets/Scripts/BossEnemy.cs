@@ -11,7 +11,7 @@ public class BossEnemy : MonoBehaviour
     [SerializeField] List<EnemyPhase> phaseList;
     [SerializeField] float baseMoveSpeed;
 
-    [SerializeField] Bullet bullet;
+    [SerializeField] Bullet tempBulletPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -48,34 +48,34 @@ public class BossEnemy : MonoBehaviour
 
     void BossAttack()
     {
-        if (currentPhase == null) return;
-        if (timesAttackedInPhase >= currentPhase.attacks.Count) return;
+        //if (currentPhase == null) return;
+        //if (timesAttackedInPhase >= currentPhase.attacks.Count) return;
 
-        if (attackTimer < currentPhase.attackCooldowns[timesAttackedInPhase]) return;
+        //if (attackTimer < currentPhase.attackCooldowns[timesAttackedInPhase]) return;
 
-        EnemyAttack attack = currentPhase.attacks[timesAttackedInPhase];
+        //BulletPattern attack = currentPhase.attacks[timesAttackedInPhase];
 
-        float angleStep = 0;
+        //float angleStep = 0;
 
-        if (attack.bulletAmount != 0)
-        {
-            angleStep = attack.bulletSpread / (attack.bulletAmount);
-        }
+        //if (attack.bulletAmount != 0)
+        //{
+        //    angleStep = attack.bulletSpread / (attack.bulletAmount);
+        //}
 
-        float startAngle = -attack.bulletSpread / 2f;
-        startAngle += attack.bulletStartAngle;
+        //float startAngle = -attack.bulletSpread / 2f;
+        //startAngle += attack.bulletAngle;
 
-        for (int i = 0; i < attack.bulletAmount; i++)
-        {
-            float bulletAngle = startAngle + i * angleStep;
-            Vector2 bulletDirection = Quaternion.Euler(0, 0, bulletAngle) * transform.right;
+        //for (int i = 0; i < attack.bulletAmount; i++)
+        //{
+        //    float bulletAngle = startAngle + i * angleStep;
+        //    Vector2 bulletDirection = Quaternion.Euler(0, 0, bulletAngle) * transform.right;
 
-            Bullet newBullet = Instantiate(bullet, transform.position, transform.rotation);
-            newBullet.InitializeBullet(2f, bulletDirection);
-        }
+        //    Bullet newBullet = Instantiate(bullet, transform.position, transform.rotation);
+        //    newBullet.InitializeBullet(2f, bulletDirection, transform.position);
+        //}
 
-        attackTimer = 0;
-        timesAttackedInPhase++;
+        //attackTimer = 0;
+        //timesAttackedInPhase++;
     }
 
     void CheckPhaseTime()

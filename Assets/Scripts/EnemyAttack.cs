@@ -1,9 +1,8 @@
 using UnityEngine;
-
-[CreateAssetMenu(fileName = "EnemyAttack", menuName = "Scriptable Objects/EnemyAttack")]
-public class EnemyAttack : ScriptableObject
+[System.Serializable]
+public class EnemyAttack 
 {
-    public int bulletAmount;
-    public float bulletSpread;
-    public float bulletStartAngle;
+    public AttackType attackType;
+    public float waitTime;
+    public BulletPattern bulletPattern;
 }

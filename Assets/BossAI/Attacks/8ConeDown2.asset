@@ -9,13 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a85d3cd598b87f14a9c11a7eee62228f, type: 3}
-  m_Name: Boss1_Phase1
+  m_Script: {fileID: 11500000, guid: b8dbada56314d074a8d96ccf9a200021, type: 3}
+  m_Name: 8ConeDown2
   m_EditorClassIdentifier: 
-  duration: 2
-  movementDirection: {x: 0, y: 0}
-  attacks:
-  - {fileID: 11400000, guid: 09b492611ab50fa47ab922d340afd8df, type: 2}
-  attackCooldowns:
-  - 0.9
-  - 0.9
+  bulletAmount: 8
+  bulletSpread: 90
+  bulletAngle: 100

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,11 +6,29 @@ using UnityEngine.UIElements;
 public class BulletHellEditor : EditorWindow
 {
     private PreviewRenderUtility preview;
+    private PatternEditor patternEditor;
+    private PhaseEditor phaseEditor;
 
+    private BossEnemy bossEnemy;
+     
     private readonly float cameraZoom = 60f;
 
-    private IntegerField bulletAmountField, bulletSpreadField, bulletAngleField, originAngleField;
-    List<GameObject> bullets;
+    List<Bullet> bullets;
+
+    float bulletSpeed;
+
+    bool playingPreview;
+    bool phasePreview;
+
+    Button playButton, pauseButton, selectPatternButton, selectPhaseButton;
+
+    Texture playButtonTexture, stopButtonTexture, pauseButtonTexture;
+    Image playButtonIcon;
+
+    int phasesAmount;
+    int previewingPhase;
+    float phaseWaitTimer;
+    float lastTime;
 
     [MenuItem("Window/UI Toolkit/BulletHellEditor")]
     public static void ShowExample()
@@ -22,55 +39,95 @@ public class BulletHellEditor : EditorWindow
 
     public void CreateGUI()
     {
+        playButtonTexture = EditorGUIUtility.IconContent("PlayButton").image;
+        stopButtonTexture = EditorGUIUtility.IconContent("StopButton").image;
+        pauseButtonTexture = EditorGUIUtility.IconContent("PauseButton").image;
+
         // Each editor window contains a root VisualElement object
         VisualElement root = rootVisualElement;
 
-        // VisualElements objects can contain other VisualElement following a tree hierarchy.
         VisualElement label = new Label("Bullet Hell Editor Window");
         label.style.marginBottom = 10;
         root.Add(label);
 
-        // Text input
-        //nameField = new TextField("Player Name");
-        //rootVisualElement.Add(nameField);
+        TwoPaneSplitView splitView = new TwoPaneSplitView(
+           0,      // Index of the fixed pane
+           300,    // Initial size of the fixed pane
+           TwoPaneSplitViewOrientation.Horizontal
+       );
 
-        // Bullet Amount
-        bulletAmountField = new IntegerField("Bullet Amount");
-            bulletAmountField.value = 4;
-            rootVisualElement.Add(bulletAmountField);
+        // Left panel
+        VisualElement leftPanel = new VisualElement();
+        leftPanel.style.paddingLeft = 10;
+        leftPanel.style.paddingRight = 10;
+        leftPanel.style.paddingTop = 10;
+        leftPanel.style.minWidth = 300;
+        leftPanel.style.maxWidth = 300;
 
-        // Bullet Spread
-        bulletSpreadField = new IntegerField("Bullet Spread");
-            bulletSpreadField.value = 180;
-            rootVisualElement.Add(bulletSpreadField);
+        // Right panel
+        VisualElement rightPanel = new VisualElement();
+        rightPanel.style.paddingLeft = 10;
+        rightPanel.style.paddingTop = 10;
 
-        // Bullet Angle
-        bulletAngleField = new IntegerField("Bullet Angle");
-            bulletAngleField.value = 45;
-            rootVisualElement.Add(bulletAngleField);
+        splitView.Add(leftPanel);
+        splitView.Add(rightPanel);
 
-        // Origin Angle
-        originAngleField = new IntegerField("Origin Angle");
-            rootVisualElement.Add(originAngleField);
+        rootVisualElement.Add(splitView);
 
-        Button createButton = new Button(() =>
-            {
-                Debug.Log($"Bullet Amount: {bulletAmountField.value}");
-            })
-            {
-                text = "Create"
-            };
-            rootVisualElement.Add(createButton);
+        patternEditor = new(this);
+        leftPanel.Add(patternEditor);
 
-        // Preview box label
-        Label previewLabel = new Label("Preview");
-            previewLabel.style.unityFontStyleAndWeight =
-                FontStyle.Bold;
+        phaseEditor = new(this);
+        leftPanel.Add(phaseEditor);
 
-            previewLabel.style.marginTop = 10;
-            previewLabel.style.marginBottom = 4;
+        VisualElement controlRow = new VisualElement();
+        controlRow.style.flexDirection = FlexDirection.Row;
+        rightPanel.Add(controlRow);
 
-            rootVisualElement.Add(previewLabel);
+        //Play label
+        Label playLabel = new Label("Play:");
+        playLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+        playLabel.style.marginTop = 5;
+        playLabel.style.marginBottom = 5;
+        controlRow.Add(playLabel);
+
+        //Play Button
+        playButton = new Button(() =>
+        {
+            TogglePlayMode();
+        });
+        playButtonIcon = new Image();
+        playButtonIcon.image = playButtonTexture;
+        playButton.Add(playButtonIcon);
+        controlRow.Add(playButton);
+
+        //Mode label
+        Label modeLabel = new Label("Mode:");
+        modeLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+        modeLabel.style.marginTop = 5;
+        modeLabel.style.marginBottom = 5;
+        controlRow.Add(modeLabel);
+
+        selectPatternButton = new Button(() =>
+        {
+            SwitchPreviewMode(false);
+        })
+        {
+            text = "Pattern"
+        };
+        controlRow.Add(selectPatternButton);
+
+        selectPhaseButton = new Button(() =>
+        {
+            SwitchPreviewMode(true);
+        })
+        {
+            text = "Phase"
+        };
+        controlRow.Add(selectPhaseButton);
+
+
+        //
 
         // Preview box
         VisualElement previewBox = new VisualElement();
@@ -88,7 +145,7 @@ public class BulletHellEditor : EditorWindow
             //previewBox.style.height = 400;
             previewBox.style.backgroundColor = new Color(1, 0, 0, 0.2f);
 
-            rootVisualElement.Add(previewBox);
+        rightPanel.Add(previewBox);
 
 
         // IMGUI preview
@@ -96,59 +153,132 @@ public class BulletHellEditor : EditorWindow
 
         previewBox.Add(previewGUI);
 
-        bulletAmountField.RegisterValueChangedCallback(UpdateBulletCount);
-        bulletSpreadField.RegisterValueChangedCallback(UpdateBulletCount);
-        originAngleField.RegisterValueChangedCallback(UpdateBulletCount);
+
+        bullets = new();
 
         // Keep repainting so the preview can animate.
         previewGUI.schedule.Execute(() =>
         {
+            PreviewUpdate();
             previewGUI.MarkDirtyRepaint();
         }).Every(16);
 
-        UpdateBulletCount();
-
+        UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true);
+        SwitchPreviewMode(false);
     }
 
-    private void UpdateBulletCount(ChangeEvent<int> evt)
+    private void PreviewUpdate()
     {
-        UpdateBulletCount();
-    }
-
-    private void UpdateBulletCount()
-    {
-        float bulletAmount = bulletAmountField.value;
-        float bulletSpread = bulletSpreadField.value;
-        float bulletStartAngle = originAngleField.value;
-
-        if (bullets != null)
+        float deltaTime = Time.time - lastTime;
+        if(playingPreview)
         {
-            foreach (GameObject bullet in bullets)
+            HandlePhase(deltaTime);
+
+            foreach (Bullet bullet in bullets)
             {
-                DestroyImmediate(bullet);
+                bullet.PreviewUpdate(deltaTime);
             }
-            bullets.Clear();
+        }
+
+        lastTime = Time.time;
+    }
+
+    void HandlePhase(float _deltaTime)
+    {
+        if (phasePreview && !(previewingPhase > phasesAmount - 1))
+        {
+            switch ((AttackType)phaseEditor.phaseRows[previewingPhase].phaseTypeField.value)
+            {
+                case AttackType.Wait:
+                    phaseWaitTimer += _deltaTime;
+                    Debug.Log($"Phase Wait Timer: {phaseWaitTimer}");
+                    if (phaseWaitTimer >= phaseEditor.phaseRows[previewingPhase].waitTimeField.value)
+                    {
+                        previewingPhase++;
+                        phaseWaitTimer = 0;
+                    }
+                    break;
+                case AttackType.Attack:
+                    BulletPattern attack = phaseEditor.phaseRows[previewingPhase].patternField.value as BulletPattern;
+                    UpdateBulletCount(attack.bulletAmount, attack.bulletSpread, attack.bulletAngle, false);
+                    previewingPhase++;
+                    break;
+            }
+
+            //Skip no wait time frames
+            if (previewingPhase < phaseEditor.phaseRows.Count)
+            {
+                if ((phaseEditor.phaseRows[previewingPhase].waitTimeField.value == 0) || ((AttackType)phaseEditor.phaseRows[previewingPhase].phaseTypeField.value == AttackType.Attack))
+                {
+                    HandlePhase(_deltaTime);
+                }
+            }
+        }
+    }
+
+    void SwitchPreviewMode(bool _newModeIsPhase)
+    {
+        if(_newModeIsPhase)
+        {
+            selectPhaseButton.enabledSelf = false;
+            selectPatternButton.enabledSelf = true;
+
+            selectPatternButton.style.backgroundColor = Color.grey;
+            selectPhaseButton.style.backgroundColor = Color.blue;
+
+            phasePreview = true;
+            phaseEditor.enabledSelf = true;
+            patternEditor.enabledSelf = false;
+            DestroyAllBullets();
         }
         else
         {
-            bullets = new();
+            selectPatternButton.enabledSelf = false;
+            selectPhaseButton.enabledSelf = true;
+
+            selectPatternButton.style.backgroundColor = Color.blue;
+            selectPhaseButton.style.backgroundColor = Color.grey;
+
+            phasePreview = false;
+            phaseEditor.enabledSelf = false;
+            patternEditor.enabledSelf = true;
+            UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true);
+        }
+    }
+
+    public void UpdateBulletCountFromPatternEditor(ChangeEvent<int> evt)
+    {
+        if(!phasePreview) UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true);
+    }
+
+    public void UpdateBulletCountFromPatternEditor(ChangeEvent<float> evt)
+    {
+        if (!phasePreview) UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true);
+    }
+
+    public void UpdateBulletCount(float _bulletAmount, float _bulletSpread, float _bulletStartAngle, bool _destroyOld)
+    {
+        Debug.Log($"New Bullets: {_bulletAmount} , {_bulletSpread} , {_bulletStartAngle}");
+        if(_destroyOld)
+        {
+            DestroyAllBullets();
         }
 
         float angleStep = 0;
 
-        if (bulletAmount == 1)
+        if (_bulletAmount == 1)
         {
             angleStep = 0;
         }
         else
         {
-            angleStep = bulletSpread / (bulletAmount);
+            angleStep = _bulletSpread / (_bulletAmount);
         }
-        float startAngle = bulletSpread / 2f;
-        startAngle += bulletStartAngle;
+        float startAngle = _bulletSpread / 2f;
+        startAngle += _bulletStartAngle;
 
         //Create New Bullets
-        for (int i = 0; i < bulletAmount; i++)
+        for (int i = 0; i < _bulletAmount; i++)
         {
             float bulletAngle = startAngle + i * angleStep;
             Vector2 bulletDirection = Quaternion.Euler(0, 0, bulletAngle) * new Vector3(0, 0, 1);
@@ -161,9 +291,25 @@ public class BulletHellEditor : EditorWindow
             Quaternion bulletRotation =
                  Quaternion.Euler(0f, 0f, bulletAngle);
 
-            GameObject newBullet = CreateCircle(direction, bulletRotation, .3f, Color.red);
+            Bullet newBullet = CreateBullet(new Vector3(direction.x * 0.2f, direction.y * 0.2f, -1), bulletRotation, .3f, Color.red);
             bullets.Add(newBullet);
-            preview.AddSingleGO(newBullet);
+            preview.AddSingleGO(newBullet.gameObject);
+        }
+    }
+
+    void DestroyAllBullets()
+    {
+        if (bullets != null)
+        {
+            foreach (Bullet bullet in bullets)
+            {
+                DestroyImmediate(bullet.gameObject);
+            }
+            bullets.Clear();
+        }
+        else
+        {
+            bullets = new();
         }
     }
 
@@ -173,6 +319,7 @@ public class BulletHellEditor : EditorWindow
 
         // Camera
         preview.camera.fieldOfView = cameraZoom;
+        preview.camera.orthographic = true;
 
         // Lighting
         preview.lights[0].intensity = 1.4f;
@@ -182,10 +329,16 @@ public class BulletHellEditor : EditorWindow
         preview.lights[1].intensity = 1.0f;
 
         // Add starting circle to the preview scene
-        GameObject startCircle = CreateCircle(new Vector2(0, 0), Quaternion.identity, 1, Color.grey);
-        preview.AddSingleGO(startCircle);
+       
 
-        Debug.Log($"Created preview: Location {startCircle.transform.position}, {startCircle.transform.localScale}");
+        GameObject bossEnemy = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/BossEnemy.prefab");
+
+        if (bossEnemy != null)
+        {
+            GameObject bossEnemyObject = PrefabUtility.InstantiatePrefab(bossEnemy) as GameObject;
+            preview.AddSingleGO(bossEnemyObject);
+        }
+
     }
 
     private void DrawPreview()
@@ -222,34 +375,71 @@ public class BulletHellEditor : EditorWindow
 
         if (bullets != null)
         {
-            foreach(GameObject bullet in  bullets)
+            foreach(Bullet bullet in  bullets)
             {
-                if(bullet) DrawBulletDirection(rect, bullet.transform.position, bulletAngleField.value, 100, bullet.transform.rotation);
+                if(bullet) DrawBulletDirection(rect, bullet.transform.position, patternEditor.bulletAngleField.value, 100, bullet.transform.rotation, bullet);
             }
 
         }
-        Handles.EndGUI();
+        Handles.EndGUI(); 
     }
 
-    private GameObject CreateCircle(Vector2 circlePosition, Quaternion circleRotation, float circleSize, Color color)
+    private void TogglePlayMode()
+    {
+        phasesAmount = phaseEditor.phaseRows.Count;
+        previewingPhase = 0;
+        phaseWaitTimer = 0;
+        playingPreview = !playingPreview;
+
+        if(playingPreview)
+        {
+            playButton.style.backgroundColor = Color.blue;
+            playButtonIcon.image = stopButtonTexture;
+            patternEditor.enabledSelf = false;
+            phaseEditor.enabledSelf = false;
+        }
+        else
+        {
+            playButton.style.backgroundColor = Color.grey;
+            playButtonIcon.image = playButtonTexture;
+
+            if (phasePreview)
+            {
+                DestroyAllBullets();
+                phaseEditor.enabledSelf = true;
+            }
+            else
+            {
+                UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true);
+                patternEditor.enabledSelf = true;
+            }
+        }
+    }
+
+    private Bullet CreateBullet(Vector3 circlePosition, Quaternion circleRotation, float circleSize, Color color)
     {
         GameObject bulletPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Bullet.prefab");
 
         if (bulletPrefab == null) return null;
 
-        GameObject newBullet =
+        GameObject newBulletObject =
             PrefabUtility.InstantiatePrefab(bulletPrefab) as GameObject;
 
-        if (newBullet == null)
+        if (newBulletObject == null)
         {
             Debug.LogError($"Could not load prefab at: {"Assets/Prefabs/Bullet.prefab"}");
             return null;
         }
 
+        if(newBulletObject.TryGetComponent<Bullet>(out Bullet newBullet))
+
         newBullet.transform.localScale = new Vector2(circleSize, circleSize);
         newBullet.transform.position = circlePosition;
         newBullet.transform.rotation = circleRotation;  
         newBullet.GetComponent<SpriteRenderer>().color = color;
+
+        bulletSpeed = 5;
+        newBullet.InitializeBullet(bulletSpeed, Vector2.up, circlePosition);
         return newBullet;
     }
 
@@ -258,7 +448,8 @@ public class BulletHellEditor : EditorWindow
      Vector2 bulletPosition,
      float angle,
      float length,
-     Quaternion bulletRotation)
+     Quaternion bulletRotation,
+     Bullet bullet)
     {
         Quaternion directionRotation =
             bulletRotation * Quaternion.Euler(0, 0, angle);
@@ -269,7 +460,7 @@ public class BulletHellEditor : EditorWindow
         Vector2 endPosition =
             bulletPosition + direction * length;
 
-        float zoom = 87f;
+        float zoom = 100f;
 
         // Convert to GUI coordinates relative to the rect
         Vector2 start = new Vector2(
@@ -283,11 +474,16 @@ public class BulletHellEditor : EditorWindow
         );
 
         // Clip everything drawn inside this rectangle
-        GUI.BeginClip(rect);
+        if(!phasePreview)
+        {
+            GUI.BeginClip(rect);
 
-        Handles.DrawLine(start, end);
+            Handles.DrawLine(start, end);
 
-        GUI.EndClip();
+            GUI.EndClip();
+        }
+
+        bullet.bulletDirection = direction;
     }
 
     private void OnEnable()
