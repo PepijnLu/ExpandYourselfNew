@@ -3,6 +3,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public Vector3 bulletStartPosition;
+    BossEnemy parent;
 
     float bulletSpeed;
     int bulletDamage;
@@ -26,8 +27,9 @@ public class Bullet : MonoBehaviour
         startTime += _deltaTime;
     }
 
-    public void InitializeBullet(float _bulletSpeed, int _bulletDamage, Vector2 _bulletDirection, Vector3 _bulletStartPosition)
+    public void InitializeBullet(BossEnemy _parent, float _bulletSpeed, int _bulletDamage, Vector2 _bulletDirection, Vector3 _bulletStartPosition)
     {
+        parent = _parent;
         bulletSpeed = _bulletSpeed;
         bulletDamage = _bulletDamage;
         bulletDirection = _bulletDirection;
@@ -41,6 +43,11 @@ public class Bullet : MonoBehaviour
         if(collider.TryGetComponent(out IDamagable damagable))
         {
             damagable.TakeDamage(bulletDamage);
+        }
+        //Walls
+        if (collider.gameObject.layer == 7)
+        {
+            parent.DestroyBullet(this);
         }
     }
 }

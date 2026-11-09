@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,10 +6,15 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] Image imagePrefab;
 
-    [SerializeField] Transform heartsContainer;
+    public Transform heartsContainer;
     [SerializeField] Sprite heartFullSprite, heartEmptySprite;
+
+    public TextMeshProUGUI timerText;
+
+    public static UIManager instance;
     private void Awake()
     {
+        instance = this;
     }
     public void AddHeart()
     {
@@ -52,5 +58,15 @@ public class UIManager : MonoBehaviour
         {
             Destroy(heartsContainer.GetChild(heartsContainer.childCount - 1).gameObject);
         }
+    }
+
+    public void SetTMProString(TextMeshProUGUI _textObject, string _string)
+    {
+        _textObject.text = _string;
+    }
+
+    public void ToggleElement(GameObject _obj, bool _active)
+    {
+        _obj.SetActive(_active);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -19,9 +20,25 @@ public class BossEnemy : MonoBehaviour
     public bool inTool;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Awaken()
     {
         currentPhase = phaseList[0];
+        StartCoroutine(StartFight());
+    }
+
+    IEnumerator StartFight()
+    {
+        UIManager.instance.SetTMProString(UIManager.instance.timerText, "3");
+        UIManager.instance.ToggleElement(UIManager.instance.heartsContainer.gameObject, true);
+        UIManager.instance.ToggleElement(UIManager.instance.timerText.gameObject, true);
+        yield return new WaitForSeconds(1);
+        UIManager.instance.SetTMProString(UIManager.instance.timerText, "2");
+        yield return new WaitForSeconds(1);
+        UIManager.instance.SetTMProString(UIManager.instance.timerText, "1");
+        yield return new WaitForSeconds(1);
+        UIManager.instance.SetTMProString(UIManager.instance.timerText, "GO");
+        yield return new WaitForSeconds(1);
+        UIManager.instance.ToggleElement(UIManager.instance.timerText.gameObject, false);
         StartPhase(currentPhase);
     }
 
@@ -55,8 +72,6 @@ public class BossEnemy : MonoBehaviour
         {
             bullet.BulletUpdate(_deltaTime);
         }
-
-        Debug.Log($"Delta time: {_deltaTime}");
     }
 
     void HandlePhase(float _deltaTime, Action<List<Bullet>> _updateBulletCallback)
@@ -134,7 +149,7 @@ public class BossEnemy : MonoBehaviour
             Quaternion bulletRotation =
                  Quaternion.Euler(0f, 0f, bulletAngle);
 
-            Bullet newBullet = CreateBullet(new Vector3(direction.x * 0.2f, direction.y * 0.2f, -1), bulletRotation, .2f, _bulletStartAngle, Color.red);
+            Bullet newBullet = CreateBullet((transform.position + new Vector3(direction.x * 0.2f, direction.y * 0.2f, -1)), bulletRotation, .2f, _bulletStartAngle, Color.red);
             newBullets.Add(newBullet);
         }
 
@@ -154,7 +169,7 @@ public class BossEnemy : MonoBehaviour
 
         float bulletSpeed = 2;
 
-        newBullet.InitializeBullet(bulletSpeed, 1, bulletDirection, _bulletPosition);
+        newBullet.InitializeBullet(this, bulletSpeed, 1, bulletDirection, _bulletPosition);
         bullets.Add(newBullet);
 
         return newBullet;
@@ -166,6 +181,12 @@ public class BossEnemy : MonoBehaviour
 
         Vector2 direction = directionRotation * Vector2.right;
         return direction;
+    }
+
+    public void DestroyBullet(Bullet _bullet)
+    {
+        bullets.Remove(_bullet);
+        Destroy(_bullet.gameObject);
     }
 
     public void DestroyAllBullets(bool _destroyImmediate)

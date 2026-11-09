@@ -8,8 +8,10 @@ public class BulletHellEditor : EditorWindow
     private PreviewRenderUtility preview;
     private PatternEditor patternEditor;
     private PhaseEditor phaseEditor;
+    private BHEInputManager inputManager;
 
     public BossEnemy bossEnemy;
+    public Player player;
      
     private readonly float cameraZoom = 60f;
 
@@ -124,27 +126,27 @@ public class BulletHellEditor : EditorWindow
         };
         controlRow.Add(selectPhaseButton);
 
-
-        //
-
         // Preview box
         VisualElement previewBox = new VisualElement();
-            previewBox.style.marginTop = 10; 
-            previewBox.style.borderTopWidth = 1;
-            previewBox.style.borderBottomWidth = 1;
-            previewBox.style.borderLeftWidth = 1;
-            previewBox.style.borderRightWidth = 1;
+        previewBox.style.marginTop = 10; 
+        previewBox.style.borderTopWidth = 1;
+        previewBox.style.borderBottomWidth = 1;
+        previewBox.style.borderLeftWidth = 1;
+        previewBox.style.borderRightWidth = 1;
 
-            previewBox.style.flexGrow = 1;
+        previewBox.style.flexGrow = 1;
 
-            previewBox.style.minHeight = 200;
-            previewBox.style.maxHeight = 1000;
+        previewBox.style.minHeight = 200;
+        previewBox.style.maxHeight = 1000;
 
-            //previewBox.style.height = 400;
-            previewBox.style.backgroundColor = new Color(1, 0, 0, 0.2f);
+        //previewBox.style.height = 400;
+        previewBox.style.backgroundColor = new Color(1, 0, 0, 0.2f);
+        
 
         rightPanel.Add(previewBox);
 
+        //Add input handler
+        inputManager = new(this, previewBox);
 
         // IMGUI preview
         IMGUIContainer previewGUI = new IMGUIContainer(DrawPreview);
@@ -178,6 +180,7 @@ public class BulletHellEditor : EditorWindow
         if(playingPreview)
         {
             bossEnemy.PreviewUpdate(deltaTime, AddBulletsToPreview);
+            player.playerMovement.PreviewUpdate(deltaTime, inputManager.keysPressed);
         }
 
         lastTime = currentTime;
@@ -239,19 +242,32 @@ public class BulletHellEditor : EditorWindow
 
         preview.lights[1].intensity = 1.0f;
 
+        //Add room
+        GameObject backgroundPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/BossRoom.prefab");
+        GameObject backgroundGO = PrefabUtility.InstantiatePrefab(backgroundPrefab) as GameObject;
+
+        preview.AddSingleGO(backgroundGO);
+
+        //Add boss
         GameObject bossEnemyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/BossEnemy.prefab");
         GameObject bossEnemyGO = PrefabUtility.InstantiatePrefab(bossEnemyPrefab) as GameObject;
 
         preview.AddSingleGO(bossEnemyGO);
 
+        //Set boss to in tool
         bossEnemy = bossEnemyGO.GetComponent<BossEnemy>();
         bossEnemy.inTool = true;
 
-        //Add placeholder background
-        GameObject backgroundPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/ScreenSizeBG.prefab");
-        GameObject backgroundGO = PrefabUtility.InstantiatePrefab(backgroundPrefab) as GameObject;
+        //Add player
+        GameObject playerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Player.prefab");
+        GameObject playerGO = PrefabUtility.InstantiatePrefab(playerPrefab) as GameObject;
 
-        preview.AddSingleGO(backgroundGO);
+        player = playerGO.GetComponent<Player>();
+        PlayerMovement playerMovement = new PlayerMovement(player.transform, player.baseMoveSpeed, player.focusMoveSpeed);
+        player.playerMovement = playerMovement;
+        player.inTool = true;
+
+        preview.AddSingleGO(playerGO);
 
         lastTime = EditorApplication.timeSinceStartup;
     }

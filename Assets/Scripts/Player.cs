@@ -2,23 +2,24 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IDamagable
 {
-
-    [SerializeField] UIManager uiManager;
-
-    PlayerMovement playerMovement;
+    public PlayerMovement playerMovement;
     Rigidbody2D rb;
 
     [Header("Stats")]
-    [SerializeField] float moveSpeed;
+    [SerializeField] public float baseMoveSpeed;
+    [SerializeField] public float focusMoveSpeed;
     [SerializeField] int health;
+    Camera camera;
+
+    public bool inTool;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        playerMovement = new(rb, moveSpeed);
-
-        uiManager.UpdateMaxHealth(health);
+        playerMovement = new(transform, baseMoveSpeed, focusMoveSpeed);
+        camera = Camera.main;
+        UIManager.instance.UpdateMaxHealth(health);
     }
 
     // Update is called once per frame
@@ -41,7 +42,7 @@ public class Player : MonoBehaviour, IDamagable
 
     void UpdateHealth(int _newAmount)
     {
-        uiManager.UpdateHealth(_newAmount);
+        UIManager.instance.UpdateHealth(_newAmount);
         Debug.Log($"New Player Health: {health}");
         if(health <= 0)
         {
@@ -52,5 +53,11 @@ public class Player : MonoBehaviour, IDamagable
     void Death()
     {
         Debug.Log($"PLAYER DEATH");
+    }
+
+    public void TeleportPlayer(Vector3 _teleportPosition, Vector3 _cameraPosition)
+    {
+        transform.position = _teleportPosition;
+        camera.transform.position = new Vector3(_cameraPosition.x, _cameraPosition.y, -10);
     }
 }
