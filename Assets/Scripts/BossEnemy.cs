@@ -32,10 +32,8 @@ public class BossEnemy : MonoBehaviour
 
         foreach (Bullet bullet in bullets)
         {
-            bullet.PreviewUpdate(Time.deltaTime);
+            bullet.BulletUpdate(Time.deltaTime);
         }
-
-        Debug.Log($"Delta time: {Time.deltaTime}");
     }
 
     public void StartPhase(EnemyPhase _newPhase)
@@ -55,7 +53,7 @@ public class BossEnemy : MonoBehaviour
 
         foreach (Bullet bullet in bullets)
         {
-            bullet.PreviewUpdate(_deltaTime);
+            bullet.BulletUpdate(_deltaTime);
         }
 
         Debug.Log($"Delta time: {_deltaTime}");
@@ -136,7 +134,7 @@ public class BossEnemy : MonoBehaviour
             Quaternion bulletRotation =
                  Quaternion.Euler(0f, 0f, bulletAngle);
 
-            Bullet newBullet = CreateBullet(new Vector3(direction.x * 0.2f, direction.y * 0.2f, -1), bulletRotation, .3f, _bulletStartAngle, Color.red);
+            Bullet newBullet = CreateBullet(new Vector3(direction.x * 0.2f, direction.y * 0.2f, -1), bulletRotation, .2f, _bulletStartAngle, Color.red);
             newBullets.Add(newBullet);
         }
 
@@ -156,7 +154,7 @@ public class BossEnemy : MonoBehaviour
 
         float bulletSpeed = 2;
 
-        newBullet.InitializeBullet(bulletSpeed, bulletDirection, _bulletPosition);
+        newBullet.InitializeBullet(bulletSpeed, 1, bulletDirection, _bulletPosition);
         bullets.Add(newBullet);
 
         return newBullet;
