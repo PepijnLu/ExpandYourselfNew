@@ -52,8 +52,20 @@ public class PlayerMovement
         if (_keysPressed["Right"]) previewMovement.x += 1;
         if (_keysPressed["Left"]) previewMovement.x -= 1;
 
+
         previewMovement = previewMovement.normalized;
         Debug.Log($"Movement Vector: {previewMovement}");
+
+        inFocus = _keysPressed["Focus"];
+
+        if (inFocus)
+        {
+            moveSpeed = focusMoveSpeed;
+        }
+        else
+        {
+            moveSpeed = baseMoveSpeed;
+        }
 
         previewMovement *= moveSpeed * Time.deltaTime;
         playerTransform.position += new Vector3(previewMovement.x, previewMovement.y, 0);
