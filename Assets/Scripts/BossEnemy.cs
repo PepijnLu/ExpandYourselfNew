@@ -70,7 +70,7 @@ public class BossEnemy : MonoBehaviour
 
         foreach (Bullet bullet in bullets)
         {
-            bullet.BulletUpdate(_deltaTime);
+            if(bullet) bullet.BulletUpdate(_deltaTime);
         }
     }
 
