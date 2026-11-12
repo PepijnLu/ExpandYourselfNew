@@ -35,7 +35,7 @@ public class Bullet : MonoBehaviour
         {
             try
             {
-                collisionManager.UpdatePreviewCollisions(col, CollisionInPreview);
+                collisionManager.UpdatePreviewCollisions(col, CollisionEnterInPreview, null);
             }
             catch (Exception e)
             {
@@ -65,7 +65,7 @@ public class Bullet : MonoBehaviour
         CheckCollision(col, collider);
     }
 
-    private void CollisionInPreview(Collider2D owner, Collider2D other)
+    private void CollisionEnterInPreview(Collider2D owner, Collider2D other)
     {
         CheckCollision(col, other);
     }
@@ -91,5 +91,6 @@ public class Bullet : MonoBehaviour
             parent.DestroyBullet(this);
         }
 
+        Debug.Log($"Collision with {other.gameObject.name}");
     }
 }

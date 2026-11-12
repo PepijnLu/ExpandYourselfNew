@@ -193,6 +193,7 @@ public class BulletHellEditor : EditorWindow
         if (playingPreview && !isPaused)
         {
             bossEnemy.PreviewUpdate(deltaTime, AddBulletsToPreview);
+            player.PreviewUpdate(deltaTime);
             player.playerMovement.PreviewUpdate(deltaTime, inputManager.keysPressed);
         }
 
@@ -281,9 +282,7 @@ public class BulletHellEditor : EditorWindow
         GameObject playerGO = PrefabUtility.InstantiatePrefab(playerPrefab) as GameObject;
 
         player = playerGO.GetComponent<Player>();
-        PlayerMovement playerMovement = new PlayerMovement(player.transform, player.baseMoveSpeed, player.focusMoveSpeed);
-        player.playerMovement = playerMovement;
-        player.inTool = true;
+        player.InitializePlayer(collisionManager, true);
 
         preview.AddSingleGO(playerGO);
 
@@ -331,8 +330,6 @@ public class BulletHellEditor : EditorWindow
 
         }
         Handles.EndGUI();
-
-        Debug.Log($"DRAW PREVIEW");
     }
 
     private void TogglePlayMode()

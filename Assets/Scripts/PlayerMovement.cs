@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class PlayerMovement
 {
+    Player player;
     float baseMoveSpeed;
     float focusMoveSpeed;
     float moveSpeed;
     private Transform playerTransform;
     private Vector2 movement;
     bool inFocus;
-    public PlayerMovement(Transform _transform, float _baseMoveSpeed, float _focusMoveSpeed)
+    public PlayerMovement(Player _player, Transform _transform, float _baseMoveSpeed, float _focusMoveSpeed)
     {
+        player = _player;
         playerTransform = _transform;
         baseMoveSpeed = _baseMoveSpeed;
         focusMoveSpeed = _focusMoveSpeed;
@@ -52,8 +54,36 @@ public class PlayerMovement
         if (_keysPressed["Right"]) previewMovement.x += 1;
         if (_keysPressed["Left"]) previewMovement.x -= 1;
 
+        List<Collider2D> overlappingBlockingColliders = player.GetOverlappingBlockingColliders();
 
+        //NOTE: WALL COLLISION ONLY WORKS WITH 90 DEGREE ANGLES AND RECTANGLES
+        foreach (Collider2D collider in overlappingBlockingColliders)
+        {
+            Vector3 objectDirection = collider.gameObject.transform.up;
+
+            //Left Wall, Facing Right
+            if (objectDirection.x > .9f)
+            {
+                previewMovement.x = Mathf.Max(0, previewMovement.x);
+            }
+            //Right Wall, Facing Left
+            else if (objectDirection.x < -.9f)
+            {
+                previewMovement.x = Mathf.Min(0, previewMovement.x);
+            }
+            //Bottom Wall, Facing Up
+            else if (objectDirection.y > .9f)
+            {
+                previewMovement.y = Mathf.Max(0, previewMovement.y);
+            }
+            //Top Wall, Facing Down
+            else if (objectDirection.y < -.9f)
+            {
+                previewMovement.y = Mathf.Min(0, previewMovement.y);
+            }
+        }
         previewMovement = previewMovement.normalized;
+
         //Debug.Log($"Movement Vector: {previewMovement}");
 
         inFocus = _keysPressed["Focus"];

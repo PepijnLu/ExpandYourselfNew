@@ -10,7 +10,7 @@ public class BHECollisionManager
         collidingObjects = new();
     }
 
-    public HashSet<Collider2D> UpdatePreviewCollisions(Collider2D collider, Action<Collider2D, Collider2D> onEnter)
+    public HashSet<Collider2D> UpdatePreviewCollisions(Collider2D collider, Action<Collider2D, Collider2D> onEnter, Action<Collider2D, Collider2D> onExit)
     {
 
         if (!collidingObjects.ContainsKey(collider))
@@ -37,13 +37,14 @@ public class BHECollisionManager
         {
             Collider2D other = results[i];
 
+            //If its the first time going into a phase after reloading, this gets skipped and stuff collides with itself
             if (other == null || other == collider) continue;
 
             currentContacts.Add(other);
 
             if (!previousContacts.Contains(other))
             {
-                onEnter.Invoke(collider, other);  
+                onEnter?.Invoke(collider, other);  
             }
         }
 
@@ -51,7 +52,7 @@ public class BHECollisionManager
         {
             if (!currentContacts.Contains(previous))
             {
-                //Debug.Log("Preview collision exit: " + previous.name);
+                onExit?.Invoke(collider, previous);
             }
         }
 
@@ -60,7 +61,7 @@ public class BHECollisionManager
             //Debug.Log($"Object {collider.gameObject.name} is colliding with {currentCollider.gameObject.name}");
         }
 
-        previousContacts = currentContacts;
+        collidingObjects[collider] = currentContacts;
 
         return currentContacts;
     }
