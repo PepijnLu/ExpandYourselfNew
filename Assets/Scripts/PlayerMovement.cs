@@ -54,7 +54,7 @@ public class PlayerMovement
 
 
         previewMovement = previewMovement.normalized;
-        Debug.Log($"Movement Vector: {previewMovement}");
+        //Debug.Log($"Movement Vector: {previewMovement}");
 
         inFocus = _keysPressed["Focus"];
 

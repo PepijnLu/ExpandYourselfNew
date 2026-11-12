@@ -10,14 +10,18 @@ public class BossEnemy : MonoBehaviour
 
     [SerializeField] Bullet tempBulletPrefab;
 
+    public BHECollisionManager bheCollisionManager;
+
     int currentAttackInt;
     int totalPhaseAttacks;
     float attackTimer;
 
     EnemyPhase currentPhase;
     public List<Bullet> bullets;
+    private List<Bullet> bulletsToDestroy = new();
 
     public bool inTool;
+    public bool shouldPauseTool = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Awaken()
@@ -50,6 +54,7 @@ public class BossEnemy : MonoBehaviour
         foreach (Bullet bullet in bullets)
         {
             bullet.BulletUpdate(Time.deltaTime);
+            
         }
     }
 
@@ -70,8 +75,22 @@ public class BossEnemy : MonoBehaviour
 
         foreach (Bullet bullet in bullets)
         {
-            if(bullet) bullet.BulletUpdate(_deltaTime);
+            if (!bullet) continue;
+
+            bullet.BulletUpdate(_deltaTime);
         }
+        
+        if(bulletsToDestroy == null) bulletsToDestroy = new();
+
+        foreach (Bullet bullet in bulletsToDestroy)
+        {
+            if (!bullet) continue;
+
+            bullets.Remove(bullet);
+            DestroyImmediate(bullet.gameObject);
+        }
+
+        bulletsToDestroy.Clear();
     }
 
     void HandlePhase(float _deltaTime, Action<List<Bullet>> _updateBulletCallback)
@@ -169,7 +188,7 @@ public class BossEnemy : MonoBehaviour
 
         float bulletSpeed = 2;
 
-        newBullet.InitializeBullet(this, bulletSpeed, 1, bulletDirection, _bulletPosition);
+        newBullet.InitializeBullet(this, bulletSpeed, 1, bulletDirection, _bulletPosition, inTool, bheCollisionManager);
         bullets.Add(newBullet);
 
         return newBullet;
@@ -185,8 +204,16 @@ public class BossEnemy : MonoBehaviour
 
     public void DestroyBullet(Bullet _bullet)
     {
-        bullets.Remove(_bullet);
-        Destroy(_bullet.gameObject);
+        Debug.Log($"In Tool' {inTool}");
+        if (inTool)
+        {
+            bulletsToDestroy.Add(_bullet);
+        }
+        else
+        {
+            bullets.Remove(_bullet);
+            Destroy(_bullet.gameObject);
+        }
     }
 
     public void DestroyAllBullets(bool _destroyImmediate)
@@ -195,8 +222,9 @@ public class BossEnemy : MonoBehaviour
         {
             foreach (Bullet bullet in bullets)
             {
-                if(_destroyImmediate) DestroyImmediate(bullet.gameObject);
-                else Destroy(bullet.gameObject);
+                DestroyBullet(bullet);
+                //if (_destroyImmediate) DestroyImmediate(bullet.gameObject);
+                //else Destroy(bullet.gameObject);
             }
             bullets.Clear();
         }

@@ -38,11 +38,15 @@ public class Player : MonoBehaviour, IDamagable
         health = Mathf.Max((health - _amount), 0);
         UpdateHealth(health);
 
+        Debug.Log("PLAYER HIT");
     }
 
     void UpdateHealth(int _newAmount)
     {
-        UIManager.instance.UpdateHealth(_newAmount);
+        if (UIManager.instance != null)
+        {
+            UIManager.instance.UpdateHealth(_newAmount);
+        }
         Debug.Log($"New Player Health: {health}");
         if(health <= 0)
         {

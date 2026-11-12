@@ -5,14 +5,12 @@ using UnityEngine.UIElements;
 public class BHEInputManager
 {
     VisualElement root;
-    BulletHellEditor bulletHellEditor;
 
     public Dictionary<string, bool> keysPressed;
-    public BHEInputManager(BulletHellEditor _bulletHellEditor, VisualElement _root)
+    public BHEInputManager(VisualElement _root)
     {
         Debug.Log("Input Manager Constructor");
 
-        bulletHellEditor = _bulletHellEditor;
         root = _root;
 
         root.focusable = true;

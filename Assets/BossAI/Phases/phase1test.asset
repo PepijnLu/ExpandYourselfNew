@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0
   movementDirection: {x: 0, y: 0}
+  attacks:
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: bd3ea69684c15af4aa93979738a3e083, type: 2}

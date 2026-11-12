@@ -8,7 +8,9 @@ public class BulletHellEditor : EditorWindow
     private PreviewRenderUtility preview;
     private PatternEditor patternEditor;
     private PhaseEditor phaseEditor;
+
     private BHEInputManager inputManager;
+    private BHECollisionManager collisionManager;
 
     public BossEnemy bossEnemy;
     public Player player;
@@ -19,6 +21,7 @@ public class BulletHellEditor : EditorWindow
 
     bool playingPreview;
     bool phasePreview;
+    bool isPaused;
 
     Button playButton, pauseButton, selectPatternButton, selectPhaseButton;
 
@@ -146,7 +149,7 @@ public class BulletHellEditor : EditorWindow
         rightPanel.Add(previewBox);
 
         //Add input handler
-        inputManager = new(this, previewBox);
+        inputManager = new(previewBox);
 
         // IMGUI preview
         IMGUIContainer previewGUI = new IMGUIContainer(DrawPreview);
@@ -162,6 +165,8 @@ public class BulletHellEditor : EditorWindow
 
         bossEnemy.UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true, AddBulletsToPreview);
         SwitchPreviewMode(false);
+
+        isPaused = false;
     }
 
     public void AddBulletsToPreview(List<Bullet> _bulletsToAdd)
@@ -177,7 +182,18 @@ public class BulletHellEditor : EditorWindow
         double currentTime = EditorApplication.timeSinceStartup;
         float deltaTime = (float)(currentTime - lastTime);
 
-        if(playingPreview)
+        Debug.Log($"Paused: {isPaused}");
+
+        if(bossEnemy)
+        {
+            if(!isPaused)
+            {
+                isPaused = bossEnemy.shouldPauseTool;
+                bossEnemy.shouldPauseTool = false;
+            }
+        }
+
+        if (playingPreview && !isPaused)
         {
             bossEnemy.PreviewUpdate(deltaTime, AddBulletsToPreview);
             player.playerMovement.PreviewUpdate(deltaTime, inputManager.keysPressed);
@@ -255,8 +271,13 @@ public class BulletHellEditor : EditorWindow
         preview.AddSingleGO(bossEnemyGO);
 
         //Set boss to in tool
+        collisionManager = new();
         bossEnemy = bossEnemyGO.GetComponent<BossEnemy>();
         bossEnemy.inTool = true;
+
+        Debug.Log($"Create Preview");
+
+        bossEnemy.bheCollisionManager = collisionManager;
 
         //Add player
         GameObject playerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Player.prefab");
