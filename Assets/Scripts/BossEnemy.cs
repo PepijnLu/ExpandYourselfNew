@@ -204,7 +204,6 @@ public class BossEnemy : MonoBehaviour
 
     public void DestroyBullet(Bullet _bullet)
     {
-        Debug.Log($"In Tool' {inTool}");
         if (inTool)
         {
             bulletsToDestroy.Add(_bullet);

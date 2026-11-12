@@ -77,16 +77,14 @@ public class Bullet : MonoBehaviour
             //In tool: player hit
             if (other.TryGetComponent(out IDamagable damagable))
             {
-                Debug.Log($"PAUSE");
                 parent.shouldPauseTool = true;
                 damagable.TakeDamage(bulletDamage);
             }
         }
         catch (Exception e) 
         {
-            Debug.Log($"Failed: {e.Message}: {other}");
+            //Debug.Log($"Collision with player failed: {e.Message}: {other}");
         }
-        Debug.Log($"{owner.gameObject.name} collides with {other.gameObject.name}");
         //Walls
         if (other.gameObject.layer == 7)
         {

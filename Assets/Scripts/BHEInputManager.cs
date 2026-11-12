@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -7,6 +8,7 @@ public class BHEInputManager
     VisualElement root;
 
     public Dictionary<string, bool> keysPressed;
+    bool initialized;
     public BHEInputManager(VisualElement _root)
     {
         Debug.Log("Input Manager Constructor");
@@ -79,5 +81,19 @@ public class BHEInputManager
                 keysPressed["Focus"] = false;
             }
         });
+
+        initialized = true;
+    }
+
+    public void ResetInputs()
+    {
+        //Its like this cause keysPressed is appearently being modified so you cant loop over the dictionary
+        if (initialized)
+        {
+            foreach (string key in keysPressed.Keys.ToArray())
+            {
+                keysPressed[key] = false;
+            }
+        }
     }
 }

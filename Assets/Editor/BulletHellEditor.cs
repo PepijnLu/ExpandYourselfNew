@@ -144,15 +144,14 @@ public class BulletHellEditor : EditorWindow
 
         //previewBox.style.height = 400;
         previewBox.style.backgroundColor = new Color(1, 0, 0, 0.2f);
-        
 
         rightPanel.Add(previewBox);
 
         //Add input handler
-        inputManager = new(previewBox);
+        inputManager = new(root);
 
         // IMGUI preview
-        IMGUIContainer previewGUI = new IMGUIContainer(DrawPreview);
+        IMGUIContainer previewGUI = new IMGUIContainer(PreviewGUIDraw);
 
         previewBox.Add(previewGUI);
 
@@ -181,8 +180,6 @@ public class BulletHellEditor : EditorWindow
     {
         double currentTime = EditorApplication.timeSinceStartup;
         float deltaTime = (float)(currentTime - lastTime);
-
-        Debug.Log($"Paused: {isPaused}");
 
         if(bossEnemy)
         {
@@ -293,7 +290,7 @@ public class BulletHellEditor : EditorWindow
         lastTime = EditorApplication.timeSinceStartup;
     }
 
-    private void DrawPreview()
+    private void PreviewGUIDraw()
     {
         if (preview == null)
             return;
@@ -333,7 +330,9 @@ public class BulletHellEditor : EditorWindow
             }
 
         }
-        Handles.EndGUI(); 
+        Handles.EndGUI();
+
+        Debug.Log($"DRAW PREVIEW");
     }
 
     private void TogglePlayMode()
@@ -403,6 +402,12 @@ public class BulletHellEditor : EditorWindow
 
             GUI.EndClip();
         }
+    }
+
+    private void OnLostFocus()
+    {
+        Debug.Log("ON LOST FOCUS");
+        if(inputManager != null) inputManager.ResetInputs();
     }
 
     private void OnEnable()
