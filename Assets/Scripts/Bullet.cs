@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -19,12 +20,31 @@ public class Bullet : MonoBehaviour
 
     public Collider2D col;
     BHECollisionManager collisionManager;
+
     bool inTool;
+    bool destructed;
+
+    Animator animator;
+    AnimatorStateInfo animatorStateInfo;
 
     private void Start()
     {
         debugStartPosition = transform.position;
         startTime = 0;
+
+        animator = GetComponent<Animator>();
+    }
+
+    public void Update()
+    {
+        if (animator && destructed)
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).length == 0)
+            {
+                //Destroy(gameObject);
+            }
+        }
+        if (destructed) return;
     }
 
     public void BulletUpdate(float _deltaTime)
@@ -65,6 +85,8 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (destructed) return;
+
         CheckCollision(col, collider);
     }
 
@@ -96,5 +118,12 @@ public class Bullet : MonoBehaviour
         }
 
         Debug.Log($"Collision with {other.gameObject.name}");
+    }
+
+    public void MarkForDestruction()
+    {
+        destructed = true;
+        animator.SetTrigger("Destruct");
+        animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
     }
 }

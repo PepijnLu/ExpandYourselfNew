@@ -103,6 +103,7 @@ MonoBehaviour:
   phaseList:
   - {fileID: 11400000, guid: e88e9af95047b3446aa3b2b0b8e6bf7f, type: 2}
   tempBulletPrefab: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}
+  currentPhase: {fileID: 0}
   bullets: []
   inTool: 0
   shouldPauseTool: 0

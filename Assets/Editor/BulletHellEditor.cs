@@ -25,7 +25,7 @@ public class BulletHellEditor : EditorWindow
     bool phasePreview;
     bool isPaused;
 
-    Button playButton, pauseButton, selectPatternButton, selectPhaseButton;
+    Button playButton, pauseButton, selectPatternButton, selectPhaseButton, rebuildPreviewButton;
 
     Texture playButtonTexture, stopButtonTexture, pauseButtonTexture;
     Image playButtonIcon, pauseButtonIcon;
@@ -143,6 +143,24 @@ public class BulletHellEditor : EditorWindow
         };
         controlRow.Add(selectPhaseButton);
 
+        //Rebuild preview label
+        Label refreshLabel = new Label("Rebuild preview:");
+        refreshLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+        refreshLabel.style.marginTop = 5;
+        refreshLabel.style.marginBottom = 5;
+        refreshLabel.style.marginLeft = 200;
+        controlRow.Add(refreshLabel);
+
+        //Rebuild preview button
+        rebuildPreviewButton = new Button(() =>
+        {
+            RebuildPreview();
+        })
+        {
+            text = "Rebuild"
+        };
+        controlRow.Add(rebuildPreviewButton);
+
         // Preview box
         VisualElement previewBox = new VisualElement();
         previewBox.style.marginTop = 10; 
@@ -176,10 +194,7 @@ public class BulletHellEditor : EditorWindow
             previewGUI.MarkDirtyRepaint();
         }).Every(16);
 
-        bossEnemy.UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true, AddBulletsToPreview);
-        SwitchPreviewMode(false);
-
-        isPaused = false;
+        PreviewStart();
     }
 
     public void AddBulletsToPreview(List<Bullet> _bulletsToAdd)
@@ -188,6 +203,14 @@ public class BulletHellEditor : EditorWindow
         {
             preview.AddSingleGO(_bullet.gameObject);
         }
+    }
+
+    void PreviewStart()
+    {
+        bossEnemy.UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true, AddBulletsToPreview);
+        SwitchPreviewMode(false);
+
+        isPaused = false;
     }
 
     private void PreviewUpdate()
@@ -370,6 +393,7 @@ public class BulletHellEditor : EditorWindow
             phaseEditor.enabledSelf = false;
             selectPatternButton.enabledSelf = false;
             selectPhaseButton.enabledSelf = false;
+            rebuildPreviewButton.enabledSelf = false;
 
             if (phasePreview)
             {
@@ -380,13 +404,14 @@ public class BulletHellEditor : EditorWindow
         {
             playButton.style.backgroundColor = Color.grey;
             playButtonIcon.image = playButtonTexture;
+            rebuildPreviewButton.enabledSelf = true;
 
             if (phasePreview)
             {
                 bossEnemy.DestroyAllBullets(true);
                 selectPatternButton.enabledSelf = true;
 
-                foreach(PhaseRow row in phaseEditor.phaseRows)
+                foreach (PhaseRow row in phaseEditor.phaseRows)
                 {
                     row.HighlightRow(false);
                 }
@@ -473,7 +498,14 @@ public class BulletHellEditor : EditorWindow
         }
     }
     
-    
+    private void RebuildPreview()
+    {
+        preview.Cleanup();
+        preview = null;
+
+        CreatePreview();
+        PreviewStart();
+    }
     private void OnLostFocus()
     {
         Debug.Log("ON LOST FOCUS");

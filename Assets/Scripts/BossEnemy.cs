@@ -175,21 +175,20 @@ public class BossEnemy : MonoBehaviour
             Quaternion bulletRotation =
                  Quaternion.Euler(0f, 0f, bulletAngle);
 
-            Bullet newBullet = CreateBullet((transform.position + new Vector3(direction.x * 0.2f, direction.y * 0.2f, -1)), bulletRotation, .2f, _bulletStartAngle, Color.red);
+            Bullet newBullet = CreateBullet((transform.position + new Vector3(direction.x * 0.2f, direction.y * 0.2f, -1)), bulletRotation, .5f, _bulletStartAngle);
             newBullets.Add(newBullet);
         }
 
         if(_callback != null) _callback.Invoke(newBullets);
     }
 
-    private Bullet CreateBullet(Vector3 _bulletPosition, Quaternion _bulletRotation, float _bulletSize, float _bulletAngle, Color _color)
+    private Bullet CreateBullet(Vector3 _bulletPosition, Quaternion _bulletRotation, float _bulletSize, float _bulletAngle)
     {
         Bullet newBullet = Instantiate(tempBulletPrefab);
 
         newBullet.transform.localScale = new Vector2(_bulletSize, _bulletSize);
         newBullet.transform.position = _bulletPosition;
         newBullet.transform.rotation = _bulletRotation;
-        newBullet.GetComponent<SpriteRenderer>().color = _color;
 
         Vector2 bulletDirection = GetBulletDirection(_bulletAngle, _bulletRotation);
 
@@ -222,8 +221,9 @@ public class BossEnemy : MonoBehaviour
         }
         else
         {
+            _bullet.MarkForDestruction();
             bullets.Remove(_bullet);
-            Destroy(_bullet.gameObject);
+            //Destroy(_bullet.gameObject);
         }
     }
 
