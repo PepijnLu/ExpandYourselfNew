@@ -103,11 +103,17 @@ public class Player : MonoBehaviour, IDamagable
 
     void CollisionEnterInPreview(Collider2D owner, Collider2D other)
     {
-        if (!overlappingBlockingColliders.Contains(other)) overlappingBlockingColliders.Add(other);
+        if(!other.isTrigger)
+        {
+            if (!overlappingBlockingColliders.Contains(other)) overlappingBlockingColliders.Add(other);
+        }
     }
 
     void CollisionExitInPreview(Collider2D owner, Collider2D other)
     {
-        if (overlappingBlockingColliders.Contains(other)) overlappingBlockingColliders.Remove(other);
+        if (!other.isTrigger)
+        {
+            if (overlappingBlockingColliders.Contains(other)) overlappingBlockingColliders.Remove(other);
+        }
     }
 }

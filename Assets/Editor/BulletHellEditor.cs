@@ -26,7 +26,7 @@ public class BulletHellEditor : EditorWindow
     Button playButton, pauseButton, selectPatternButton, selectPhaseButton;
 
     Texture playButtonTexture, stopButtonTexture, pauseButtonTexture;
-    Image playButtonIcon;
+    Image playButtonIcon, pauseButtonIcon;
 
     int phasesAmount;
     int previewingPhase;
@@ -88,7 +88,7 @@ public class BulletHellEditor : EditorWindow
         rightPanel.Add(controlRow);
 
         //Play label
-        Label playLabel = new Label("Play:");
+        Label playLabel = new Label("Play/Pause:");
         playLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
         playLabel.style.marginTop = 5;
         playLabel.style.marginBottom = 5;
@@ -103,6 +103,16 @@ public class BulletHellEditor : EditorWindow
         playButtonIcon.image = playButtonTexture;
         playButton.Add(playButtonIcon);
         controlRow.Add(playButton);
+
+        //Pause Button
+        pauseButton = new Button(() =>
+        {
+            TogglePause(!isPaused);
+        });
+        pauseButtonIcon = new Image();
+        pauseButtonIcon.image = pauseButtonTexture;
+        pauseButton.Add(pauseButtonIcon);
+        controlRow.Add(pauseButton);
 
         //Mode label
         Label modeLabel = new Label("Mode:");
@@ -183,9 +193,9 @@ public class BulletHellEditor : EditorWindow
 
         if(bossEnemy)
         {
-            if(!isPaused)
+            if(!isPaused && bossEnemy.shouldPauseTool)
             {
-                isPaused = bossEnemy.shouldPauseTool;
+                TogglePause(true);
                 bossEnemy.shouldPauseTool = false;
             }
         }
@@ -367,6 +377,22 @@ public class BulletHellEditor : EditorWindow
                 bossEnemy.UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true, AddBulletsToPreview);
                 patternEditor.enabledSelf = true;
             }
+        }
+    }
+
+    private void TogglePause(bool _pause)
+    {
+        if(isPaused && !_pause)
+        {
+            pauseButton.style.backgroundColor = Color.grey;
+            pauseButtonIcon.image = pauseButtonTexture;
+            isPaused = false;
+        }
+        else if (_pause)
+        {
+            pauseButton.style.backgroundColor = Color.blue;
+            pauseButtonIcon.image = playButtonTexture;
+            isPaused = true;
         }
     }
 
