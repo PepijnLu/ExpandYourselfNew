@@ -103,6 +103,8 @@ public class Player : MonoBehaviour, IDamagable
 
     void CollisionEnterInPreview(Collider2D owner, Collider2D other)
     {
+        if (!other) return;
+
         if(!other.isTrigger)
         {
             if (!overlappingBlockingColliders.Contains(other)) overlappingBlockingColliders.Add(other);
@@ -111,6 +113,8 @@ public class Player : MonoBehaviour, IDamagable
 
     void CollisionExitInPreview(Collider2D owner, Collider2D other)
     {
+        if (!other) return;
+
         if (!other.isTrigger)
         {
             if (overlappingBlockingColliders.Contains(other)) overlappingBlockingColliders.Remove(other);

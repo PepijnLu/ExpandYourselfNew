@@ -18,16 +18,28 @@ public class BossEnemy : MonoBehaviour
 
     EnemyPhase currentPhase;
     public List<Bullet> bullets;
-    private List<Bullet> bulletsToDestroy = new();
+    private List<Bullet> bulletsToDestroy;
 
     public bool inTool;
+
     public bool shouldPauseTool = false;
+    public int hitAttackInPhaseIndex;
+
+    public int attackIndex;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Awaken()
     {
         currentPhase = phaseList[0];
         StartCoroutine(StartFight());
+    }
+
+    public void InitializeBoss(BHECollisionManager _bheCollisionManager)
+    {
+        bulletsToDestroy = new();
+        bullets = new();
+        inTool = true;
+        bheCollisionManager = _bheCollisionManager;
     }
 
     IEnumerator StartFight()
@@ -79,18 +91,8 @@ public class BossEnemy : MonoBehaviour
 
             bullet.BulletUpdate(_deltaTime);
         }
-        
-        if(bulletsToDestroy == null) bulletsToDestroy = new();
 
-        foreach (Bullet bullet in bulletsToDestroy)
-        {
-            if (!bullet) continue;
-
-            bullets.Remove(bullet);
-            DestroyImmediate(bullet.gameObject);
-        }
-
-        bulletsToDestroy.Clear();
+        ClearBullets();
     }
 
     void HandlePhase(float _deltaTime, Action<List<Bullet>> _updateBulletCallback)
@@ -122,6 +124,11 @@ public class BossEnemy : MonoBehaviour
                     break;
             }
 
+            if(inTool)
+            {
+                attackIndex = currentPhase.attacks.IndexOf(newAttack);
+            }
+
             //Skip no wait time frames
             if (currentAttackInt < currentPhase.attacks.Count)
             {
@@ -139,7 +146,7 @@ public class BossEnemy : MonoBehaviour
 
         if (_destroyOld)
         {
-            DestroyAllBullets(inTool);
+            DestroyAllBullets(true);
         }
 
         float angleStep = 0;
@@ -188,7 +195,12 @@ public class BossEnemy : MonoBehaviour
 
         float bulletSpeed = 2;
 
-        newBullet.InitializeBullet(this, bulletSpeed, 1, bulletDirection, _bulletPosition, inTool, bheCollisionManager);
+
+        int currentAttackIndex = currentAttackInt;
+
+        Debug.Log($"Attack Index: {currentAttackIndex}");
+
+        newBullet.InitializeBullet(this, bulletSpeed, 1, bulletDirection, _bulletPosition, inTool, bheCollisionManager, currentAttackIndex);
         bullets.Add(newBullet);
 
         return newBullet;
@@ -215,21 +227,36 @@ public class BossEnemy : MonoBehaviour
         }
     }
 
-    public void DestroyAllBullets(bool _destroyImmediate)
+
+    public void DestroyAllBullets(bool _immediatelyDestroy)
     {
-        if (bullets != null)
+        
+        foreach (Bullet bullet in bullets)
         {
-            foreach (Bullet bullet in bullets)
-            {
-                DestroyBullet(bullet);
-                //if (_destroyImmediate) DestroyImmediate(bullet.gameObject);
-                //else Destroy(bullet.gameObject);
-            }
-            bullets.Clear();
+            DestroyBullet(bullet);
         }
-        else
+        bullets.Clear();
+
+        if (_immediatelyDestroy) ClearBullets();
+    }
+
+    private void ClearBullets()
+    {
+        if(!inTool)
         {
-            bullets = new();
+            throw new Exception("Can't destroy immediate in play mode");
         }
+
+        foreach (Bullet bullet in bulletsToDestroy)
+        {
+            if (!bullet) continue;
+
+            bullets.Remove(bullet);
+            DestroyImmediate(bullet.gameObject);
+            Debug.Log("Clear Bullet");
+        }
+
+        bulletsToDestroy.Clear();
+
     }
 }

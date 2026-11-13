@@ -6,6 +6,8 @@ public class Bullet : MonoBehaviour
     public Vector3 bulletStartPosition;
     BossEnemy parent;
 
+    int attackIndex;
+
     float bulletSpeed;
     int bulletDamage;
 
@@ -44,7 +46,7 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    public void InitializeBullet(BossEnemy _parent, float _bulletSpeed, int _bulletDamage, Vector2 _bulletDirection, Vector3 _bulletStartPosition, bool _inTool, BHECollisionManager _collisionManager)
+    public void InitializeBullet(BossEnemy _parent, float _bulletSpeed, int _bulletDamage, Vector2 _bulletDirection, Vector3 _bulletStartPosition, bool _inTool, BHECollisionManager _collisionManager, int _attackIndex)
     {
         inTool = _inTool;
 
@@ -53,6 +55,7 @@ public class Bullet : MonoBehaviour
         bulletDamage = _bulletDamage;
         bulletDirection = _bulletDirection;
         bulletStartPosition = _bulletStartPosition;
+        attackIndex = _attackIndex;
 
         initialized = true;
 
@@ -78,6 +81,7 @@ public class Bullet : MonoBehaviour
             if (other.TryGetComponent(out IDamagable damagable))
             {
                 parent.shouldPauseTool = true;
+                parent.hitAttackInPhaseIndex = attackIndex;
                 damagable.TakeDamage(bulletDamage);
             }
         }

@@ -12,6 +12,8 @@ public class PhaseRow : VisualElement
     public ObjectField patternField;
     Texture trashIcon;
 
+    public StyleColor defaultColor;
+
     public PhaseRow(PhaseEditor _phaseEditor)
     {
         style.flexDirection = FlexDirection.Row;
@@ -31,6 +33,9 @@ public class PhaseRow : VisualElement
         Add(waitTimeField);
 
         patternField = new ObjectField();
+
+        defaultColor = patternField.style.backgroundColor;
+
         patternField.objectType = typeof(BulletPattern);
         patternField.enabledSelf = false;
         patternField.style.maxWidth = 125;
@@ -60,6 +65,18 @@ public class PhaseRow : VisualElement
     {
         AttackType phase = (AttackType)evt.newValue;
         UpdateEnabledField(phase);
+    }
+
+    public void HighlightRow(bool _highlight)
+    {
+        if(_highlight)
+        {
+            style.backgroundColor = Color.white;
+        }
+        else
+        {
+            style.backgroundColor = defaultColor;
+        }
     }
 
     void UpdateEnabledField(AttackType _attackType)

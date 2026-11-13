@@ -1,3 +1,4 @@
+using Mono.Cecil;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class BulletHellEditor : EditorWindow
 
     public BossEnemy bossEnemy;
     public Player player;
+    Vector3 playerStart;
      
     private readonly float cameraZoom = 60f;
 
@@ -32,6 +34,8 @@ public class BulletHellEditor : EditorWindow
     int previewingPhase;
     float phaseWaitTimer;
     double lastTime;
+
+    int currentAttackIndex;
 
     [MenuItem("Window/UI Toolkit/BulletHellEditor")]
     public static void ShowExample()
@@ -196,7 +200,13 @@ public class BulletHellEditor : EditorWindow
             if(!isPaused && bossEnemy.shouldPauseTool)
             {
                 TogglePause(true);
+                
+                if(phasePreview) phaseEditor.phaseRows[bossEnemy.hitAttackInPhaseIndex].style.backgroundColor = Color.red;
+                    
                 bossEnemy.shouldPauseTool = false;
+                bossEnemy.hitAttackInPhaseIndex = -1;
+
+                Debug.Log($"PAUSE FROM BOSS HIT");
             }
         }
 
@@ -205,6 +215,8 @@ public class BulletHellEditor : EditorWindow
             bossEnemy.PreviewUpdate(deltaTime, AddBulletsToPreview);
             player.PreviewUpdate(deltaTime);
             player.playerMovement.PreviewUpdate(deltaTime, inputManager.keysPressed);
+
+            UpdateRowHighlights();
         }
 
         lastTime = currentTime;
@@ -281,11 +293,10 @@ public class BulletHellEditor : EditorWindow
         //Set boss to in tool
         collisionManager = new();
         bossEnemy = bossEnemyGO.GetComponent<BossEnemy>();
-        bossEnemy.inTool = true;
+        bossEnemy.InitializeBoss(collisionManager);
 
         Debug.Log($"Create Preview");
 
-        bossEnemy.bheCollisionManager = collisionManager;
 
         //Add player
         GameObject playerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Player.prefab");
@@ -293,6 +304,7 @@ public class BulletHellEditor : EditorWindow
 
         player = playerGO.GetComponent<Player>();
         player.InitializePlayer(collisionManager, true);
+        playerStart = player.transform.position;
 
         preview.AddSingleGO(playerGO);
 
@@ -355,10 +367,11 @@ public class BulletHellEditor : EditorWindow
             playButtonIcon.image = stopButtonTexture;
             patternEditor.enabledSelf = false;
             phaseEditor.enabledSelf = false;
+            selectPatternButton.enabledSelf = false;
+            selectPhaseButton.enabledSelf = false;
 
             if (phasePreview)
             {
-                //0 for testing first phase 
                 bossEnemy.StartPhase(phaseEditor.currentPhase);
             }
         }
@@ -370,13 +383,22 @@ public class BulletHellEditor : EditorWindow
             if (phasePreview)
             {
                 bossEnemy.DestroyAllBullets(true);
-                phaseEditor.enabledSelf = true;
+                selectPatternButton.enabledSelf = true;
+
+                foreach(PhaseRow row in phaseEditor.phaseRows)
+                {
+                    row.HighlightRow(false);
+                }
             }
             else
             {
                 bossEnemy.UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true, AddBulletsToPreview);
-                patternEditor.enabledSelf = true;
+                selectPhaseButton.enabledSelf = true;
             }
+
+            TogglePause(false);
+            patternEditor.enabledSelf = true;
+            player.transform.position = playerStart;
         }
     }
 
@@ -427,6 +449,24 @@ public class BulletHellEditor : EditorWindow
         }
     }
 
+    void UpdateRowHighlights()
+    {
+        if(currentAttackIndex != bossEnemy.attackIndex)
+        {
+            currentAttackIndex = bossEnemy.attackIndex;
+
+            if ((phaseEditor.phaseRows.Count > currentAttackIndex - 1) && (currentAttackIndex - 1 >= 0))
+            {
+                phaseEditor.phaseRows[currentAttackIndex - 1].HighlightRow(false);
+            }
+            if (currentAttackIndex < phaseEditor.phaseRows.Count)
+            {
+                phaseEditor.phaseRows[currentAttackIndex].HighlightRow(true);
+            }
+        }
+    }
+    
+    
     private void OnLostFocus()
     {
         Debug.Log("ON LOST FOCUS");
