@@ -245,6 +245,7 @@ public class BulletHellEditor : EditorWindow
             selectPatternButton.style.backgroundColor = Color.blue;
             selectPhaseButton.style.backgroundColor = Color.grey;
 
+            bossEnemy.currentPhase = null;
             phasePreview = false;
             phaseEditor.enabledSelf = false;
             patternEditor.enabledSelf = true;
@@ -409,6 +410,12 @@ public class BulletHellEditor : EditorWindow
             pauseButton.style.backgroundColor = Color.grey;
             pauseButtonIcon.image = pauseButtonTexture;
             isPaused = false;
+
+            //Make red rows normal again
+            foreach (PhaseRow row in phaseEditor.phaseRows)
+            {
+                if((row.style.backgroundColor == Color.red) && (row.style.backgroundColor != Color.white)) row.HighlightRow(false);
+            }
         }
         else if (_pause)
         {

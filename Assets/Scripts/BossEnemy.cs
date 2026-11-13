@@ -16,7 +16,7 @@ public class BossEnemy : MonoBehaviour
     int totalPhaseAttacks;
     float attackTimer;
 
-    EnemyPhase currentPhase;
+    public EnemyPhase currentPhase;
     public List<Bullet> bullets;
     private List<Bullet> bulletsToDestroy;
 
