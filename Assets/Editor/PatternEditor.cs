@@ -14,6 +14,7 @@ public class PatternEditor : VisualElement
     private BulletHellEditor bulletHellEditor;
     public ObjectField patternField, bulletTypeField;
     private Button saveButton, createButton;
+    private BulletOverrides bulletOverrides;
 
     private BulletPattern currentPattern;
 
@@ -21,6 +22,11 @@ public class PatternEditor : VisualElement
     {
         style.backgroundColor = Color.black;
         style.marginBottom = 20;
+
+        //Label
+        Label patternEditorLabel = new Label("Attack values:");
+        patternEditorLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+        Add(patternEditorLabel);
 
         bulletHellEditor = _bulletHellEditor;
         // Bullet Amount
@@ -38,10 +44,6 @@ public class PatternEditor : VisualElement
         attackAngleField.value = 45;
         Add(attackAngleField);
 
-        // Origin Angle
-        //originAngleField = new FloatField("Origin Angle");
-        //Add(originAngleField);
-
         // Bullet type
         bulletTypeField = new ObjectField("Bullet Type");
         bulletTypeField.objectType = typeof(Bullet);
@@ -54,6 +56,15 @@ public class PatternEditor : VisualElement
 
         positionOffsetYField = new FloatField("Offset Y");
         Add(positionOffsetYField);
+
+        //Bullet overrides
+        Label overrideLabel = new Label("Bullet Overrides:");
+        overrideLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+        overrideLabel.style.paddingTop = 20;
+        Add(overrideLabel);
+
+        bulletOverrides = new BulletOverrides();
+        Add(bulletOverrides);
 
         // SO name
         patternNameField = new TextField("Pattern Name");
@@ -184,6 +195,10 @@ public class PatternEditor : VisualElement
 
         _pattern.bulletOffset.x = positionOffsetXField.value;
         _pattern.bulletOffset.y = positionOffsetYField.value;
+
+        _pattern.bulletSpeedOverride = bulletOverrides.bulletSpeedField.value;
+        _pattern.bulletDamageOverride = bulletOverrides.bulletDamageField.value;
+        _pattern.bulletSizeOverride = bulletOverrides.bulletSizeField.value;
 
         _pattern.name = patternNameField.value;
 

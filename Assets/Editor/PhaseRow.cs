@@ -21,9 +21,7 @@ public class PhaseRow : VisualElement
         style.flexDirection = FlexDirection.Row;
         trashIcon = EditorGUIUtility.IconContent("TreeEditor.Trash").image;
 
-        phaseTypeField = new EnumField(
-        AttackType.Wait
-        );
+        phaseTypeField = new EnumField(AttackType.Wait);
 
         phaseTypeField.RegisterValueChangedCallback(UpdateRow);
 

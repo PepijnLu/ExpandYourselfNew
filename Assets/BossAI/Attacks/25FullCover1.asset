@@ -15,6 +15,7 @@ MonoBehaviour:
   bulletAmount: 25
   bulletSpread: 185
   attackAngle: 179
+  bulletOffset: {x: 0, y: 0}
   bulletType: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}
   bulletSpeedOverride: 0
   bulletDamageOverride: 0
