@@ -284,6 +284,11 @@ public class BulletHellEditor : EditorWindow
         if (!phasePreview) bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
     }
 
+    public void UpdateBulletCountFromPatternEditor(ChangeEvent<Object> evt)
+    {
+        if (!phasePreview) bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
+    }
+
     private BulletPattern GetPatternFromEditorFields()
     {
         BulletPattern pattern = new();

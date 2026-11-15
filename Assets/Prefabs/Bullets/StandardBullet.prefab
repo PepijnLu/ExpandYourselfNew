@@ -103,8 +103,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 710034cf30d6aaf40b0d79cbdbebc71f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletStartPosition: {x: 0, y: 0, z: 0}
+  bulletSpeed: 3
+  bulletDamage: 1
   bulletDirection: {x: 0, y: 0}
+  bulletStartPosition: {x: 0, y: 0, z: 0}
   col: {fileID: 0}
 --- !u!58 &6601157241960917962
 CircleCollider2D:

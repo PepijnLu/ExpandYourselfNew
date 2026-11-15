@@ -142,13 +142,16 @@ public class BossEnemy : MonoBehaviour
 
     public void UpdateBulletCount(BulletPattern _pattern, bool _destroyOld, Action<List<Bullet>> _callback)
     {
+        Bullet bulletPrefab = _pattern.bulletType;
+
         float _bulletAmount = _pattern.bulletAmount;
         float _bulletSpread = _pattern.bulletSpread;
         float _attackAngle = _pattern.attackAngle;
 
-        float _bulletSpeed = 0;
-        int _bulletDamage = 0;
-        float _bulletSize = 0;
+        float _bulletSpeed = bulletPrefab.bulletSpeed;
+        int _bulletDamage = bulletPrefab.bulletDamage;
+
+        float _bulletSize = bulletPrefab.gameObject.transform.localScale.x;
 
         if (_pattern.bulletSpeedOverride != 0) _bulletSpeed = _pattern.bulletSpeedOverride;
         if (_pattern.bulletDamageOverride != 0) _bulletDamage = _pattern.bulletDamageOverride;
@@ -183,16 +186,16 @@ public class BossEnemy : MonoBehaviour
 
             Vector3 bulletPosition = transform.position;
 
-            Bullet newBullet = CreateBullet(bulletPosition, bulletDirection, _bulletSpeed, _bulletDamage, _bulletSize);
+            Bullet newBullet = CreateBullet(bulletPrefab, bulletPosition, bulletDirection, _bulletSpeed, _bulletDamage, _bulletSize);
             newBullets.Add(newBullet);
         }
 
         _callback?.Invoke(newBullets);
     }
 
-    private Bullet CreateBullet(Vector3 _bulletPosition, Vector2 _bulletDirection, float _bulletSpeed, int _bulletDamage, float _bulletSize)
+    private Bullet CreateBullet(Bullet _bulletPrefab, Vector3 _bulletPosition, Vector2 _bulletDirection, float _bulletSpeed, int _bulletDamage, float _bulletSize)
     {
-        Bullet newBullet = Instantiate(tempBulletPrefab, _bulletPosition, Quaternion.identity);
+        Bullet newBullet = Instantiate(_bulletPrefab, _bulletPosition, Quaternion.identity);
 
         newBullet.InitializeBullet(this, _bulletSpeed, _bulletDamage, _bulletSize, _bulletDirection, _bulletPosition, inTool, bheCollisionManager, currentAttackInt);
         

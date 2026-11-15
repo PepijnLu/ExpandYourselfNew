@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -43,7 +45,7 @@ public class PatternEditor : VisualElement
         // Bullet type
         bulletTypeField = new ObjectField("Bullet Type");
         bulletTypeField.objectType = typeof(Bullet);
-        //bulletAngleField.value = 45;
+        bulletTypeField.value = AssetDatabase.LoadAssetAtPath<Bullet>("Assets/Prefabs/Bullets/StandardBullet.prefab"); 
         Add(bulletTypeField);
 
         // SO name
@@ -79,6 +81,7 @@ public class PatternEditor : VisualElement
         bulletAmountField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
         bulletSpreadField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
         attackAngleField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
+        bulletTypeField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
 
         patternNameField.RegisterValueChangedCallback(CheckPatternName);
         patternField.RegisterValueChangedCallback(SelectNewPattern);

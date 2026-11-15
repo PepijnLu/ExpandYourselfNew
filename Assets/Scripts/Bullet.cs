@@ -9,8 +9,8 @@ public class Bullet : MonoBehaviour
 
     int attackIndex;
 
-    [SerializeField] float bulletSpeed;
-    [SerializeField] int bulletDamage;
+    public float bulletSpeed;
+    public int bulletDamage;
 
     [HideInInspector] public Vector2 bulletDirection;
     [HideInInspector] public Vector3 bulletStartPosition;
