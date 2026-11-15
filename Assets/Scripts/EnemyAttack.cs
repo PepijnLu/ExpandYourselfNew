@@ -5,4 +5,5 @@ public class EnemyAttack
     public AttackType attackType;
     public float waitTime;
     public BulletPattern bulletPattern;
+    public float angleOffset;
 }

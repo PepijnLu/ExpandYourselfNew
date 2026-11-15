@@ -10,8 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b8dbada56314d074a8d96ccf9a200021, type: 3}
-  m_Name: Boss1_SpreadAttack2
+  m_Name: CarrotFast
   m_EditorClassIdentifier: 
-  bulletAmount: 4
-  bulletSpread: 180
-  bulletStartAngle: 0
+  bulletAmount: 1
+  bulletSpread: 0
+  attackAngle: 0
+  bulletOffset: {x: 0, y: -0.4}
+  bulletType: {fileID: 6154068675008969671, guid: 10af8adb89e2b4749a4cefb1377cc9e8, type: 3}
+  bulletSpeedOverride: 0
+  bulletDamageOverride: 0
+  bulletSizeOverride: 0

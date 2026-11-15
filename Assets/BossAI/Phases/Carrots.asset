@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a85d3cd598b87f14a9c11a7eee62228f, type: 3}
+  m_Name: Carrots
+  m_EditorClassIdentifier: 
+  duration: 0
+  movementDirection: {x: 0, y: 0}
+  attacks:
+  - attackType: 0
+    waitTime: 0
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 952b888ab8f0d944aa412491249ce34c, type: 2}
+    angleOffset: 0
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: a14adbe46c0f3974591b8104718c26ac, type: 2}
+    angleOffset: 0
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: a79273c296456d7439485b17b707ecac, type: 2}
+    angleOffset: 0
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 4202c7fb5e4d77f4ca738f1ead41e968, type: 2}
+    angleOffset: 0
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 0066e03f1c649f74999987f172bb184d, type: 2}
+    angleOffset: 0

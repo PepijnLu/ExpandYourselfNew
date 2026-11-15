@@ -210,7 +210,7 @@ public class BulletHellEditor : EditorWindow
 
     void PreviewStart()
     {
-        bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
+        bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
         SwitchPreviewMode(false);
 
         isPaused = false;
@@ -273,36 +273,44 @@ public class BulletHellEditor : EditorWindow
             phasePreview = false;
             phaseEditor.enabledSelf = false;
             patternEditor.enabledSelf = true;
-            bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
+            bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
         }
     }
 
     public void UpdateBulletCountFromPatternEditor(ChangeEvent<int> evt)
     {
-        if(!phasePreview) bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
+        if(!phasePreview) bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
     }
 
     public void UpdateBulletCountFromPatternEditor(ChangeEvent<float> evt)
     {
-        if (!phasePreview) bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
+        if (!phasePreview) bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
     }
 
     public void UpdateBulletCountFromPatternEditor(ChangeEvent<Object> evt)
     {
-        if (!phasePreview) bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
+        if (!phasePreview) bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
     }
 
-    private BulletPattern GetPatternFromEditorFields()
+    private EnemyAttack GetAttackFromEditorFields()
     {
+        EnemyAttack attack = new();
+        
         BulletPattern pattern = CreateInstance<BulletPattern>();
 
         pattern.bulletAmount = patternEditor.bulletAmountField.value;
         pattern.bulletSpread = patternEditor.bulletSpreadField.value;
         pattern.attackAngle = patternEditor.attackAngleField.value;
         pattern.bulletType = patternEditor.bulletTypeField.value as Bullet;
+
+        pattern.bulletOffset.x = patternEditor.positionOffsetXField.value;
+        pattern.bulletOffset.y = patternEditor.positionOffsetYField.value;
+
         pattern.name = patternEditor.patternNameField.value;
 
-        return pattern;
+        attack.bulletPattern = pattern;
+
+        return attack;
     }
 
     private void CreatePreview()
@@ -436,7 +444,7 @@ public class BulletHellEditor : EditorWindow
             }
             else
             {
-                bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
+                bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
                 selectPhaseButton.enabledSelf = true;
                 patternEditor.enabledSelf = true;
             }

@@ -6,6 +6,7 @@ public class BulletPattern : ScriptableObject
     public int bulletAmount;
     public float bulletSpread;
     public float attackAngle;
+    public Vector2 bulletOffset;
 
     public Bullet bulletType;
 

@@ -24,11 +24,16 @@ public class PhaseEditor : VisualElement
         Label phaseTypeLabel = new Label("Phase Type");
         header.Add(phaseTypeLabel);
 
-        Label waitTimeLabel = new Label("Wait Time");
+        Label waitTimeLabel = new Label("Wait");
         waitTimeLabel.style.color = Color.black;
         header.Add(waitTimeLabel);
 
+        Label angleOffsetLabel = new Label("Offset");
+        angleOffsetLabel.style.color = Color.white;
+        header.Add(angleOffsetLabel);
+
         Label attackLabel = new Label("Attack");
+        attackLabel.style.color = Color.black;
         header.Add(attackLabel);
 
         Add(header);
@@ -101,7 +106,7 @@ public class PhaseEditor : VisualElement
             foreach (EnemyAttack attack in currentPhase.attacks)
             {
                 PhaseRow newRow = new(this);
-                newRow.SetValues(attack.attackType, attack.waitTime, attack.bulletPattern);
+                newRow.SetValues(attack.attackType, attack.waitTime, attack.bulletPattern, attack.angleOffset);
                 phaseRows.Add(newRow);
                 rowContainer.Add(newRow);
 
@@ -138,12 +143,14 @@ public class PhaseEditor : VisualElement
             AttackType rowAttackType = (AttackType)row.phaseTypeField.value;
             float rowWaitTime = row.waitTimeField.value;
             BulletPattern rowBulletPattern = (BulletPattern)row.patternField.value;
+            float rowAngleOffset = row.angleOffsetField.value;
 
             EnemyAttack newAttack = new();
 
             newAttack.attackType = rowAttackType;
             newAttack.waitTime = rowWaitTime;
             newAttack.bulletPattern = rowBulletPattern;
+            newAttack.angleOffset = rowAngleOffset;
 
             currentPhase.attacks.Add(newAttack);
         }
@@ -170,6 +177,7 @@ public class PhaseEditor : VisualElement
                     break;
                 case AttackType.Attack:
                     newAttack.bulletPattern = (BulletPattern)phaseRow.patternField.value;
+                    newAttack.angleOffset = phaseRow.angleOffsetField.value;
                     break;
             }
 

@@ -18,42 +18,56 @@ MonoBehaviour:
   - attackType: 0
     waitTime: 0
     bulletPattern: {fileID: 0}
-  - attackType: 1
-    waitTime: 0
-    bulletPattern: {fileID: 11400000, guid: 0979201868473a344b5be399fd91b6f0, type: 2}
-  - attackType: 0
-    waitTime: 0.2
-    bulletPattern: {fileID: 0}
+    angleOffset: 0
   - attackType: 1
     waitTime: 0
     bulletPattern: {fileID: 11400000, guid: 2d4e5d4350a65ed4e97f11db2fc24bf7, type: 2}
+    angleOffset: -4
   - attackType: 0
     waitTime: 0.2
     bulletPattern: {fileID: 0}
-  - attackType: 1
-    waitTime: 0
-    bulletPattern: {fileID: 11400000, guid: 18d31b3bc8b8f1545b174e131faf25b4, type: 2}
-  - attackType: 0
-    waitTime: 0.2
-    bulletPattern: {fileID: 0}
+    angleOffset: 0
   - attackType: 1
     waitTime: 0
     bulletPattern: {fileID: 11400000, guid: 2d4e5d4350a65ed4e97f11db2fc24bf7, type: 2}
+    angleOffset: 0
   - attackType: 0
     waitTime: 0.2
     bulletPattern: {fileID: 0}
-  - attackType: 1
-    waitTime: 0
-    bulletPattern: {fileID: 11400000, guid: 0979201868473a344b5be399fd91b6f0, type: 2}
-  - attackType: 0
-    waitTime: 0.2
-    bulletPattern: {fileID: 0}
+    angleOffset: 0
   - attackType: 1
     waitTime: 0
     bulletPattern: {fileID: 11400000, guid: 2d4e5d4350a65ed4e97f11db2fc24bf7, type: 2}
+    angleOffset: 4
   - attackType: 0
     waitTime: 0.2
     bulletPattern: {fileID: 0}
+    angleOffset: 0
   - attackType: 1
     waitTime: 0
-    bulletPattern: {fileID: 11400000, guid: 18d31b3bc8b8f1545b174e131faf25b4, type: 2}
+    bulletPattern: {fileID: 11400000, guid: 2d4e5d4350a65ed4e97f11db2fc24bf7, type: 2}
+    angleOffset: 0
+  - attackType: 0
+    waitTime: 0.2
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 2d4e5d4350a65ed4e97f11db2fc24bf7, type: 2}
+    angleOffset: -4
+  - attackType: 0
+    waitTime: 0.2
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 2d4e5d4350a65ed4e97f11db2fc24bf7, type: 2}
+    angleOffset: 0
+  - attackType: 0
+    waitTime: 0.2
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 2d4e5d4350a65ed4e97f11db2fc24bf7, type: 2}
+    angleOffset: 4

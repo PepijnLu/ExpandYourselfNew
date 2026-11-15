@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 public class PatternEditor : VisualElement
 {
     public IntegerField bulletAmountField;
-    public FloatField bulletSpreadField, attackAngleField;
+    public FloatField bulletSpreadField, attackAngleField, positionOffsetXField, positionOffsetYField;
     public TextField patternNameField;
     private BulletHellEditor bulletHellEditor;
     public ObjectField patternField, bulletTypeField;
@@ -48,6 +48,13 @@ public class PatternEditor : VisualElement
         bulletTypeField.value = AssetDatabase.LoadAssetAtPath<Bullet>("Assets/Prefabs/Bullets/StandardBullet.prefab"); 
         Add(bulletTypeField);
 
+        //Position offset
+        positionOffsetXField = new FloatField("Offset X");
+        Add(positionOffsetXField);
+
+        positionOffsetYField = new FloatField("Offset Y");
+        Add(positionOffsetYField);
+
         // SO name
         patternNameField = new TextField("Pattern Name");
         patternNameField.style.marginTop = 15;
@@ -82,6 +89,8 @@ public class PatternEditor : VisualElement
         bulletSpreadField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
         attackAngleField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
         bulletTypeField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
+        positionOffsetXField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
+        positionOffsetYField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
 
         patternNameField.RegisterValueChangedCallback(CheckPatternName);
         patternField.RegisterValueChangedCallback(SelectNewPattern);
@@ -89,6 +98,7 @@ public class PatternEditor : VisualElement
 
     public void SelectNewPattern(ChangeEvent<Object> evt)
     {
+        EnemyAttack newAttack = new();
         BulletPattern newPattern = evt.newValue as BulletPattern;
 
         if (newPattern != null)
@@ -100,8 +110,12 @@ public class PatternEditor : VisualElement
             attackAngleField.value = currentPattern.attackAngle;
             bulletTypeField.value = currentPattern.bulletType;
             patternNameField.value = currentPattern.name;
+            positionOffsetXField.value = currentPattern.bulletOffset.x;
+            positionOffsetYField.value = currentPattern.bulletOffset.y;
 
-            bulletHellEditor.bossEnemy.UpdateBulletCount(currentPattern, true, bulletHellEditor.AddBulletsToPreview);
+            newAttack.bulletPattern = newPattern;
+
+            bulletHellEditor.bossEnemy.UpdateBulletCount(newAttack, true, bulletHellEditor.AddBulletsToPreview);
             saveButton.enabledSelf = true;
         }
         else
@@ -144,6 +158,9 @@ public class PatternEditor : VisualElement
         currentPattern.attackAngle = attackAngleField.value;
         currentPattern.bulletType = bulletTypeField.value as Bullet;
 
+        currentPattern.bulletOffset.x = positionOffsetXField.value;
+        currentPattern.bulletOffset.y = positionOffsetYField.value;
+
         EditorUtility.SetDirty(currentPattern);
 
         AssetDatabase.SaveAssets();
@@ -157,6 +174,9 @@ public class PatternEditor : VisualElement
         bulletPattern.bulletSpread = bulletSpreadField.value;
         bulletPattern.attackAngle = attackAngleField.value;
         bulletPattern.bulletType = bulletTypeField.value as Bullet;
+
+        bulletPattern.bulletOffset.x = positionOffsetXField.value;
+        bulletPattern.bulletOffset.y = positionOffsetYField.value;
 
         AssetDatabase.CreateAsset(bulletPattern, $"Assets/BossAI/Attacks/{patternNameField.value}.asset");
         AssetDatabase.SaveAssets();

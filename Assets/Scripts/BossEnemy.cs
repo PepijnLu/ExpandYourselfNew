@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -118,8 +119,7 @@ public class BossEnemy : MonoBehaviour
                     }
                     break;
                 case AttackType.Attack:
-                    BulletPattern pattern = newAttack.bulletPattern;
-                    UpdateBulletCount(pattern, false, updateBulletCallback);
+                    UpdateBulletCount(newAttack, false, updateBulletCallback);
                     currentAttackInt++;
                     break;
             }
@@ -140,22 +140,24 @@ public class BossEnemy : MonoBehaviour
         }
     }
 
-    public void UpdateBulletCount(BulletPattern _pattern, bool _destroyOld, Action<List<Bullet>> _callback)
+    public void UpdateBulletCount(EnemyAttack _enemyAttack, bool _destroyOld, Action<List<Bullet>> _callback)
     {
-        Bullet bulletPrefab = _pattern.bulletType;
+        BulletPattern pattern = _enemyAttack.bulletPattern;
+        
+        Bullet bulletPrefab = pattern.bulletType;
 
-        float _bulletAmount = _pattern.bulletAmount;
-        float _bulletSpread = _pattern.bulletSpread;
-        float _attackAngle = _pattern.attackAngle;
+        float _bulletAmount = pattern.bulletAmount;
+        float _bulletSpread = pattern.bulletSpread;
+        float _attackAngle = pattern.attackAngle;
 
         float _bulletSpeed = bulletPrefab.bulletSpeed;
         int _bulletDamage = bulletPrefab.bulletDamage;
 
         float _bulletSize = bulletPrefab.gameObject.transform.localScale.x;
 
-        if (_pattern.bulletSpeedOverride != 0) _bulletSpeed = _pattern.bulletSpeedOverride;
-        if (_pattern.bulletDamageOverride != 0) _bulletDamage = _pattern.bulletDamageOverride;
-        if (_pattern.bulletSizeOverride != 0) _bulletSize = _pattern.bulletSizeOverride;
+        if (pattern.bulletSpeedOverride != 0) _bulletSpeed = pattern.bulletSpeedOverride;
+        if (pattern.bulletDamageOverride != 0) _bulletDamage = pattern.bulletDamageOverride;
+        if (pattern.bulletSizeOverride != 0) _bulletSize = pattern.bulletSizeOverride;
 
         List<Bullet> newBullets = new();
 
@@ -174,7 +176,7 @@ public class BossEnemy : MonoBehaviour
         {
             angleStep = _bulletSpread / (_bulletAmount);
         }
-        float startAngle = _bulletSpread / 2f;
+        float startAngle = (_bulletSpread / 2f) + _enemyAttack.angleOffset;
         startAngle += _attackAngle;
 
         //Create New Bullets
@@ -184,7 +186,7 @@ public class BossEnemy : MonoBehaviour
 
             Vector2 bulletDirection = GetBulletDirection(bulletAngle);
 
-            Vector3 bulletPosition = transform.position;
+            Vector3 bulletPosition = transform.position + new Vector3(pattern.bulletOffset.x, pattern.bulletOffset.y, 0);
 
             Bullet newBullet = CreateBullet(bulletPrefab, bulletPosition, bulletDirection, _bulletSpeed, _bulletDamage, _bulletSize);
             newBullets.Add(newBullet);

@@ -10,6 +10,8 @@ public class PhaseRow : VisualElement
     public EnumField phaseTypeField;
     public FloatField waitTimeField;
     public ObjectField patternField;
+    public FloatField angleOffsetField;
+
     Texture trashIcon;
 
     public StyleColor defaultColor;
@@ -32,13 +34,18 @@ public class PhaseRow : VisualElement
         waitTimeField.style.minWidth = 30;
         Add(waitTimeField);
 
+        angleOffsetField = new FloatField();
+        angleOffsetField.style.minWidth = 30;
+        Add(angleOffsetField);
+
+
         patternField = new ObjectField();
 
         defaultColor = patternField.style.backgroundColor;
 
         patternField.objectType = typeof(BulletPattern);
         patternField.enabledSelf = false;
-        patternField.style.maxWidth = 125;
+        patternField.style.maxWidth = 95;
         Add(patternField);
 
         //'Remove row' Button
@@ -52,13 +59,14 @@ public class PhaseRow : VisualElement
         Add(removeRowButton);
     }
 
-    public void SetValues(AttackType attackType, float waitTime, BulletPattern bulletPattern)
+    public void SetValues(AttackType _attackType, float _waitTime, BulletPattern _bulletPattern, float _angleOffset)
     {
-        phaseTypeField.value = attackType;
-        waitTimeField.value = waitTime;
-        patternField.value = bulletPattern;
+        phaseTypeField.value = _attackType;
+        waitTimeField.value = _waitTime;
+        patternField.value = _bulletPattern;
+        angleOffsetField.value = _angleOffset;
 
-        UpdateEnabledField(attackType);
+        UpdateEnabledField(_attackType);
     }
 
     void UpdateRow(ChangeEvent<Enum> evt)
@@ -86,10 +94,12 @@ public class PhaseRow : VisualElement
             case AttackType.Wait:
                 waitTimeField.enabledSelf = true;
                 patternField.enabledSelf = false;
+                angleOffsetField.enabledSelf = false;
                 break;
             case AttackType.Attack:
                 waitTimeField.enabledSelf = false;
                 patternField.enabledSelf = true;
+                angleOffsetField.enabledSelf = true;
                 break;
         }
     }
