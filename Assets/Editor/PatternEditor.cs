@@ -14,7 +14,9 @@ public class PatternEditor : VisualElement
     private BulletHellEditor bulletHellEditor;
     public ObjectField patternField, bulletTypeField;
     private Button saveButton, createButton;
-    private BulletOverrides bulletOverrides;
+    private BulletOverrideFields bulletOverrideFields;
+
+    private BulletOverrideEditor bulletOverrideEditor;
 
     private BulletPattern currentPattern;
 
@@ -22,6 +24,7 @@ public class PatternEditor : VisualElement
     {
         style.backgroundColor = Color.black;
         style.marginBottom = 20;
+        style.paddingBottom = 20;
 
         //Label
         Label patternEditorLabel = new Label("Attack values:");
@@ -58,13 +61,13 @@ public class PatternEditor : VisualElement
         Add(positionOffsetYField);
 
         //Bullet overrides
-        Label overrideLabel = new Label("Bullet Overrides:");
+        Label overrideLabel = new Label("All Bullet Overrides:");
         overrideLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
         overrideLabel.style.paddingTop = 20;
         Add(overrideLabel);
 
-        bulletOverrides = new BulletOverrides();
-        Add(bulletOverrides);
+        bulletOverrideFields = new BulletOverrideFields();
+        Add(bulletOverrideFields);
 
         // SO name
         patternNameField = new TextField("Pattern Name");
@@ -95,6 +98,9 @@ public class PatternEditor : VisualElement
         };
         saveButton.enabledSelf = false;
         Add(saveButton);
+
+        bulletOverrideEditor = new(this);
+        Add(bulletOverrideEditor);
 
         bulletAmountField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
         bulletSpreadField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
@@ -196,9 +202,9 @@ public class PatternEditor : VisualElement
         _pattern.bulletOffset.x = positionOffsetXField.value;
         _pattern.bulletOffset.y = positionOffsetYField.value;
 
-        _pattern.bulletSpeedOverride = bulletOverrides.bulletSpeedField.value;
-        _pattern.bulletDamageOverride = bulletOverrides.bulletDamageField.value;
-        _pattern.bulletSizeOverride = bulletOverrides.bulletSizeField.value;
+        _pattern.allBulletsOverrideValues.bulletSpeed = bulletOverrideFields.bulletSpeedField.value;
+        _pattern.allBulletsOverrideValues.bulletDamage = bulletOverrideFields.bulletDamageField.value;
+        _pattern.allBulletsOverrideValues.bulletSize = bulletOverrideFields.bulletSizeField.value;
 
         _pattern.name = patternNameField.value;
 

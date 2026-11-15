@@ -155,9 +155,17 @@ public class BossEnemy : MonoBehaviour
 
         float _bulletSize = bulletPrefab.gameObject.transform.localScale.x;
 
-        if (pattern.bulletSpeedOverride != 0) _bulletSpeed = pattern.bulletSpeedOverride;
-        if (pattern.bulletDamageOverride != 0) _bulletDamage = pattern.bulletDamageOverride;
-        if (pattern.bulletSizeOverride != 0) _bulletSize = pattern.bulletSizeOverride;
+
+        if (pattern.allBulletsOverrideValues.bulletSpeed != 0) _bulletSpeed = pattern.allBulletsOverrideValues.bulletSpeed;
+        if (pattern.allBulletsOverrideValues.bulletDamage != 0) _bulletDamage = pattern.allBulletsOverrideValues.bulletDamage;
+        if (pattern.allBulletsOverrideValues.bulletSize != 0) _bulletSize = pattern.allBulletsOverrideValues.bulletSize;
+
+        BulletValues overrideValues = new()
+        {
+            bulletSpeed = _bulletSpeed,
+            bulletDamage = _bulletDamage,
+            bulletSize = _bulletSize,
+        };
 
         List<Bullet> newBullets = new();
 
@@ -188,18 +196,18 @@ public class BossEnemy : MonoBehaviour
 
             Vector3 bulletPosition = transform.position + new Vector3(pattern.bulletOffset.x, pattern.bulletOffset.y, 0);
 
-            Bullet newBullet = CreateBullet(bulletPrefab, bulletPosition, bulletDirection, _bulletSpeed, _bulletDamage, _bulletSize);
+            Bullet newBullet = CreateBullet(bulletPrefab, bulletPosition, bulletDirection, overrideValues);
             newBullets.Add(newBullet);
         }
 
         _callback?.Invoke(newBullets);
     }
 
-    private Bullet CreateBullet(Bullet _bulletPrefab, Vector3 _bulletPosition, Vector2 _bulletDirection, float _bulletSpeed, int _bulletDamage, float _bulletSize)
+    private Bullet CreateBullet(Bullet _bulletPrefab, Vector3 _bulletPosition, Vector2 _bulletDirection, BulletValues _bulletValues)
     {
         Bullet newBullet = Instantiate(_bulletPrefab, _bulletPosition, Quaternion.identity);
 
-        newBullet.InitializeBullet(this, _bulletSpeed, _bulletDamage, _bulletSize, _bulletDirection, _bulletPosition, inTool, bheCollisionManager, currentAttackInt);
+        newBullet.InitializeBullet(this, _bulletValues.bulletSpeed, _bulletValues.bulletDamage, _bulletValues.bulletSize, _bulletDirection, _bulletPosition, inTool, bheCollisionManager, currentAttackInt);
         
         bullets.Add(newBullet);
 

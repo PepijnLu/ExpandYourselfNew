@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class BulletOverrides : VisualElement
+public class BulletOverrideFields : VisualElement
 {
     public FloatField bulletSpeedField;
     public IntegerField bulletDamageField;
     public FloatField bulletSizeField;
-    public BulletOverrides()
+    public BulletOverrideFields()
     {
         //Bullet Speed
         bulletSpeedField = new FloatField("Bullet Speed");

@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EnemyAttack", menuName = "Scriptable Objects/EnemyAttack")]
@@ -10,7 +12,7 @@ public class BulletPattern : ScriptableObject
 
     public Bullet bulletType;
 
-    public float bulletSpeedOverride;
-    public int bulletDamageOverride;
-    public float bulletSizeOverride;
+    public BulletValues allBulletsOverrideValues;
+
+    public List<BulletValues> individualBulletOverrides;
 }
