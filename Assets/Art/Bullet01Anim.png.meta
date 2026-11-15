@@ -118,12 +118,12 @@ TextureImporter:
       name: Bullet01Anim_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 2
-        width: 12
-        height: 12
+        x: 3
+        y: 3
+        width: 10
+        height: 10
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -140,12 +140,12 @@ TextureImporter:
       name: Bullet01Anim_1
       rect:
         serializedVersion: 2
-        x: 18
-        y: 1
-        width: 11
-        height: 13
+        x: 19
+        y: 2
+        width: 9
+        height: 11
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -162,12 +162,12 @@ TextureImporter:
       name: Bullet01Anim_2
       rect:
         serializedVersion: 2
-        x: 34
-        y: 1
-        width: 12
-        height: 13
+        x: 35
+        y: 2
+        width: 10
+        height: 11
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -184,12 +184,12 @@ TextureImporter:
       name: Bullet01Anim_3
       rect:
         serializedVersion: 2
-        x: 51
-        y: 4
-        width: 10
-        height: 9
+        x: 52
+        y: 5
+        width: 8
+        height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -206,12 +206,12 @@ TextureImporter:
       name: Bullet01Anim_4
       rect:
         serializedVersion: 2
-        x: 68
-        y: 4
-        width: 8
-        height: 8
+        x: 69
+        y: 5
+        width: 6
+        height: 6
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -228,12 +228,12 @@ TextureImporter:
       name: Bullet01Anim_5
       rect:
         serializedVersion: 2
-        x: 85
-        y: 5
-        width: 7
-        height: 6
+        x: 86
+        y: 6
+        width: 5
+        height: 4
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -242,6 +242,28 @@ TextureImporter:
       bones: []
       spriteID: ee98d3cbd5bc2ea30800000000000000
       internalID: 4243177402386975214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullet01Anim_6
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 5
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b948ff68b25b4041b3ed1c13c03b0d8
+      internalID: 2004173616
       vertices: []
       indices: 
       edges: []
@@ -266,6 +288,7 @@ TextureImporter:
       Bullet01Anim_3: -2585597648663279598
       Bullet01Anim_4: 8301512271517580439
       Bullet01Anim_5: 4243177402386975214
+      Bullet01Anim_6: 2004173616
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

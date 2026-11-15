@@ -207,7 +207,7 @@ public class BulletHellEditor : EditorWindow
 
     void PreviewStart()
     {
-        bossEnemy.UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true, AddBulletsToPreview);
+        bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
         SwitchPreviewMode(false);
 
         isPaused = false;
@@ -228,8 +228,6 @@ public class BulletHellEditor : EditorWindow
                     
                 bossEnemy.shouldPauseTool = false;
                 bossEnemy.hitAttackInPhaseIndex = -1;
-
-                Debug.Log($"PAUSE FROM BOSS HIT");
             }
         }
 
@@ -272,18 +270,31 @@ public class BulletHellEditor : EditorWindow
             phasePreview = false;
             phaseEditor.enabledSelf = false;
             patternEditor.enabledSelf = true;
-            bossEnemy.UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true, AddBulletsToPreview);
+            bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
         }
     }
 
     public void UpdateBulletCountFromPatternEditor(ChangeEvent<int> evt)
     {
-        if(!phasePreview) bossEnemy.UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true, AddBulletsToPreview);
+        if(!phasePreview) bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
     }
 
     public void UpdateBulletCountFromPatternEditor(ChangeEvent<float> evt)
     {
-        if (!phasePreview) bossEnemy.UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true, AddBulletsToPreview);
+        if (!phasePreview) bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
+    }
+
+    private BulletPattern GetPatternFromEditorFields()
+    {
+        BulletPattern pattern = new();
+
+        pattern.bulletAmount = patternEditor.bulletAmountField.value;
+        pattern.bulletSpread = patternEditor.bulletSpreadField.value;
+        pattern.attackAngle = patternEditor.attackAngleField.value;
+        pattern.bulletType = patternEditor.bulletTypeField.value as Bullet;
+        pattern.name = patternEditor.patternNameField.value;
+
+        return pattern;
     }
 
     private void CreatePreview()
@@ -318,9 +329,6 @@ public class BulletHellEditor : EditorWindow
         collisionManager = new();
         bossEnemy = bossEnemyGO.GetComponent<BossEnemy>();
         bossEnemy.InitializeBoss(collisionManager);
-
-        Debug.Log($"Create Preview");
-
 
         //Add player
         GameObject playerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Player.prefab");
@@ -371,7 +379,7 @@ public class BulletHellEditor : EditorWindow
         {
             foreach(Bullet bullet in bossEnemy.bullets)
             {
-                if(bullet) DrawBulletDirection(rect, bullet.transform.position, patternEditor.bulletAngleField.value, 100, bullet.transform.rotation, bullet);
+                if(bullet) DrawBulletDirection(rect, bullet.transform.position, bullet.bulletDirection, 100);
             }
 
         }
@@ -418,7 +426,7 @@ public class BulletHellEditor : EditorWindow
             }
             else
             {
-                bossEnemy.UpdateBulletCount(patternEditor.bulletAmountField.value, patternEditor.bulletSpreadField.value, patternEditor.bulletAngleField.value, true, AddBulletsToPreview);
+                bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
                 selectPhaseButton.enabledSelf = true;
             }
 
@@ -450,14 +458,12 @@ public class BulletHellEditor : EditorWindow
         }
     }
 
-    private void DrawBulletDirection(Rect rect, Vector2 bulletPosition, float angle, float length, Quaternion bulletRotation, Bullet bullet)
+    private void DrawBulletDirection(Rect rect, Vector2 bulletPosition, Vector2 _bulletDirection, float length)
     {
-        Vector2 direction = bossEnemy.GetBulletDirection(angle, bulletRotation);
-
         Vector2 endPosition =
-            bulletPosition + direction * length;
+            bulletPosition + _bulletDirection * length;
 
-        float zoom = 100f;
+        float zoom = 50;
 
         // Convert to GUI coordinates relative to the rect
         Vector2 start = new Vector2(
@@ -508,7 +514,6 @@ public class BulletHellEditor : EditorWindow
     }
     private void OnLostFocus()
     {
-        Debug.Log("ON LOST FOCUS");
         if(inputManager != null) inputManager.ResetInputs();
     }
 

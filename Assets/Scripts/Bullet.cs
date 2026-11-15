@@ -1,31 +1,31 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 using UnityEditor;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public Vector3 bulletStartPosition;
     BossEnemy parent;
 
     int attackIndex;
 
-    float bulletSpeed;
-    int bulletDamage;
+    [SerializeField] float bulletSpeed;
+    [SerializeField] int bulletDamage;
 
-    public Vector2 bulletDirection;
+    [HideInInspector] public Vector2 bulletDirection;
+    [HideInInspector] public Vector3 bulletStartPosition;
+    [HideInInspector] public Collider2D col;
+    
     bool initialized;
 
     float startTime;
     Vector3 debugStartPosition;
 
-    public Collider2D col;
     BHECollisionManager collisionManager;
 
     bool inTool;
     bool destructed;
-
     Animator animator;
-    AnimatorStateInfo animatorStateInfo;
 
     private void Start()
     {
@@ -39,12 +39,19 @@ public class Bullet : MonoBehaviour
     {
         if (animator && destructed)
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).length == 0)
+            //lowk terrible way of doing this
+            if (AnimatorIsPlaying())
             {
-                //Destroy(gameObject);
+                Destroy(gameObject);
             }
         }
         if (destructed) return;
+    }
+
+    bool AnimatorIsPlaying()
+    {
+        return animator.GetCurrentAnimatorStateInfo(0).length >
+               animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
     }
 
     public void BulletUpdate(float _deltaTime)
@@ -66,7 +73,7 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    public void InitializeBullet(BossEnemy _parent, float _bulletSpeed, int _bulletDamage, Vector2 _bulletDirection, Vector3 _bulletStartPosition, bool _inTool, BHECollisionManager _collisionManager, int _attackIndex)
+    public void InitializeBullet(BossEnemy _parent, float _bulletSpeed, int _bulletDamage, float _bulletSize, Vector2 _bulletDirection, Vector3 _bulletStartPosition, bool _inTool, BHECollisionManager _collisionManager, int _attackIndex)
     {
         inTool = _inTool;
 
@@ -77,10 +84,12 @@ public class Bullet : MonoBehaviour
         bulletStartPosition = _bulletStartPosition;
         attackIndex = _attackIndex;
 
-        initialized = true;
+        gameObject.transform.localScale = new Vector2(_bulletSize, _bulletSize);
 
         collisionManager = _collisionManager;
         col = GetComponent<Collider2D>();
+        
+        initialized = true;
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
@@ -124,6 +133,5 @@ public class Bullet : MonoBehaviour
     {
         destructed = true;
         animator.SetTrigger("Destruct");
-        animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
     }
 }

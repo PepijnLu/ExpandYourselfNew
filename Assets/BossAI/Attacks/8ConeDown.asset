@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletAmount: 8
   bulletSpread: 90
-  bulletAngle: 96
+  attackAngle: 190
+  bulletType: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}

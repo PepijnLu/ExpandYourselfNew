@@ -118,8 +118,8 @@ public class BossEnemy : MonoBehaviour
                     }
                     break;
                 case AttackType.Attack:
-                    BulletPattern attack = newAttack.bulletPattern;
-                    UpdateBulletCount(attack.bulletAmount, attack.bulletSpread, attack.bulletAngle, false, updateBulletCallback);
+                    BulletPattern pattern = newAttack.bulletPattern;
+                    UpdateBulletCount(pattern, false, updateBulletCallback);
                     currentAttackInt++;
                     break;
             }
@@ -140,8 +140,20 @@ public class BossEnemy : MonoBehaviour
         }
     }
 
-    public void UpdateBulletCount(float _bulletAmount, float _bulletSpread, float _bulletStartAngle, bool _destroyOld, Action<List<Bullet>> _callback)
+    public void UpdateBulletCount(BulletPattern _pattern, bool _destroyOld, Action<List<Bullet>> _callback)
     {
+        float _bulletAmount = _pattern.bulletAmount;
+        float _bulletSpread = _pattern.bulletSpread;
+        float _attackAngle = _pattern.attackAngle;
+
+        float _bulletSpeed = 0;
+        int _bulletDamage = 0;
+        float _bulletSize = 0;
+
+        if (_pattern.bulletSpeedOverride != 0) _bulletSpeed = _pattern.bulletSpeedOverride;
+        if (_pattern.bulletDamageOverride != 0) _bulletDamage = _pattern.bulletDamageOverride;
+        if (_pattern.bulletSizeOverride != 0) _bulletSize = _pattern.bulletSizeOverride;
+
         List<Bullet> newBullets = new();
 
         if (_destroyOld)
@@ -149,7 +161,7 @@ public class BossEnemy : MonoBehaviour
             DestroyAllBullets(true);
         }
 
-        float angleStep = 0;
+        float angleStep;
 
         if (_bulletAmount == 1)
         {
@@ -160,56 +172,40 @@ public class BossEnemy : MonoBehaviour
             angleStep = _bulletSpread / (_bulletAmount);
         }
         float startAngle = _bulletSpread / 2f;
-        startAngle += _bulletStartAngle;
+        startAngle += _attackAngle;
 
         //Create New Bullets
         for (int i = 0; i < _bulletAmount; i++)
         {
             float bulletAngle = startAngle + i * angleStep;
 
-            Vector2 direction = new Vector2(
-                Mathf.Cos(bulletAngle * Mathf.Deg2Rad),
-                Mathf.Sin(bulletAngle * Mathf.Deg2Rad)
-            );
+            Vector2 bulletDirection = GetBulletDirection(bulletAngle);
 
-            Quaternion bulletRotation =
-                 Quaternion.Euler(0f, 0f, bulletAngle);
+            Vector3 bulletPosition = transform.position;
 
-            Bullet newBullet = CreateBullet((transform.position + new Vector3(direction.x * 0.2f, direction.y * 0.2f, -1)), bulletRotation, .5f, _bulletStartAngle);
+            Bullet newBullet = CreateBullet(bulletPosition, bulletDirection, _bulletSpeed, _bulletDamage, _bulletSize);
             newBullets.Add(newBullet);
         }
 
-        if(_callback != null) _callback.Invoke(newBullets);
+        _callback?.Invoke(newBullets);
     }
 
-    private Bullet CreateBullet(Vector3 _bulletPosition, Quaternion _bulletRotation, float _bulletSize, float _bulletAngle)
+    private Bullet CreateBullet(Vector3 _bulletPosition, Vector2 _bulletDirection, float _bulletSpeed, int _bulletDamage, float _bulletSize)
     {
-        Bullet newBullet = Instantiate(tempBulletPrefab);
+        Bullet newBullet = Instantiate(tempBulletPrefab, _bulletPosition, Quaternion.identity);
 
-        newBullet.transform.localScale = new Vector2(_bulletSize, _bulletSize);
-        newBullet.transform.position = _bulletPosition;
-        newBullet.transform.rotation = _bulletRotation;
-
-        Vector2 bulletDirection = GetBulletDirection(_bulletAngle, _bulletRotation);
-
-        float bulletSpeed = 2;
-
-
-        int currentAttackIndex = currentAttackInt;
-
-        Debug.Log($"Attack Index: {currentAttackIndex}");
-
-        newBullet.InitializeBullet(this, bulletSpeed, 1, bulletDirection, _bulletPosition, inTool, bheCollisionManager, currentAttackIndex);
+        newBullet.InitializeBullet(this, _bulletSpeed, _bulletDamage, _bulletSize, _bulletDirection, _bulletPosition, inTool, bheCollisionManager, currentAttackInt);
+        
         bullets.Add(newBullet);
 
         return newBullet;
     }
 
-    public Vector2 GetBulletDirection(float _angle, Quaternion _bulletRotation)
+    public Vector2 GetBulletDirection(float _angle)
     {
-        Quaternion directionRotation = _bulletRotation * Quaternion.Euler(0, 0, _angle);
-
+        Quaternion directionRotation = Quaternion.Euler(0, 0, _angle);
         Vector2 direction = directionRotation * Vector2.right;
+
         return direction;
     }
 
@@ -223,7 +219,6 @@ public class BossEnemy : MonoBehaviour
         {
             _bullet.MarkForDestruction();
             bullets.Remove(_bullet);
-            //Destroy(_bullet.gameObject);
         }
     }
 

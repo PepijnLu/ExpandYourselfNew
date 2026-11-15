@@ -7,10 +7,10 @@ using UnityEngine.UIElements;
 public class PatternEditor : VisualElement
 {
     public IntegerField bulletAmountField;
-    public FloatField bulletSpreadField, bulletAngleField;
+    public FloatField bulletSpreadField, attackAngleField;
     public TextField patternNameField;
     private BulletHellEditor bulletHellEditor;
-    public ObjectField patternField;
+    public ObjectField patternField, bulletTypeField;
     private Button saveButton, createButton;
 
     private BulletPattern currentPattern;
@@ -32,13 +32,19 @@ public class PatternEditor : VisualElement
         Add(bulletSpreadField);
 
         // Bullet Angle
-        bulletAngleField = new FloatField("Bullet Angle");
-        bulletAngleField.value = 45;
-        Add(bulletAngleField);
+        attackAngleField = new FloatField("Attack Angle");
+        attackAngleField.value = 45;
+        Add(attackAngleField);
 
         // Origin Angle
         //originAngleField = new FloatField("Origin Angle");
         //Add(originAngleField);
+
+        // Bullet type
+        bulletTypeField = new ObjectField("Bullet Type");
+        bulletTypeField.objectType = typeof(Bullet);
+        //bulletAngleField.value = 45;
+        Add(bulletTypeField);
 
         // SO name
         patternNameField = new TextField("Pattern Name");
@@ -72,7 +78,7 @@ public class PatternEditor : VisualElement
 
         bulletAmountField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
         bulletSpreadField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-        bulletAngleField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
+        attackAngleField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
 
         patternNameField.RegisterValueChangedCallback(CheckPatternName);
         patternField.RegisterValueChangedCallback(SelectNewPattern);
@@ -88,9 +94,11 @@ public class PatternEditor : VisualElement
 
             bulletAmountField.value = currentPattern.bulletAmount;
             bulletSpreadField.value = currentPattern.bulletSpread;
-            bulletAngleField.value = currentPattern.bulletAngle;
+            attackAngleField.value = currentPattern.attackAngle;
+            bulletTypeField.value = currentPattern.bulletType;
+            patternNameField.value = currentPattern.name;
 
-            bulletHellEditor.bossEnemy.UpdateBulletCount(currentPattern.bulletAmount, currentPattern.bulletSpread, currentPattern.bulletAngle, true, bulletHellEditor.AddBulletsToPreview);
+            bulletHellEditor.bossEnemy.UpdateBulletCount(currentPattern, true, bulletHellEditor.AddBulletsToPreview);
             saveButton.enabledSelf = true;
         }
         else
@@ -128,11 +136,10 @@ public class PatternEditor : VisualElement
 
     void SaveBulletPatternSO()
     {
-        Debug.Log($"BULLET PATTERN SAVE");
-
         currentPattern.bulletAmount = bulletAmountField.value;
         currentPattern.bulletSpread = bulletSpreadField.value;
-        currentPattern.bulletAngle = bulletAngleField.value;
+        currentPattern.attackAngle = attackAngleField.value;
+        currentPattern.bulletType = bulletTypeField.value as Bullet;
 
         EditorUtility.SetDirty(currentPattern);
 
@@ -141,13 +148,11 @@ public class PatternEditor : VisualElement
     }
     void CreateBulletPatternSO()
     {
-        Debug.Log($"BULLET PATTERN CREATE");
-
         BulletPattern bulletPattern = ScriptableObject.CreateInstance<BulletPattern>();
 
         bulletPattern.bulletAmount = bulletAmountField.value;
         bulletPattern.bulletSpread = bulletSpreadField.value;
-        bulletPattern.bulletAngle = bulletAngleField.value;
+        bulletPattern.attackAngle = attackAngleField.value;
 
         AssetDatabase.CreateAsset(bulletPattern, $"Assets/BossAI/Attacks/{patternNameField.value}.asset");
         AssetDatabase.SaveAssets();
