@@ -142,8 +142,9 @@ public class BossEnemy : MonoBehaviour
 
     public void UpdateBulletCount(EnemyAttack _enemyAttack, bool _destroyOld, Action<List<Bullet>> _callback)
     {
+        List<Bullet> newBullets = new();
+
         BulletPattern pattern = _enemyAttack.bulletPattern;
-        
         Bullet bulletPrefab = pattern.bulletType;
 
         float _bulletAmount = pattern.bulletAmount;
@@ -155,19 +156,12 @@ public class BossEnemy : MonoBehaviour
 
         float _bulletSize = bulletPrefab.gameObject.transform.localScale.x;
 
-
+        //Check for override for all bullets in attack
         if (pattern.allBulletsOverrideValues.bulletSpeed != 0) _bulletSpeed = pattern.allBulletsOverrideValues.bulletSpeed;
         if (pattern.allBulletsOverrideValues.bulletDamage != 0) _bulletDamage = pattern.allBulletsOverrideValues.bulletDamage;
         if (pattern.allBulletsOverrideValues.bulletSize != 0) _bulletSize = pattern.allBulletsOverrideValues.bulletSize;
 
-        BulletValues overrideValues = new()
-        {
-            bulletSpeed = _bulletSpeed,
-            bulletDamage = _bulletDamage,
-            bulletSize = _bulletSize,
-        };
 
-        List<Bullet> newBullets = new();
 
         if (_destroyOld)
         {
@@ -195,6 +189,22 @@ public class BossEnemy : MonoBehaviour
             Vector2 bulletDirection = GetBulletDirection(bulletAngle);
 
             Vector3 bulletPosition = transform.position + new Vector3(pattern.bulletOffset.x, pattern.bulletOffset.y, 0);
+
+            //Check for individual overrides
+            if (pattern.individualBulletOverrides.TryGetValue(i, out BulletValues values))
+            {
+                Debug.Log($"OVERRIDE FOUND");
+                if(values.bulletSpeed != 0) _bulletSpeed = values.bulletSpeed;
+                if (values.bulletDamage != 0) _bulletDamage = values.bulletDamage;
+                if (values.bulletSize != 0) _bulletSize = values.bulletSize;
+            }
+
+            BulletValues overrideValues = new()
+            {
+                bulletSpeed = _bulletSpeed,
+                bulletDamage = _bulletDamage,
+                bulletSize = _bulletSize,
+            };
 
             Bullet newBullet = CreateBullet(bulletPrefab, bulletPosition, bulletDirection, overrideValues);
             newBullets.Add(newBullet);

@@ -18,7 +18,7 @@ public class PatternEditor : VisualElement
 
     private BulletOverrideEditor bulletOverrideEditor;
 
-    private BulletPattern currentPattern;
+    public BulletPattern currentPattern;
 
     public PatternEditor(BulletHellEditor _bulletHellEditor)
     {
@@ -103,6 +103,7 @@ public class PatternEditor : VisualElement
         Add(bulletOverrideEditor);
 
         bulletAmountField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
+
         bulletSpreadField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
         attackAngleField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
         bulletTypeField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
@@ -140,6 +141,34 @@ public class PatternEditor : VisualElement
             saveButton.enabledSelf = false;
             currentPattern = null;
         }
+    }
+
+    //0 = speed, 1 = damage, 2 = size
+    public void SetBulletOverrideValue(int bulletIndex, float newValue, int valueIndex)
+    {
+        if (!currentPattern.individualBulletOverrides.ContainsKey(bulletIndex))
+        {
+            currentPattern.individualBulletOverrides.Add(bulletIndex, new BulletValues());
+        }
+
+        BulletValues overrideValues = currentPattern.individualBulletOverrides[bulletIndex];
+
+        switch(valueIndex)
+        {
+            case 0:
+                overrideValues.bulletSpeed = newValue; 
+                break;
+            case 1:
+                overrideValues.bulletDamage = (int)newValue; 
+                break;
+            case 2: 
+                overrideValues.bulletSize = newValue;
+                break;
+        }
+
+        currentPattern.individualBulletOverrides[bulletIndex] = overrideValues;
+
+        bulletHellEditor.UpdateBulletCountFromPatternEditor();
     }
 
     void CheckPatternName(string _newValue)

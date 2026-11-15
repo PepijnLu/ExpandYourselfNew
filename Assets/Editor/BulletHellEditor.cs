@@ -277,6 +277,11 @@ public class BulletHellEditor : EditorWindow
         }
     }
 
+    public void UpdateBulletCountFromPatternEditor()
+    {
+        if (!phasePreview) bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
+    }
+
     public void UpdateBulletCountFromPatternEditor(ChangeEvent<int> evt)
     {
         if(!phasePreview) bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
