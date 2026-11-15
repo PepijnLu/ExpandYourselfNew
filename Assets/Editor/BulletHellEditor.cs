@@ -297,16 +297,7 @@ public class BulletHellEditor : EditorWindow
         EnemyAttack attack = new();
         
         BulletPattern pattern = CreateInstance<BulletPattern>();
-
-        pattern.bulletAmount = patternEditor.bulletAmountField.value;
-        pattern.bulletSpread = patternEditor.bulletSpreadField.value;
-        pattern.attackAngle = patternEditor.attackAngleField.value;
-        pattern.bulletType = patternEditor.bulletTypeField.value as Bullet;
-
-        pattern.bulletOffset.x = patternEditor.positionOffsetXField.value;
-        pattern.bulletOffset.y = patternEditor.positionOffsetYField.value;
-
-        pattern.name = patternEditor.patternNameField.value;
+        pattern = patternEditor.FillBulletPatternFromEditorFields(pattern);
 
         attack.bulletPattern = pattern;
 

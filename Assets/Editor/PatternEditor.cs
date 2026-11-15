@@ -153,13 +153,7 @@ public class PatternEditor : VisualElement
 
     void SaveBulletPatternSO()
     {
-        currentPattern.bulletAmount = bulletAmountField.value;
-        currentPattern.bulletSpread = bulletSpreadField.value;
-        currentPattern.attackAngle = attackAngleField.value;
-        currentPattern.bulletType = bulletTypeField.value as Bullet;
-
-        currentPattern.bulletOffset.x = positionOffsetXField.value;
-        currentPattern.bulletOffset.y = positionOffsetYField.value;
+        currentPattern = FillBulletPatternFromEditorFields(currentPattern);
 
         EditorUtility.SetDirty(currentPattern);
 
@@ -170,13 +164,7 @@ public class PatternEditor : VisualElement
     {
         BulletPattern bulletPattern = ScriptableObject.CreateInstance<BulletPattern>();
 
-        bulletPattern.bulletAmount = bulletAmountField.value;
-        bulletPattern.bulletSpread = bulletSpreadField.value;
-        bulletPattern.attackAngle = attackAngleField.value;
-        bulletPattern.bulletType = bulletTypeField.value as Bullet;
-
-        bulletPattern.bulletOffset.x = positionOffsetXField.value;
-        bulletPattern.bulletOffset.y = positionOffsetYField.value;
+        bulletPattern = FillBulletPatternFromEditorFields(bulletPattern);
 
         AssetDatabase.CreateAsset(bulletPattern, $"Assets/BossAI/Attacks/{patternNameField.value}.asset");
         AssetDatabase.SaveAssets();
@@ -185,5 +173,20 @@ public class PatternEditor : VisualElement
         patternField.value = bulletPattern;
 
         CheckPatternName(patternNameField.value);
+    }
+
+    public BulletPattern FillBulletPatternFromEditorFields(BulletPattern _pattern)
+    {
+        _pattern.bulletAmount = bulletAmountField.value;
+        _pattern.bulletSpread = bulletSpreadField.value;
+        _pattern.attackAngle = attackAngleField.value;
+        _pattern.bulletType = bulletTypeField.value as Bullet;
+
+        _pattern.bulletOffset.x = positionOffsetXField.value;
+        _pattern.bulletOffset.y = positionOffsetYField.value;
+
+        _pattern.name = patternNameField.value;
+
+        return _pattern;
     }
 }
