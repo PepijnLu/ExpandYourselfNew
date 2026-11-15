@@ -156,6 +156,7 @@ public class PatternEditor : VisualElement
         bulletPattern.bulletAmount = bulletAmountField.value;
         bulletPattern.bulletSpread = bulletSpreadField.value;
         bulletPattern.attackAngle = attackAngleField.value;
+        bulletPattern.bulletType = bulletTypeField.value as Bullet;
 
         AssetDatabase.CreateAsset(bulletPattern, $"Assets/BossAI/Attacks/{patternNameField.value}.asset");
         AssetDatabase.SaveAssets();

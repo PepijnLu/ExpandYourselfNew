@@ -207,7 +207,7 @@ public class BossEnemy : MonoBehaviour
     public Vector2 GetBulletDirection(float _angle)
     {
         Quaternion directionRotation = Quaternion.Euler(0, 0, _angle);
-        Vector2 direction = directionRotation * Vector2.right;
+        Vector2 direction = directionRotation * Vector2.down;
 
         return direction;
     }

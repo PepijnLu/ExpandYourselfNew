@@ -16,7 +16,10 @@ public class BulletHellEditor : EditorWindow
     public BossEnemy bossEnemy;
     public Player player;
     Vector3 playerStart;
-     
+
+    private readonly Vector3 bossStartPosition = new Vector3(0, 3.7f, 0);
+
+
     private readonly float cameraZoom = 60f;
 
     float bulletSpeed;
@@ -291,7 +294,7 @@ public class BulletHellEditor : EditorWindow
 
     private BulletPattern GetPatternFromEditorFields()
     {
-        BulletPattern pattern = new();
+        BulletPattern pattern = CreateInstance<BulletPattern>();
 
         pattern.bulletAmount = patternEditor.bulletAmountField.value;
         pattern.bulletSpread = patternEditor.bulletSpreadField.value;
@@ -328,6 +331,7 @@ public class BulletHellEditor : EditorWindow
         GameObject bossEnemyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/BossEnemy.prefab");
         GameObject bossEnemyGO = PrefabUtility.InstantiatePrefab(bossEnemyPrefab) as GameObject;
 
+        bossEnemyGO.transform.position = bossStartPosition;
         preview.AddSingleGO(bossEnemyGO);
 
         //Set boss to in tool
@@ -423,6 +427,7 @@ public class BulletHellEditor : EditorWindow
             {
                 bossEnemy.DestroyAllBullets(true);
                 selectPatternButton.enabledSelf = true;
+                phaseEditor.enabledSelf = true;
 
                 foreach (PhaseRow row in phaseEditor.phaseRows)
                 {
@@ -433,10 +438,10 @@ public class BulletHellEditor : EditorWindow
             {
                 bossEnemy.UpdateBulletCount(GetPatternFromEditorFields(), true, AddBulletsToPreview);
                 selectPhaseButton.enabledSelf = true;
+                patternEditor.enabledSelf = true;
             }
 
             TogglePause(false);
-            patternEditor.enabledSelf = true;
             player.transform.position = playerStart;
         }
     }
