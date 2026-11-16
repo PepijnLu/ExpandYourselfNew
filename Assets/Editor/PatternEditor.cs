@@ -137,7 +137,7 @@ public class PatternEditor : VisualElement
     }
 
     //0 = speed, 1 = damage, 2 = size
-    public void SetBulletOverrideValue(int bulletIndex, float newValue, int valueIndex)
+    public void SetBulletOverrideValue(int bulletIndex, float newValue, string value)
     {
         if (currentPattern.individualBulletOverrides.Count <= bulletIndex)
         {
@@ -150,16 +150,25 @@ public class PatternEditor : VisualElement
 
         BulletValues overrideValues = currentPattern.individualBulletOverrides[bulletIndex];
 
-        switch(valueIndex)
+        switch(value)
         {
-            case 0:
+            case "speed":
                 overrideValues.bulletSpeed = newValue; 
                 break;
-            case 1:
+            case "damage":
                 overrideValues.bulletDamage = (int)newValue; 
                 break;
-            case 2: 
+            case "size": 
                 overrideValues.bulletSize = newValue;
+                break;
+            case "angle":
+                overrideValues.bulletAngle = newValue;
+                break;
+            case "posX":
+                overrideValues.posOffset.x = newValue;
+                break;
+            case "posY":
+                overrideValues.posOffset.y = newValue;
                 break;
         }
 

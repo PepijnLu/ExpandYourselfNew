@@ -19,23 +19,109 @@ MonoBehaviour:
     waitTime: 0
     bulletPattern: {fileID: 0}
     angleOffset: 0
+    positionOffset: {x: 0, y: 0}
   - attackType: 1
     waitTime: 0
-    bulletPattern: {fileID: 11400000, guid: 952b888ab8f0d944aa412491249ce34c, type: 2}
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
     angleOffset: 0
+    positionOffset: {x: -4, y: 0}
   - attackType: 1
     waitTime: 0
-    bulletPattern: {fileID: 11400000, guid: a14adbe46c0f3974591b8104718c26ac, type: 2}
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
     angleOffset: 0
+    positionOffset: {x: -1.35, y: 0}
   - attackType: 1
     waitTime: 0
-    bulletPattern: {fileID: 11400000, guid: a79273c296456d7439485b17b707ecac, type: 2}
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
     angleOffset: 0
+    positionOffset: {x: 1.35, y: 0}
   - attackType: 1
     waitTime: 0
-    bulletPattern: {fileID: 11400000, guid: 4202c7fb5e4d77f4ca738f1ead41e968, type: 2}
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
     angleOffset: 0
+    positionOffset: {x: 4, y: 0}
+  - attackType: 0
+    waitTime: 0.8
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}
   - attackType: 1
     waitTime: 0
-    bulletPattern: {fileID: 11400000, guid: 0066e03f1c649f74999987f172bb184d, type: 2}
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
     angleOffset: 0
+    positionOffset: {x: 5.5, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
+    angleOffset: 0
+    positionOffset: {x: 2.75, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
+    angleOffset: 0
+    positionOffset: {x: -2.75, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
+    angleOffset: 0
+    positionOffset: {x: -5.5, y: 0}
+  - attackType: 0
+    waitTime: 0.8
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
+    angleOffset: 0
+    positionOffset: {x: -4, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
+    angleOffset: 0
+    positionOffset: {x: -1.35, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
+    angleOffset: 0
+    positionOffset: {x: 1.35, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
+    angleOffset: 0
+    positionOffset: {x: 4, y: 0}
+  - attackType: 0
+    waitTime: 0.8
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
+    angleOffset: 0
+    positionOffset: {x: 5.5, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
+    angleOffset: 0
+    positionOffset: {x: 2.75, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
+    angleOffset: 0
+    positionOffset: {x: -2.75, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
+    angleOffset: 0
+    positionOffset: {x: -5.5, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 573a370554ea4df4e84ecdcffd96e0b4, type: 2}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}

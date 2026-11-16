@@ -11,6 +11,8 @@ public class PhaseRow : VisualElement
     public FloatField waitTimeField;
     public ObjectField patternField;
     public FloatField angleOffsetField;
+    public FloatField positionOffsetXField;
+    public FloatField positionOffsetYField;
 
     Texture trashIcon;
 
@@ -36,6 +38,13 @@ public class PhaseRow : VisualElement
         angleOffsetField.style.minWidth = 30;
         Add(angleOffsetField);
 
+        //Position Offset
+        positionOffsetXField = new FloatField();
+        Add(positionOffsetXField);
+
+        positionOffsetYField = new FloatField();
+        Add(positionOffsetYField);
+
 
         patternField = new ObjectField();
 
@@ -57,12 +66,14 @@ public class PhaseRow : VisualElement
         Add(removeRowButton);
     }
 
-    public void SetValues(AttackType _attackType, float _waitTime, BulletPattern _bulletPattern, float _angleOffset)
+    public void SetValues(AttackType _attackType, float _waitTime, BulletPattern _bulletPattern, float _angleOffset, Vector2 _positionOffset)
     {
         phaseTypeField.value = _attackType;
         waitTimeField.value = _waitTime;
         patternField.value = _bulletPattern;
         angleOffsetField.value = _angleOffset;
+        positionOffsetXField.value = _positionOffset.x;
+        positionOffsetYField.value = _positionOffset.y;
 
         UpdateEnabledField(_attackType);
     }
@@ -93,11 +104,15 @@ public class PhaseRow : VisualElement
                 waitTimeField.enabledSelf = true;
                 patternField.enabledSelf = false;
                 angleOffsetField.enabledSelf = false;
+                positionOffsetXField.enabledSelf = false;
+                positionOffsetYField.enabledSelf = false;
                 break;
             case AttackType.Attack:
                 waitTimeField.enabledSelf = false;
                 patternField.enabledSelf = true;
                 angleOffsetField.enabledSelf = true;
+                positionOffsetXField.enabledSelf = true;
+                positionOffsetYField.enabledSelf = true;
                 break;
         }
     }

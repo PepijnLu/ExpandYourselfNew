@@ -1,0 +1,27 @@
+
+
+
+add callback so bullets respawn when one of the following is changed
+	- bullet type
+	- any overrides
+
+design a better system for animation
+
+implement different phases for boss
+
+- invidual bullet angle offset 
+- all bullet overrides angle and position
+
+- have all bullet override values change on selecting pattern (including individual, reset bullet to 0)
+
+
+OTHER STUFF:
+
+freeze bullet sprite while keeping bullet rotation
+
+Saving
+- saving should change the name of the pattern
+	- only able to save if Pattern Name is the same as SelectedPattern.name OR if that name is free
+
+make difference between bullet spread (cone) and bullet spread (line) in attack values
+	- changing the direction vs. changing the bullet spawn pos

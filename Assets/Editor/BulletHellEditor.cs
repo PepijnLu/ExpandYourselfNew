@@ -19,11 +19,6 @@ public class BulletHellEditor : EditorWindow
 
     private readonly Vector3 bossStartPosition = new Vector3(0, 3.7f, 0);
 
-
-    private readonly float cameraZoom = 60f;
-
-    float bulletSpeed;
-
     bool playingPreview;
     bool phasePreview;
     bool isPaused;
@@ -60,19 +55,15 @@ public class BulletHellEditor : EditorWindow
         label.style.marginBottom = 10;
         root.Add(label);
 
-        TwoPaneSplitView splitView = new TwoPaneSplitView(
-           0,      // Index of the fixed pane
-           300,    // Initial size of the fixed pane
-           TwoPaneSplitViewOrientation.Horizontal
-       );
+        TwoPaneSplitView splitView = new TwoPaneSplitView(0, 350, TwoPaneSplitViewOrientation.Horizontal);
 
         // Left panel
         VisualElement leftPanel = new VisualElement();
         leftPanel.style.paddingLeft = 10;
         leftPanel.style.paddingRight = 10;
         leftPanel.style.paddingTop = 10;
-        leftPanel.style.minWidth = 300;
-        leftPanel.style.maxWidth = 300;
+        leftPanel.style.minWidth = 350;
+        leftPanel.style.maxWidth = 350;
 
         // Right panel
         VisualElement rightPanel = new VisualElement();
@@ -327,15 +318,14 @@ public class BulletHellEditor : EditorWindow
     {
         preview = new PreviewRenderUtility();
 
-        // Camera
+        //Camera
         preview.camera.orthographic = true;
         preview.camera.orthographicSize = 10;
         preview.camera.transform.position = new Vector3(0, 0, -10);
 
-        // Lighting
+        //Lighting
         preview.lights[0].intensity = 1.4f;
-        preview.lights[0].transform.rotation =
-            Quaternion.Euler(30f, 30f, 0f);
+        preview.lights[0].transform.rotation = Quaternion.Euler(30f, 30f, 0f);
 
         preview.lights[1].intensity = 1.0f;
 
@@ -376,12 +366,8 @@ public class BulletHellEditor : EditorWindow
             return;
 
 
-        Rect rect = GUILayoutUtility.GetRect(
-            600,
-            1000
-        );
+        Rect rect = GUILayoutUtility.GetRect(600, 1000);
 
-        // Camera looks directly at the sphere's center
         preview.camera.transform.position = new Vector3(0, 0, -10);
         preview.camera.transform.LookAt(Vector3.zero);
 
@@ -394,11 +380,7 @@ public class BulletHellEditor : EditorWindow
 
         Texture result = preview.EndPreview();
 
-        GUI.DrawTexture(
-            rect,
-            result,
-            ScaleMode.StretchToFill
-        );
+        GUI.DrawTexture(rect, result, ScaleMode.StretchToFill);
 
         Handles.BeginGUI();
 
@@ -488,23 +470,16 @@ public class BulletHellEditor : EditorWindow
 
     private void DrawBulletDirection(Rect rect, Vector2 bulletPosition, Vector2 _bulletDirection, float length)
     {
-        Vector2 endPosition =
-            bulletPosition + _bulletDirection * length;
+        Vector2 endPosition = bulletPosition + _bulletDirection * length;
 
         float zoom = 50;
 
-        // Convert to GUI coordinates relative to the rect
-        Vector2 start = new Vector2(
-            rect.width / 2f + bulletPosition.x * zoom,
-            rect.height / 2f - bulletPosition.y * zoom
-        );
+        //Convert to GUI coordinates relative to the rect
+        Vector2 start = new Vector2(rect.width / 2f + bulletPosition.x * zoom, rect.height / 2f - bulletPosition.y * zoom);
 
-        Vector2 end = new Vector2(
-            rect.width / 2f + endPosition.x * zoom,
-            rect.height / 2f - endPosition.y * zoom
-        );
+        Vector2 end = new Vector2(rect.width / 2f + endPosition.x * zoom, rect.height / 2f - endPosition.y * zoom);
 
-        // Clip everything drawn inside this rectangle
+        //Clip everything drawn inside this rectangle
         if(!phasePreview)
         {
             GUI.BeginClip(rect);

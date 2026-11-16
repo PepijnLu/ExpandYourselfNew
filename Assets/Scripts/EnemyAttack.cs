@@ -6,4 +6,5 @@ public class EnemyAttack
     public float waitTime;
     public BulletPattern bulletPattern;
     public float angleOffset;
+    public Vector2 positionOffset;
 }

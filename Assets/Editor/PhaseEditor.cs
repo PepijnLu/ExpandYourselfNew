@@ -28,12 +28,16 @@ public class PhaseEditor : VisualElement
         waitTimeLabel.style.color = Color.black;
         header.Add(waitTimeLabel);
 
-        Label angleOffsetLabel = new Label("Offset");
+        Label angleOffsetLabel = new Label("Angle");
         angleOffsetLabel.style.color = Color.white;
         header.Add(angleOffsetLabel);
 
+        Label positionOffsetLabel = new Label("Position");
+        positionOffsetLabel.style.color = Color.black;
+        header.Add(positionOffsetLabel);
+
         Label attackLabel = new Label("Attack");
-        attackLabel.style.color = Color.black;
+        attackLabel.style.color = Color.white;
         header.Add(attackLabel);
 
         Add(header);
@@ -106,7 +110,7 @@ public class PhaseEditor : VisualElement
             foreach (EnemyAttack attack in currentPhase.attacks)
             {
                 PhaseRow newRow = new(this);
-                newRow.SetValues(attack.attackType, attack.waitTime, attack.bulletPattern, attack.angleOffset);
+                newRow.SetValues(attack.attackType, attack.waitTime, attack.bulletPattern, attack.angleOffset, attack.positionOffset);
                 phaseRows.Add(newRow);
                 rowContainer.Add(newRow);
 
@@ -144,6 +148,7 @@ public class PhaseEditor : VisualElement
             float rowWaitTime = row.waitTimeField.value;
             BulletPattern rowBulletPattern = (BulletPattern)row.patternField.value;
             float rowAngleOffset = row.angleOffsetField.value;
+            Vector2 positionOffset = new Vector2(row.positionOffsetXField.value, row.positionOffsetYField.value);
 
             EnemyAttack newAttack = new();
 
@@ -151,6 +156,7 @@ public class PhaseEditor : VisualElement
             newAttack.waitTime = rowWaitTime;
             newAttack.bulletPattern = rowBulletPattern;
             newAttack.angleOffset = rowAngleOffset;
+            newAttack.positionOffset = positionOffset;
 
             currentPhase.attacks.Add(newAttack);
         }
@@ -178,6 +184,7 @@ public class PhaseEditor : VisualElement
                 case AttackType.Attack:
                     newAttack.bulletPattern = (BulletPattern)phaseRow.patternField.value;
                     newAttack.angleOffset = phaseRow.angleOffsetField.value;
+                    newAttack.positionOffset = new Vector2(phaseRow.positionOffsetXField.value, phaseRow.positionOffsetYField.value);
                     break;
             }
 

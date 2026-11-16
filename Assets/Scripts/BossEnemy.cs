@@ -149,9 +149,10 @@ public class BossEnemy : MonoBehaviour
         BulletPattern pattern = _enemyAttack.bulletPattern;
         Bullet bulletPrefab = pattern.bulletType;
 
-        float _bulletAmount = pattern.bulletAmount;
-        float _bulletSpread = pattern.bulletSpread;
-        float _attackAngle = pattern.attackAngle;
+        float bulletAmount = pattern.bulletAmount;
+        float bulletSpread = pattern.bulletSpread;
+        float attackAngle = pattern.attackAngle;
+        Vector2 attackPosOffset = _enemyAttack.positionOffset;
 
         float _attackBulletSpeed = bulletPrefab.bulletSpeed;
         int _attackBulletDamage = bulletPrefab.bulletDamage;
@@ -169,19 +170,19 @@ public class BossEnemy : MonoBehaviour
 
         float angleStep;
 
-        if (_bulletAmount == 1)
+        if (bulletAmount == 1)
         {
             angleStep = 0;
         }
         else
         {
-            angleStep = _bulletSpread / (_bulletAmount);
+            angleStep = bulletSpread / (bulletAmount);
         }
-        float startAngle = (_bulletSpread / 2f) + _enemyAttack.angleOffset;
-        startAngle += _attackAngle;
+        float startAngle = (bulletSpread / 2f) + _enemyAttack.angleOffset;
+        startAngle += attackAngle;
 
         //Create New Bullets
-        for (int i = 0; i < _bulletAmount; i++)
+        for (int i = 0; i < bulletAmount; i++)
         {
             float _bulletSpeed = _attackBulletSpeed;
             int _bulletDamage = _attackBulletDamage;
@@ -192,7 +193,7 @@ public class BossEnemy : MonoBehaviour
             Vector2 bulletDirection = GetBulletDirection(bulletAngle);
 
             //Vector3 bulletPosition = transform.position + new Vector3(pattern.bulletOffset.x, pattern.bulletOffset.y, 0);
-            Vector3 bulletPosition = transform.position;
+            Vector3 bulletPosition = transform.position + new Vector3(attackPosOffset.x, attackPosOffset.y, 0);
 
             //Check for individual overrides
             if (pattern.individualBulletOverrides != null)
@@ -200,9 +201,12 @@ public class BossEnemy : MonoBehaviour
                 if (i < pattern.individualBulletOverrides.Count)
                 {
                     BulletValues values = pattern.individualBulletOverrides[i];
+
                     if (values.bulletSpeed != 0) _bulletSpeed = values.bulletSpeed;
                     if (values.bulletDamage != 0) _bulletDamage = values.bulletDamage;
                     if (values.bulletSize != 0) _bulletSize = values.bulletSize;
+
+                    bulletPosition += new Vector3(values.posOffset.x, values.posOffset.y, 0);
                 }
             }
             else Debug.LogWarning($"NO LIST FOUND FOR OVERRIDES");
