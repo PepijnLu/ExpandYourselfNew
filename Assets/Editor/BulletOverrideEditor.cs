@@ -54,8 +54,9 @@ public class BulletOverrideEditor : VisualElement
             bulletOverrideFields.SetEnabled(true);
         }
 
-        if (patternEditor.currentPattern.individualBulletOverrides.TryGetValue(newBulletIndex, out BulletValues values))
+        if (newBulletIndex < patternEditor.currentPattern.individualBulletOverrides.Count)
         {
+            BulletValues values = patternEditor.currentPattern.individualBulletOverrides[newBulletIndex];
             bulletOverrideFields.bulletSpeedField.value = values.bulletSpeed;
             bulletOverrideFields.bulletDamageField.value = values.bulletDamage;
             bulletOverrideFields.bulletSizeField.value = values.bulletSize;

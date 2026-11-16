@@ -277,9 +277,10 @@ public class BulletHellEditor : EditorWindow
         }
     }
 
-    public void UpdateBulletCountFromPatternEditor()
+    public void UpdateBulletCountFromPatternEditor(List<BulletValues> _bulletOverrideValues)
     {
-        if (!phasePreview) bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
+        Debug.Log($"Updated bullet override of {patternEditor.currentPattern.name} : count: {patternEditor.currentPattern.individualBulletOverrides.Count}");
+        if (!phasePreview) bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(_bulletOverrideValues), true, AddBulletsToPreview);
     }
 
     public void UpdateBulletCountFromPatternEditor(ChangeEvent<int> evt)
@@ -297,12 +298,14 @@ public class BulletHellEditor : EditorWindow
         if (!phasePreview) bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
     }
 
-    private EnemyAttack GetAttackFromEditorFields()
+    private EnemyAttack GetAttackFromEditorFields(List<BulletValues> _bulletOverrideValues = null)
     {
         EnemyAttack attack = new();
         
         BulletPattern pattern = CreateInstance<BulletPattern>();
         pattern = patternEditor.FillBulletPatternFromEditorFields(pattern);
+
+        pattern.individualBulletOverrides = patternEditor.currentPattern.individualBulletOverrides;
 
         attack.bulletPattern = pattern;
 

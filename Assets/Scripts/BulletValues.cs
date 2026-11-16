@@ -1,5 +1,5 @@
 using UnityEngine;
-
+[System.Serializable]
 public struct BulletValues
 {
     public float bulletSpeed;

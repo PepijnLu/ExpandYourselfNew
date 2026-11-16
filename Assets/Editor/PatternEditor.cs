@@ -146,9 +146,13 @@ public class PatternEditor : VisualElement
     //0 = speed, 1 = damage, 2 = size
     public void SetBulletOverrideValue(int bulletIndex, float newValue, int valueIndex)
     {
-        if (!currentPattern.individualBulletOverrides.ContainsKey(bulletIndex))
+        if (currentPattern.individualBulletOverrides.Count <= bulletIndex)
         {
-            currentPattern.individualBulletOverrides.Add(bulletIndex, new BulletValues());
+            int difference = (bulletIndex + 1) - currentPattern.individualBulletOverrides.Count;
+            for (int i = 0; i < difference; i++)
+            {
+                currentPattern.individualBulletOverrides.Add(new BulletValues());
+            }
         }
 
         BulletValues overrideValues = currentPattern.individualBulletOverrides[bulletIndex];
@@ -168,7 +172,7 @@ public class PatternEditor : VisualElement
 
         currentPattern.individualBulletOverrides[bulletIndex] = overrideValues;
 
-        bulletHellEditor.UpdateBulletCountFromPatternEditor();
+        bulletHellEditor.UpdateBulletCountFromPatternEditor(currentPattern.individualBulletOverrides);
     }
 
     void CheckPatternName(string _newValue)

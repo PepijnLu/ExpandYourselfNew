@@ -142,6 +142,8 @@ public class BossEnemy : MonoBehaviour
 
     public void UpdateBulletCount(EnemyAttack _enemyAttack, bool _destroyOld, Action<List<Bullet>> _callback)
     {
+        Debug.Log($"UPDATE BULLET COUNT");
+
         List<Bullet> newBullets = new();
 
         BulletPattern pattern = _enemyAttack.bulletPattern;
@@ -151,17 +153,14 @@ public class BossEnemy : MonoBehaviour
         float _bulletSpread = pattern.bulletSpread;
         float _attackAngle = pattern.attackAngle;
 
-        float _bulletSpeed = bulletPrefab.bulletSpeed;
-        int _bulletDamage = bulletPrefab.bulletDamage;
-
-        float _bulletSize = bulletPrefab.gameObject.transform.localScale.x;
+        float _attackBulletSpeed = bulletPrefab.bulletSpeed;
+        int _attackBulletDamage = bulletPrefab.bulletDamage;
+        float _attackBulletSize = bulletPrefab.gameObject.transform.localScale.x;
 
         //Check for override for all bullets in attack
-        if (pattern.allBulletsOverrideValues.bulletSpeed != 0) _bulletSpeed = pattern.allBulletsOverrideValues.bulletSpeed;
-        if (pattern.allBulletsOverrideValues.bulletDamage != 0) _bulletDamage = pattern.allBulletsOverrideValues.bulletDamage;
-        if (pattern.allBulletsOverrideValues.bulletSize != 0) _bulletSize = pattern.allBulletsOverrideValues.bulletSize;
-
-
+        if (pattern.allBulletsOverrideValues.bulletSpeed != 0) _attackBulletSpeed = pattern.allBulletsOverrideValues.bulletSpeed;
+        if (pattern.allBulletsOverrideValues.bulletDamage != 0) _attackBulletDamage = pattern.allBulletsOverrideValues.bulletDamage;
+        if (pattern.allBulletsOverrideValues.bulletSize != 0) _attackBulletSize = pattern.allBulletsOverrideValues.bulletSize;
 
         if (_destroyOld)
         {
@@ -184,6 +183,10 @@ public class BossEnemy : MonoBehaviour
         //Create New Bullets
         for (int i = 0; i < _bulletAmount; i++)
         {
+            float _bulletSpeed = _attackBulletSpeed;
+            int _bulletDamage = _attackBulletDamage;
+            float _bulletSize = _attackBulletSize;
+
             float bulletAngle = startAngle + i * angleStep;
 
             Vector2 bulletDirection = GetBulletDirection(bulletAngle);
@@ -191,13 +194,17 @@ public class BossEnemy : MonoBehaviour
             Vector3 bulletPosition = transform.position + new Vector3(pattern.bulletOffset.x, pattern.bulletOffset.y, 0);
 
             //Check for individual overrides
-            if (pattern.individualBulletOverrides.TryGetValue(i, out BulletValues values))
+            if (pattern.individualBulletOverrides != null)
             {
-                Debug.Log($"OVERRIDE FOUND");
-                if(values.bulletSpeed != 0) _bulletSpeed = values.bulletSpeed;
-                if (values.bulletDamage != 0) _bulletDamage = values.bulletDamage;
-                if (values.bulletSize != 0) _bulletSize = values.bulletSize;
+                if (i < pattern.individualBulletOverrides.Count)
+                {
+                    BulletValues values = pattern.individualBulletOverrides[i];
+                    if (values.bulletSpeed != 0) _bulletSpeed = values.bulletSpeed;
+                    if (values.bulletDamage != 0) _bulletDamage = values.bulletDamage;
+                    if (values.bulletSize != 0) _bulletSize = values.bulletSize;
+                }
             }
+            else Debug.LogWarning($"NO LIST FOUND FOR OVERRIDES");
 
             BulletValues overrideValues = new()
             {
