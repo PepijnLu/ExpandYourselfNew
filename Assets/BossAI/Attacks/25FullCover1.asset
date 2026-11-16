@@ -22,4 +22,14 @@ MonoBehaviour:
     bulletSize: 0
     bulletAngle: 0
     posOffset: {x: 0, y: 0}
-  individualBulletOverrides: []
+  individualBulletOverrides:
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: 0}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: 0}

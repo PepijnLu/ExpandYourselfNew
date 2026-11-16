@@ -94,10 +94,16 @@ public class PatternEditor : VisualElement
 
 
         bulletAmountField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-
         bulletSpreadField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
         attackAngleField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
         bulletTypeField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
+
+        bulletOverrideFields.bulletSpeedField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
+        bulletOverrideFields.bulletDamageField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
+        bulletOverrideFields.bulletSizeField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
+        bulletOverrideFields.angleOffsetField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
+        bulletOverrideFields.positionOffsetXField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
+        bulletOverrideFields.positionOffsetYField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
 
         patternNameField.RegisterValueChangedCallback(CheckPatternName);
         patternField.RegisterValueChangedCallback(SelectNewPattern);
@@ -124,6 +130,13 @@ public class PatternEditor : VisualElement
             bulletTypeField.value = currentPattern.bulletType;
             patternNameField.value = currentPattern.name;
 
+            bulletOverrideFields.bulletSpeedField.value = currentPattern.allBulletsOverrideValues.bulletSpeed;
+            bulletOverrideFields.bulletDamageField.value = currentPattern.allBulletsOverrideValues.bulletDamage;
+            bulletOverrideFields.bulletSizeField.value = currentPattern.allBulletsOverrideValues.bulletSize;
+            bulletOverrideFields.angleOffsetField.value = currentPattern.allBulletsOverrideValues.bulletAngle;
+            bulletOverrideFields.positionOffsetXField.value = currentPattern.allBulletsOverrideValues.posOffset.x;
+            bulletOverrideFields.positionOffsetYField.value = currentPattern.allBulletsOverrideValues.posOffset.y;
+
             newAttack.bulletPattern = newPattern;
 
             bulletHellEditor.bossEnemy.UpdateBulletCount(newAttack, true, bulletHellEditor.AddBulletsToPreview);
@@ -134,6 +147,8 @@ public class PatternEditor : VisualElement
             saveButton.enabledSelf = false;
             currentPattern = null;
         }
+
+        if(bulletOverrideEditor != null) bulletOverrideEditor.ChangeSelectedBullet(0);
     }
 
     //0 = speed, 1 = damage, 2 = size
@@ -238,6 +253,9 @@ public class PatternEditor : VisualElement
         _pattern.allBulletsOverrideValues.bulletSpeed = bulletOverrideFields.bulletSpeedField.value;
         _pattern.allBulletsOverrideValues.bulletDamage = bulletOverrideFields.bulletDamageField.value;
         _pattern.allBulletsOverrideValues.bulletSize = bulletOverrideFields.bulletSizeField.value;
+
+        _pattern.allBulletsOverrideValues.bulletAngle = bulletOverrideFields.angleOffsetField.value;
+        _pattern.allBulletsOverrideValues.posOffset = new Vector2(bulletOverrideFields.positionOffsetXField.value, bulletOverrideFields.positionOffsetYField.value);
 
         _pattern.name = patternNameField.value;
 

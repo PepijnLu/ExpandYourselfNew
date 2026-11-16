@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -39,6 +40,16 @@ public class BulletOverrideEditor : VisualElement
         bulletOverrideFields.positionOffsetXField.RegisterValueChangedCallback(UpdateOverridePosX);
         bulletOverrideFields.positionOffsetYField.RegisterValueChangedCallback(UpdateOverridePosY);
 
+        //Clear override button
+        Button clearOverrideButton = new Button(() =>
+        {
+            ClearOverrides();
+        })
+        {
+            text = "Clear Overrides"
+        };
+        Add(clearOverrideButton);
+
         ChangeSelectedBullet(0);
     }
 
@@ -47,9 +58,11 @@ public class BulletOverrideEditor : VisualElement
         ChangeSelectedBullet(i.newValue);
     }
 
-    void ChangeSelectedBullet(int newBulletIndex)
+    public void ChangeSelectedBullet(int newBulletIndex)
     {
         if (!patternEditor.currentPattern) return;
+
+        selectedBulletField.value = newBulletIndex;
         int bulletCount = patternEditor.currentPattern.bulletAmount;
 
         if (newBulletIndex >= bulletCount)
@@ -83,6 +96,24 @@ public class BulletOverrideEditor : VisualElement
             bulletOverrideFields.positionOffsetYField.value = 0;
         }
 
+    }
+
+    void ClearOverrides()
+    {
+        //Clear values
+        patternEditor.currentPattern.individualBulletOverrides.Clear();
+
+        //Clear fields
+        bulletOverrideFields.bulletSpeedField.value = 0;
+        bulletOverrideFields.bulletDamageField.value = 0;
+        bulletOverrideFields.bulletSizeField.value = 0;
+
+        bulletOverrideFields.angleOffsetField.value = 0;
+        bulletOverrideFields.positionOffsetXField.value = 0;
+        bulletOverrideFields.positionOffsetYField.value = 0;
+
+        //Update bullets
+        patternEditor.SetBulletOverrideValue(selectedBulletField.value, 0, "speed");
     }
 
     public void UpdateOverrideSpeed(ChangeEvent<float> f)

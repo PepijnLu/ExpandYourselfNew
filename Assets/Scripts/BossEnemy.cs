@@ -152,6 +152,7 @@ public class BossEnemy : MonoBehaviour
         float bulletAmount = pattern.bulletAmount;
         float bulletSpread = pattern.bulletSpread;
         float attackAngle = pattern.attackAngle;
+
         Vector2 attackPosOffset = _enemyAttack.positionOffset;
 
         float _attackBulletSpeed = bulletPrefab.bulletSpeed;
@@ -162,6 +163,9 @@ public class BossEnemy : MonoBehaviour
         if (pattern.allBulletsOverrideValues.bulletSpeed != 0) _attackBulletSpeed = pattern.allBulletsOverrideValues.bulletSpeed;
         if (pattern.allBulletsOverrideValues.bulletDamage != 0) _attackBulletDamage = pattern.allBulletsOverrideValues.bulletDamage;
         if (pattern.allBulletsOverrideValues.bulletSize != 0) _attackBulletSize = pattern.allBulletsOverrideValues.bulletSize;
+
+        attackAngle += pattern.allBulletsOverrideValues.bulletAngle;
+        attackPosOffset += pattern.allBulletsOverrideValues.posOffset;
 
         if (_destroyOld)
         {
@@ -192,7 +196,6 @@ public class BossEnemy : MonoBehaviour
 
             Vector2 bulletDirection = GetBulletDirection(bulletAngle);
 
-            //Vector3 bulletPosition = transform.position + new Vector3(pattern.bulletOffset.x, pattern.bulletOffset.y, 0);
             Vector3 bulletPosition = transform.position + new Vector3(attackPosOffset.x, attackPosOffset.y, 0);
 
             //Check for individual overrides
@@ -207,6 +210,12 @@ public class BossEnemy : MonoBehaviour
                     if (values.bulletSize != 0) _bulletSize = values.bulletSize;
 
                     bulletPosition += new Vector3(values.posOffset.x, values.posOffset.y, 0);
+                    
+                    if(values.bulletAngle != 0)
+                    {
+                        float newBulletAngle = bulletAngle + values.bulletAngle;
+                        bulletDirection = GetBulletDirection(newBulletAngle);
+                    }
                 }
             }
             else Debug.LogWarning($"NO LIST FOUND FOR OVERRIDES");

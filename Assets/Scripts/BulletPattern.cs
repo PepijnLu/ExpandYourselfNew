@@ -11,7 +11,7 @@ public class BulletPattern : ScriptableObject
 
     public Bullet bulletType;
 
-    public BulletValues allBulletsOverrideValues;
+    public BulletValues allBulletsOverrideValues = new();
 
     public List<BulletValues> individualBulletOverrides = new();
 }
