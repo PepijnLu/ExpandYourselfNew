@@ -17,3 +17,17 @@ MonoBehaviour:
   attackAngle: -90
   bulletOffset: {x: 0, y: 0}
   bulletType: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}
+  allBulletsOverrideValues:
+    bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+  individualBulletOverrides:
+  - bulletSpeed: 1
+    bulletDamage: 0
+    bulletSize: 0
+  - bulletSpeed: 1
+    bulletDamage: 0
+    bulletSize: 0
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0

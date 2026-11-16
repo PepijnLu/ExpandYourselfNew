@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 public class PatternEditor : VisualElement
 {
     public IntegerField bulletAmountField;
-    public FloatField bulletSpreadField, attackAngleField, positionOffsetXField, positionOffsetYField;
+    public FloatField bulletSpreadField, attackAngleField;
     public TextField patternNameField;
     private BulletHellEditor bulletHellEditor;
     public ObjectField patternField, bulletTypeField;
@@ -53,13 +53,6 @@ public class PatternEditor : VisualElement
         bulletTypeField.value = AssetDatabase.LoadAssetAtPath<Bullet>("Assets/Prefabs/Bullets/StandardBullet.prefab"); 
         Add(bulletTypeField);
 
-        //Position offset
-        positionOffsetXField = new FloatField("Offset X");
-        Add(positionOffsetXField);
-
-        positionOffsetYField = new FloatField("Offset Y");
-        Add(positionOffsetYField);
-
         //Bullet overrides
         Label overrideLabel = new Label("All Bullet Overrides:");
         overrideLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
@@ -99,19 +92,21 @@ public class PatternEditor : VisualElement
         saveButton.enabledSelf = false;
         Add(saveButton);
 
-        bulletOverrideEditor = new(this);
-        Add(bulletOverrideEditor);
 
         bulletAmountField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
 
         bulletSpreadField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
         attackAngleField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
         bulletTypeField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-        positionOffsetXField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-        positionOffsetYField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
 
         patternNameField.RegisterValueChangedCallback(CheckPatternName);
         patternField.RegisterValueChangedCallback(SelectNewPattern);
+    }
+
+    public void Initialize()
+    {
+        bulletOverrideEditor = new(this);
+        Add(bulletOverrideEditor);
     }
 
     public void SelectNewPattern(ChangeEvent<Object> evt)
@@ -128,8 +123,6 @@ public class PatternEditor : VisualElement
             attackAngleField.value = currentPattern.attackAngle;
             bulletTypeField.value = currentPattern.bulletType;
             patternNameField.value = currentPattern.name;
-            positionOffsetXField.value = currentPattern.bulletOffset.x;
-            positionOffsetYField.value = currentPattern.bulletOffset.y;
 
             newAttack.bulletPattern = newPattern;
 
@@ -225,15 +218,13 @@ public class PatternEditor : VisualElement
         CheckPatternName(patternNameField.value);
     }
 
+    //Does not change individual bullet overrides!!
     public BulletPattern FillBulletPatternFromEditorFields(BulletPattern _pattern)
     {
         _pattern.bulletAmount = bulletAmountField.value;
         _pattern.bulletSpread = bulletSpreadField.value;
         _pattern.attackAngle = attackAngleField.value;
         _pattern.bulletType = bulletTypeField.value as Bullet;
-
-        _pattern.bulletOffset.x = positionOffsetXField.value;
-        _pattern.bulletOffset.y = positionOffsetYField.value;
 
         _pattern.allBulletsOverrideValues.bulletSpeed = bulletOverrideFields.bulletSpeedField.value;
         _pattern.allBulletsOverrideValues.bulletDamage = bulletOverrideFields.bulletDamageField.value;

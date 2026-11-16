@@ -191,7 +191,8 @@ public class BossEnemy : MonoBehaviour
 
             Vector2 bulletDirection = GetBulletDirection(bulletAngle);
 
-            Vector3 bulletPosition = transform.position + new Vector3(pattern.bulletOffset.x, pattern.bulletOffset.y, 0);
+            //Vector3 bulletPosition = transform.position + new Vector3(pattern.bulletOffset.x, pattern.bulletOffset.y, 0);
+            Vector3 bulletPosition = transform.position;
 
             //Check for individual overrides
             if (pattern.individualBulletOverrides != null)

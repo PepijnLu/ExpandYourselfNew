@@ -210,8 +210,11 @@ public class BulletHellEditor : EditorWindow
 
     void PreviewStart()
     {
+        patternEditor.patternField.value = AssetDatabase.LoadAssetAtPath<BulletPattern>("Assets/BossAI/Attacks/8ConeDown.asset");
         bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
         SwitchPreviewMode(false);
+
+        patternEditor.Initialize();
 
         isPaused = false;
     }
@@ -277,9 +280,14 @@ public class BulletHellEditor : EditorWindow
         }
     }
 
+    public void UpdateBulletCountFromPatternEditor()
+    {
+        if (!phasePreview) bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
+    }
+
+
     public void UpdateBulletCountFromPatternEditor(List<BulletValues> _bulletOverrideValues)
     {
-        Debug.Log($"Updated bullet override of {patternEditor.currentPattern.name} : count: {patternEditor.currentPattern.individualBulletOverrides.Count}");
         if (!phasePreview) bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(_bulletOverrideValues), true, AddBulletsToPreview);
     }
 
@@ -305,7 +313,10 @@ public class BulletHellEditor : EditorWindow
         BulletPattern pattern = CreateInstance<BulletPattern>();
         pattern = patternEditor.FillBulletPatternFromEditorFields(pattern);
 
-        pattern.individualBulletOverrides = patternEditor.currentPattern.individualBulletOverrides;
+        if(patternEditor.currentPattern != null)
+        {
+            pattern.individualBulletOverrides = patternEditor.currentPattern.individualBulletOverrides;
+        }
 
         attack.bulletPattern = pattern;
 

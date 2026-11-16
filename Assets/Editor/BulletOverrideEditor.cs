@@ -34,6 +34,8 @@ public class BulletOverrideEditor : VisualElement
         bulletOverrideFields.bulletSpeedField.RegisterValueChangedCallback(UpdateOverrideSpeed);
         bulletOverrideFields.bulletDamageField.RegisterValueChangedCallback(UpdateOverrideDamage);
         bulletOverrideFields.bulletSizeField.RegisterValueChangedCallback(UpdateOverrideSize);
+
+        ChangeSelectedBullet(0);
     }
 
     void ChangeSelectedBulletCallback(ChangeEvent<int> i)
