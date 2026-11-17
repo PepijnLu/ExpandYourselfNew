@@ -27,8 +27,7 @@ public class Player : MonoBehaviour, IDamagable
         InitializePlayer(null, false);
 
         Weapon newWeapon = Instantiate(startWeapon, transform);
-        newWeapon.transform.parent = transform;
-        newWeapon.transform.localPosition = Vector3.zero;
+        newWeapon.InitializeWeapon(this);
         currentWeapon = newWeapon;
     }
 

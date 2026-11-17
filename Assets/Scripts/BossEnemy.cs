@@ -7,10 +7,11 @@ using UnityEngine;
 
 public class BossEnemy : MonoBehaviour, IDamagable, IFireable
 {
-    [SerializeField] private float totalHP;
-    [SerializeField] private float startHPPercent;
+    [SerializeField] public float totalHP;
+    [SerializeField] public float startHPPercent;
     [SerializeField] private List<BossPhase> bossPhases;
-    private float currentHP;
+    [SerializeField] Teleporter teleporterPrefab;
+    public float currentHP;
     private bool damageCapped;
     private int currentAttackInt;
     private int totalPhaseAttacks;
@@ -31,10 +32,8 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Awaken()
     {
-        GameManager.instance.currentBoss = this;
-
         currentHP = totalHP * (startHPPercent / 100);
-
+        damageCapped = true;
         StartCoroutine(StartFight());
     }
 
@@ -48,9 +47,8 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
 
     IEnumerator StartFight()
     {
+        GameManager.instance.StartBossfight(this);
         UIManager.instance.SetTMProString(UIManager.instance.timerText, "3");
-        UIManager.instance.ToggleElement(UIManager.instance.heartsContainer.gameObject, true);
-        UIManager.instance.ToggleElement(UIManager.instance.timerText.gameObject, true);
         yield return new WaitForSeconds(1);
         UIManager.instance.SetTMProString(UIManager.instance.timerText, "2");
         yield return new WaitForSeconds(1);
@@ -99,11 +97,42 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
         ClearBullets();
     }
 
+    public void Death()
+    {
+        GameManager.instance.EndBossfight();
+
+        //do this better
+        Transform startingRoom = GameObject.Find("StartingRoom").transform;
+        Teleporter newTeleporter = Instantiate(teleporterPrefab, transform.position, Quaternion.identity);
+
+        newTeleporter.teleportTarget = startingRoom;
+        newTeleporter.cameraTarget = startingRoom;
+
+        foreach(Bullet _bullet in bullets)
+        {
+            Destroy(_bullet.gameObject);
+        }
+        
+        Destroy(gameObject);
+    }
+
     void IDamagable.TakeDamage(float _amount)
     {
+        if (damageCapped) return;
+
         currentHP -= _amount;
-        CheckStagger();
-        Debug.Log($"Boss take damage, new hp = {currentHP}");
+
+        if(currentHP <= 0)
+        {
+            currentHP = 0;
+            Death();
+        }
+        else
+        {
+            CheckStagger();
+        }
+
+        UIManager.instance.UpdateBossHealthBar(GetHPPercent(), currentHP, totalHP);
     }
 
     void HandlePhase(float _deltaTime, Action<List<Bullet>> _updateBulletCallback)

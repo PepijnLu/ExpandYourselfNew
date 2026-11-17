@@ -6,7 +6,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     BossEnemy bossEnemy;
-    GameObject owner;
+    GameObject bulletOwner;
     IFireable firee;
 
     int attackIndex;
@@ -90,6 +90,7 @@ public class Bullet : MonoBehaviour
     {
         inTool = _inTool;
 
+        bulletOwner = _owner;
         bossEnemy = _owningBossEnemy;
         bulletSpeed = _bulletSpeed;
         bulletDamage = _bulletDamage;
@@ -113,19 +114,19 @@ public class Bullet : MonoBehaviour
         CheckCollision(col, collider);
     }
 
-    private void CollisionEnterInPreview(Collider2D owner, Collider2D other)
+    private void CollisionEnterInPreview(Collider2D _owner, Collider2D _other)
     {
-        CheckCollision(col, other);
+        CheckCollision(col, _other);
     }
 
-    private void CheckCollision(Collider2D owner, Collider2D other)
+    private void CheckCollision(Collider2D _owner, Collider2D _other)
     {
+        Debug.Log($"{bulletOwner.name} fired and hit {_other.gameObject.name}");
         try
         {
-            if (other.TryGetComponent(out IDamagable damagable))
+            if (_other.TryGetComponent(out IDamagable damagable))
             {
-                Debug.Log($"{owner.name} fired and hit {other.gameObject.name}");
-                if(other.gameObject != owner)
+                if(_other.gameObject != bulletOwner)
                 {
                     if(inTool)
                     {
@@ -141,12 +142,12 @@ public class Bullet : MonoBehaviour
             //Debug.Log($"Collision with player failed: {e.Message}: {other}");
         }
         //Walls
-        if (other.gameObject.layer == 8)
+        if (_other.gameObject.layer == 8)
         {
             firee.DestroyBullet(this);
         }
 
-        Debug.Log($"Collision with {other.gameObject.name}");
+        Debug.Log($"Collision with {_other.gameObject.name}");
     }
 
     public void MarkForDestruction()

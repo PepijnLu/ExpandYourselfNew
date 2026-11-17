@@ -4,16 +4,22 @@ using Unity.Hierarchy;
 using UnityEngine;
 public class Weapon : MonoBehaviour, IFireable
 {
+    GameObject owner;
     List<Bullet> bullets;
     List<Bullet> bulletsToDestroy;
     [SerializeField] Bullet bullet;
     [SerializeField] float cooldown;
     float cooldownTimer;
 
-    void Start()
+    public void InitializeWeapon(Player _player)
     {
         bullets = new();
         bulletsToDestroy = new();
+        owner = _player.gameObject;
+
+        transform.parent = _player.gameObject.transform;
+        transform.localPosition = Vector3.zero;
+
     }
 
     void Update()
@@ -63,7 +69,7 @@ public class Weapon : MonoBehaviour, IFireable
 
         bullets.Add(newBullet);
 
-        newBullet.InitializeBullet(gameObject, null, this, bullet.bulletSpeed, bullet.bulletDamage, bullet.gameObject.transform.localScale.x, bulletDirection, transform.position, false, null, 0);
+        newBullet.InitializeBullet(owner, null, this, bullet.bulletSpeed, bullet.bulletDamage, bullet.gameObject.transform.localScale.x, bulletDirection, transform.position, false, null, 0);
         Debug.Log("FIRE");
     }
 

@@ -105,6 +105,8 @@ MonoBehaviour:
   totalHP: 0
   startHPPercent: 0
   bossPhases: []
+  teleporterPrefab: {fileID: 2669892203088097872, guid: 00a2a953ced19cc4f96ac5b3d1fc2606, type: 3}
+  currentHP: 0
   currentAttackPhase: {fileID: 0}
   bullets: []
   inTool: 0

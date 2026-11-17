@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Teleporter : MonoBehaviour
 {
-    [SerializeField] Transform teleportTarget;
-    [SerializeField] Transform cameraTarget;
+    public Transform teleportTarget;
+    public Transform cameraTarget;
     [SerializeField] BossEnemy roomBoss;
     private void OnTriggerEnter2D(Collider2D collider)
     {

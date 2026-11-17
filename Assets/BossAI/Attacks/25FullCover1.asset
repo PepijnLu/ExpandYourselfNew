@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8dbada56314d074a8d96ccf9a200021, type: 3}
   m_Name: 25FullCover1
   m_EditorClassIdentifier: 
-  bulletAmount: 25
+  bulletAmount: 20
   bulletSpread: 185
   attackAngle: 179
   bulletType: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}
   allBulletsOverrideValues:
-    bulletSpeed: 0
+    bulletSpeed: 3
     bulletDamage: 0
     bulletSize: 0
     bulletAngle: 0
