@@ -16,3 +16,12 @@ public class EnemyPhase : ScriptableObject
 
     public List<EnemyAttack> attacks;
 }
+
+[System.Serializable]
+public class BossPhase
+{
+    //Below this % this phase will activate. Can only be 1 at a time
+    public float hpPercentThreshold;
+    //Enemy phases in this boss phase
+    public List<EnemyPhase> enemyPhases;
+}

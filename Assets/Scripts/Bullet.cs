@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    BossEnemy parent;
+    BossEnemy bossEnemy;
+    GameObject owner;
 
     int attackIndex;
 
@@ -73,11 +74,11 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    public void InitializeBullet(BossEnemy _parent, float _bulletSpeed, int _bulletDamage, float _bulletSize, Vector2 _bulletDirection, Vector3 _bulletStartPosition, bool _inTool, BHECollisionManager _collisionManager, int _attackIndex)
+    public void InitializeBullet(GameObject _owner, BossEnemy _owningBossEnemy, float _bulletSpeed, int _bulletDamage, float _bulletSize, Vector2 _bulletDirection, Vector3 _bulletStartPosition, bool _inTool, BHECollisionManager _collisionManager, int _attackIndex)
     {
         inTool = _inTool;
 
-        parent = _parent;
+        bossEnemy = _owningBossEnemy;
         bulletSpeed = _bulletSpeed;
         bulletDamage = _bulletDamage;
         bulletDirection = _bulletDirection;
@@ -108,12 +109,14 @@ public class Bullet : MonoBehaviour
     {
         try
         {
-            //In tool: player hit
             if (other.TryGetComponent(out IDamagable damagable))
             {
-                parent.shouldPauseTool = true;
-                parent.hitAttackInPhaseIndex = attackIndex;
-                damagable.TakeDamage(bulletDamage);
+                if(other.gameObject != owner)
+                {
+                    bossEnemy.shouldPauseTool = true;
+                    bossEnemy.hitAttackInPhaseIndex = attackIndex;
+                    damagable.TakeDamage(bulletDamage);
+                }
             }
         }
         catch (Exception e) 
@@ -123,7 +126,7 @@ public class Bullet : MonoBehaviour
         //Walls
         if (other.gameObject.layer == 7)
         {
-            parent.DestroyBullet(this);
+            bossEnemy.DestroyBullet(this);
         }
 
         Debug.Log($"Collision with {other.gameObject.name}");

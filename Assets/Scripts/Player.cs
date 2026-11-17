@@ -64,9 +64,9 @@ public class Player : MonoBehaviour, IDamagable
         bheCollisionManager.UpdatePreviewCollisions(col, CollisionEnterInPreview, CollisionExitInPreview);
     }
 
-    void IDamagable.TakeDamage(int _amount)
+    void IDamagable.TakeDamage(float _amount)
     {
-        health = Mathf.Max((health - _amount), 0);
+        health = Mathf.Max((health - (int)_amount), 0);
         UpdateHealth(health);
 
         Debug.Log("PLAYER HIT");

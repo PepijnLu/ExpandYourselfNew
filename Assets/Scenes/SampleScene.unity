@@ -1175,6 +1175,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3249192547453426024, guid: b71344ef021c4c14c9f7a857370a79f6, type: 3}
+      propertyPath: phaseLists.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3249192547453426024, guid: b71344ef021c4c14c9f7a857370a79f6, type: 3}
       propertyPath: 'phaseList.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: 054368b91f1ae144a85f0d56d13bcfa2, type: 2}
@@ -1182,6 +1186,22 @@ PrefabInstance:
       propertyPath: 'phaseList.Array.data[1]'
       value: 
       objectReference: {fileID: 11400000, guid: 65833251f60dcd544926a8ba6c46b841, type: 2}
+    - target: {fileID: 3249192547453426024, guid: b71344ef021c4c14c9f7a857370a79f6, type: 3}
+      propertyPath: phaseLists.Array.data[0].hpPercentThreshold
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3249192547453426024, guid: b71344ef021c4c14c9f7a857370a79f6, type: 3}
+      propertyPath: phaseLists.Array.data[0].enemyPhases.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3249192547453426024, guid: b71344ef021c4c14c9f7a857370a79f6, type: 3}
+      propertyPath: 'phaseLists.Array.data[0].enemyPhases.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 65833251f60dcd544926a8ba6c46b841, type: 2}
+    - target: {fileID: 3249192547453426024, guid: b71344ef021c4c14c9f7a857370a79f6, type: 3}
+      propertyPath: 'phaseLists.Array.data[0].enemyPhases.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 054368b91f1ae144a85f0d56d13bcfa2, type: 2}
     - target: {fileID: 3768670971937494497, guid: b71344ef021c4c14c9f7a857370a79f6, type: 3}
       propertyPath: m_Name
       value: BossEnemy

@@ -5,33 +5,37 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
-public class BossEnemy : MonoBehaviour
+public class BossEnemy : MonoBehaviour, IDamagable
 {
-    [SerializeField] List<EnemyPhase> phaseList;
-
-    [SerializeField] Bullet tempBulletPrefab;
-
-    public BHECollisionManager bheCollisionManager;
-
-    int currentAttackInt;
-    int totalPhaseAttacks;
-    float attackTimer;
-
-    public EnemyPhase currentPhase;
-    public List<Bullet> bullets;
+    [SerializeField] private float totalHP;
+    [SerializeField] private float startHPPercent;
+    [SerializeField] private List<BossPhase> bossPhases;
+    private float currentHP;
+    private bool damageCapped;
+    private int currentAttackInt;
+    private int totalPhaseAttacks;
+    private float attackTimer;
     private List<Bullet> bulletsToDestroy;
+    private BossPhase currentBossPhase;
+    [HideInInspector] public EnemyPhase currentAttackPhase;
+    [HideInInspector] public List<Bullet> bullets;
+    [HideInInspector] public BHECollisionManager bheCollisionManager;
 
-    public bool inTool;
+    [HideInInspector] public bool inTool;
 
-    public bool shouldPauseTool = false;
-    public int hitAttackInPhaseIndex;
+    [HideInInspector] public bool shouldPauseTool = false;
+    [HideInInspector] public int hitAttackInPhaseIndex;
 
-    public int attackIndex;
+    [HideInInspector] public int attackIndex;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Awaken()
     {
-        currentPhase = phaseList[0];
+        currentHP = totalHP * (startHPPercent / 100);
+        currentBossPhase = GetNewBossPhase();
+
+
+        //currentAttackPhase = phaseLists[0].enemyPhases[0];
         StartCoroutine(StartFight());
     }
 
@@ -56,7 +60,7 @@ public class BossEnemy : MonoBehaviour
         UIManager.instance.SetTMProString(UIManager.instance.timerText, "GO");
         yield return new WaitForSeconds(1);
         UIManager.instance.ToggleElement(UIManager.instance.timerText.gameObject, false);
-        StartPhase(currentPhase);
+        StartPhase(currentAttackPhase);
     }
 
     // Update is called once per frame
@@ -75,9 +79,9 @@ public class BossEnemy : MonoBehaviour
     {
         if (_newPhase == null) return;
 
-        currentPhase = _newPhase;
+        currentAttackPhase = _newPhase;
 
-        totalPhaseAttacks = currentPhase.attacks.Count;
+        totalPhaseAttacks = currentAttackPhase.attacks.Count;
         currentAttackInt = 0;
         attackTimer = 0;
     }
@@ -96,13 +100,19 @@ public class BossEnemy : MonoBehaviour
         ClearBullets();
     }
 
+    void IDamagable.TakeDamage(float _amount)
+    {
+         currentHP -= _amount;
+        CheckStagger();
+    }
+
     void HandlePhase(float _deltaTime, Action<List<Bullet>> _updateBulletCallback)
     {
-        if (currentPhase == null) return;
+        if (currentAttackPhase == null) return;
         
         if (!(currentAttackInt > totalPhaseAttacks - 1))
         {
-            EnemyAttack newAttack = currentPhase.attacks[currentAttackInt];
+            EnemyAttack newAttack = currentAttackPhase.attacks[currentAttackInt];
 
             Action<List<Bullet>> updateBulletCallback = null;
             if (inTool) updateBulletCallback = _updateBulletCallback;
@@ -126,18 +136,96 @@ public class BossEnemy : MonoBehaviour
 
             if(inTool)
             {
-                attackIndex = currentPhase.attacks.IndexOf(newAttack);
+                attackIndex = currentAttackPhase.attacks.IndexOf(newAttack);
             }
 
             //Skip no wait time frames
-            if (currentAttackInt < currentPhase.attacks.Count)
+            if (currentAttackInt < currentAttackPhase.attacks.Count)
             {
-                if ((currentPhase.attacks[currentAttackInt].waitTime == 0) || (currentPhase.attacks[currentAttackInt].attackType == AttackType.Attack) )
+                if ((currentAttackPhase.attacks[currentAttackInt].waitTime == 0) || (currentAttackPhase.attacks[currentAttackInt].attackType == AttackType.Attack) )
                 {
                     HandlePhase(_deltaTime, updateBulletCallback);
                 }
             }
         }
+    }
+
+    private void CheckStagger()
+    {
+        BossPhase newBossPhase = GetNewBossPhase();
+        if ((newBossPhase != null) && (newBossPhase != currentBossPhase))
+        {
+            currentBossPhase = newBossPhase;
+            damageCapped = true;
+
+            StartCoroutine(StaggerPhase());
+        }
+    }
+
+    private IEnumerator StaggerPhase()
+    {
+        //return to start position? 
+
+        //animations / sprite change for new phase
+
+        //Choose new attack phase
+        EnemyPhase newPhase = GetRandomEnemyPhase();
+
+        //Become un-damage capped
+        damageCapped = false;
+
+        //Start new phase
+        StartPhase(newPhase);
+
+        yield return null;
+    }
+
+    private BossPhase GetNewBossPhase()
+    {
+        BossPhase newBossPhase = null;
+        float lowestThreshold = 101f;
+
+        foreach(BossPhase _phase in bossPhases)
+        {
+            if((_phase.hpPercentThreshold >= GetHPPercent()) && (_phase.hpPercentThreshold <= lowestThreshold))
+            {
+                newBossPhase = _phase;
+                lowestThreshold = _phase.hpPercentThreshold;
+            }
+        }
+
+        return newBossPhase;
+    }
+
+    private EnemyPhase GetRandomEnemyPhase()
+    {
+        if (currentBossPhase == null)
+        {
+            Debug.LogWarning($"No current boss phase");
+            return null;
+        }
+        if (currentBossPhase.enemyPhases == null)
+        {
+            Debug.LogWarning($"Current boss phase at index {bossPhases.IndexOf(currentBossPhase)} has no list");
+            return null;
+        }
+        if (currentBossPhase.enemyPhases.Count == 0)
+        {
+            Debug.LogWarning($"Current boss phase at index {bossPhases.IndexOf(currentBossPhase)} has no phases");
+            return null;
+        }
+
+        int possiblePhasesCount = currentBossPhase.enemyPhases.Count;
+
+        int randomPhaseInt = UnityEngine.Random.Range(0, possiblePhasesCount);
+        EnemyPhase randomPhase = currentBossPhase.enemyPhases[randomPhaseInt];
+
+        return randomPhase;
+    }
+
+    public float GetHPPercent()
+    {
+        return (currentHP / totalHP) * 100;
     }
 
     public void UpdateBulletCount(EnemyAttack _enemyAttack, bool _destroyOld, Action<List<Bullet>> _callback)
@@ -238,7 +326,7 @@ public class BossEnemy : MonoBehaviour
     {
         Bullet newBullet = Instantiate(_bulletPrefab, _bulletPosition, Quaternion.identity);
 
-        newBullet.InitializeBullet(this, _bulletValues.bulletSpeed, _bulletValues.bulletDamage, _bulletValues.bulletSize, _bulletDirection, _bulletPosition, inTool, bheCollisionManager, currentAttackInt);
+        newBullet.InitializeBullet(gameObject, this, _bulletValues.bulletSpeed, _bulletValues.bulletDamage, _bulletValues.bulletSize, _bulletDirection, _bulletPosition, inTool, bheCollisionManager, currentAttackInt);
         
         bullets.Add(newBullet);
 

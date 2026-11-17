@@ -263,7 +263,7 @@ public class BulletHellEditor : EditorWindow
             selectPatternButton.style.backgroundColor = Color.blue;
             selectPhaseButton.style.backgroundColor = Color.grey;
 
-            bossEnemy.currentPhase = null;
+            bossEnemy.currentAttackPhase = null;
             phasePreview = false;
             phaseEditor.enabledSelf = false;
             patternEditor.enabledSelf = true;
