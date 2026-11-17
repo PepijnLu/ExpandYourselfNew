@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8256537349747365588}
   - component: {fileID: 2480573082658397090}
   - component: {fileID: 3249192547453426024}
+  - component: {fileID: 104518687718056790}
+  - component: {fileID: 5158203098157394578}
   m_Layer: 0
   m_Name: BossEnemy
   m_TagString: Untagged
@@ -100,12 +102,75 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 369f34510184a21498bc25fb4e9acaec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  phaseList:
-  - {fileID: 11400000, guid: e88e9af95047b3446aa3b2b0b8e6bf7f, type: 2}
-  tempBulletPrefab: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}
-  currentPhase: {fileID: 0}
+  totalHP: 0
+  startHPPercent: 0
+  bossPhases: []
+  currentAttackPhase: {fileID: 0}
   bullets: []
   inTool: 0
   shouldPauseTool: 0
   hitAttackInPhaseIndex: 0
   attackIndex: 0
+--- !u!58 &104518687718056790
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3768670971937494497}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.5
+--- !u!50 &5158203098157394578
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3768670971937494497}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

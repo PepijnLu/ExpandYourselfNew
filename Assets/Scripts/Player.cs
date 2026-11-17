@@ -13,6 +13,8 @@ public class Player : MonoBehaviour, IDamagable
     [SerializeField] public float baseMoveSpeed;
     [SerializeField] public float focusMoveSpeed;
     [SerializeField] int health;
+    [SerializeField] Weapon startWeapon;
+    Weapon currentWeapon;
     Camera cam;
     Collider2D col;
 
@@ -23,6 +25,11 @@ public class Player : MonoBehaviour, IDamagable
     void Start()
     {
         InitializePlayer(null, false);
+
+        Weapon newWeapon = Instantiate(startWeapon, transform);
+        newWeapon.transform.parent = transform;
+        newWeapon.transform.localPosition = Vector3.zero;
+        currentWeapon = newWeapon;
     }
 
     public void InitializePlayer(BHECollisionManager _bheCollisionManager, bool _inTool)
@@ -46,12 +53,19 @@ public class Player : MonoBehaviour, IDamagable
         }
 
         overlappingBlockingColliders = new();
+
     }
 
     // Update is called once per frame
     void Update()
     {
         playerMovement.Update();
+        
+        if(currentWeapon != null)
+        {
+            currentWeapon.TryFire();
+        }
+        
     }
 
     void FixedUpdate()

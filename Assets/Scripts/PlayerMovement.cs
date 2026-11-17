@@ -28,8 +28,6 @@ public class PlayerMovement
         movement.y = Input.GetAxisRaw("Vertical");
 
         movement = movement.normalized;
-        Debug.Log($"Movement: {movement.x} , {movement.y}");
-
 
         bool inFocus = Input.GetKey(KeyCode.X);
         if(inFocus)

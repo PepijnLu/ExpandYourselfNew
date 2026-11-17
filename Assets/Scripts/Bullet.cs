@@ -7,11 +7,13 @@ public class Bullet : MonoBehaviour
 {
     BossEnemy bossEnemy;
     GameObject owner;
+    IFireable firee;
 
     int attackIndex;
 
     public float bulletSpeed;
     public int bulletDamage;
+    public float range;
 
     [HideInInspector] public Vector2 bulletDirection;
     [HideInInspector] public Vector3 bulletStartPosition;
@@ -72,9 +74,19 @@ public class Bullet : MonoBehaviour
                 //Debug.Log($"Cant Update Collisions: {e.Message} ({bheCollisionManager} , {bullet.col})");
             }
         }
+
+        if(range != 0)
+        {
+            float distanceFromStart = (transform.position - bulletStartPosition).magnitude;
+
+            if (distanceFromStart > range)
+            {
+                firee.DestroyBullet(this);
+            }
+        }
     }
 
-    public void InitializeBullet(GameObject _owner, BossEnemy _owningBossEnemy, float _bulletSpeed, int _bulletDamage, float _bulletSize, Vector2 _bulletDirection, Vector3 _bulletStartPosition, bool _inTool, BHECollisionManager _collisionManager, int _attackIndex)
+    public void InitializeBullet(GameObject _owner, BossEnemy _owningBossEnemy, IFireable _firee, float _bulletSpeed, int _bulletDamage, float _bulletSize, Vector2 _bulletDirection, Vector3 _bulletStartPosition, bool _inTool, BHECollisionManager _collisionManager, int _attackIndex)
     {
         inTool = _inTool;
 
@@ -84,6 +96,7 @@ public class Bullet : MonoBehaviour
         bulletDirection = _bulletDirection;
         bulletStartPosition = _bulletStartPosition;
         attackIndex = _attackIndex;
+        firee = _firee;
 
         gameObject.transform.localScale = new Vector2(_bulletSize, _bulletSize);
 
@@ -111,10 +124,14 @@ public class Bullet : MonoBehaviour
         {
             if (other.TryGetComponent(out IDamagable damagable))
             {
+                Debug.Log($"{owner.name} fired and hit {other.gameObject.name}");
                 if(other.gameObject != owner)
                 {
-                    bossEnemy.shouldPauseTool = true;
-                    bossEnemy.hitAttackInPhaseIndex = attackIndex;
+                    if(inTool)
+                    {
+                        bossEnemy.shouldPauseTool = true;
+                        bossEnemy.hitAttackInPhaseIndex = attackIndex;
+                    }
                     damagable.TakeDamage(bulletDamage);
                 }
             }
@@ -124,9 +141,9 @@ public class Bullet : MonoBehaviour
             //Debug.Log($"Collision with player failed: {e.Message}: {other}");
         }
         //Walls
-        if (other.gameObject.layer == 7)
+        if (other.gameObject.layer == 8)
         {
-            bossEnemy.DestroyBullet(this);
+            firee.DestroyBullet(this);
         }
 
         Debug.Log($"Collision with {other.gameObject.name}");

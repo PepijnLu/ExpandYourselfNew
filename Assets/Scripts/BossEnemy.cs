@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
-public class BossEnemy : MonoBehaviour, IDamagable
+public class BossEnemy : MonoBehaviour, IDamagable, IFireable
 {
     [SerializeField] private float totalHP;
     [SerializeField] private float startHPPercent;
@@ -31,11 +31,10 @@ public class BossEnemy : MonoBehaviour, IDamagable
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Awaken()
     {
+        GameManager.instance.currentBoss = this;
+
         currentHP = totalHP * (startHPPercent / 100);
-        currentBossPhase = GetNewBossPhase();
 
-
-        //currentAttackPhase = phaseLists[0].enemyPhases[0];
         StartCoroutine(StartFight());
     }
 
@@ -60,7 +59,7 @@ public class BossEnemy : MonoBehaviour, IDamagable
         UIManager.instance.SetTMProString(UIManager.instance.timerText, "GO");
         yield return new WaitForSeconds(1);
         UIManager.instance.ToggleElement(UIManager.instance.timerText.gameObject, false);
-        StartPhase(currentAttackPhase);
+        CheckStagger();
     }
 
     // Update is called once per frame
@@ -102,8 +101,9 @@ public class BossEnemy : MonoBehaviour, IDamagable
 
     void IDamagable.TakeDamage(float _amount)
     {
-         currentHP -= _amount;
+        currentHP -= _amount;
         CheckStagger();
+        Debug.Log($"Boss take damage, new hp = {currentHP}");
     }
 
     void HandlePhase(float _deltaTime, Action<List<Bullet>> _updateBulletCallback)
@@ -148,6 +148,17 @@ public class BossEnemy : MonoBehaviour, IDamagable
                 }
             }
         }
+        else
+        {
+            currentAttackPhase = null;
+            StartCoroutine(StartPhaseAfterTime(GetRandomEnemyPhase(), 2f));
+        }
+    }
+
+    IEnumerator StartPhaseAfterTime(EnemyPhase _newPhase, float _time)
+    {
+        yield return new WaitForSeconds(_time);
+        StartPhase(_newPhase);
     }
 
     private void CheckStagger()
@@ -326,7 +337,7 @@ public class BossEnemy : MonoBehaviour, IDamagable
     {
         Bullet newBullet = Instantiate(_bulletPrefab, _bulletPosition, Quaternion.identity);
 
-        newBullet.InitializeBullet(gameObject, this, _bulletValues.bulletSpeed, _bulletValues.bulletDamage, _bulletValues.bulletSize, _bulletDirection, _bulletPosition, inTool, bheCollisionManager, currentAttackInt);
+        newBullet.InitializeBullet(gameObject, this, this, _bulletValues.bulletSpeed, _bulletValues.bulletDamage, _bulletValues.bulletSize, _bulletDirection, _bulletPosition, inTool, bheCollisionManager, currentAttackInt);
         
         bullets.Add(newBullet);
 
@@ -341,6 +352,11 @@ public class BossEnemy : MonoBehaviour, IDamagable
         return direction;
     }
 
+    void IFireable.DestroyBullet(Bullet _bullet)
+    {
+        DestroyBullet(_bullet);
+    }
+
     public void DestroyBullet(Bullet _bullet)
     {
         if (inTool)
@@ -349,7 +365,7 @@ public class BossEnemy : MonoBehaviour, IDamagable
         }
         else
         {
-            _bullet.MarkForDestruction();
+            Destroy(_bullet.gameObject);
             bullets.Remove(_bullet);
         }
     }
