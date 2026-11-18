@@ -66,33 +66,35 @@ public class Bullet : MonoBehaviour
     public void BulletUpdate(float _deltaTime)
     {
         Vector2 newBulletDirection = bulletDirection;
-        if (!linearVariablesX.Equals(default(LinearVariables)))
-        {
-            float extraDirection = mathUtil.SolveLinearEquation(linearVariablesX, timeAlive);
-            newBulletDirection.x += extraDirection;
-            newBulletDirection.Normalize();
-        }
+        //if (!linearVariablesX.Equals(default(LinearVariables)))
+        //{
+        //    float extraDirection = mathUtil.SolveLinearEquation(linearVariablesX, timeAlive);
+        //    newBulletDirection.x += extraDirection;
+        //    newBulletDirection.Normalize();
+        //}
 
-        if (!linearVariablesY.Equals(default(LinearVariables)))
-        {
-            float extraDirection = mathUtil.SolveLinearEquation(linearVariablesY, timeAlive);
-            newBulletDirection.y += extraDirection;
-            newBulletDirection.Normalize();
-        }
+        //if (!linearVariablesY.Equals(default(LinearVariables)))
+        //{
+        //    float extraDirection = mathUtil.SolveLinearEquation(linearVariablesY, timeAlive);
+        //    newBulletDirection.y += extraDirection;
+        //    newBulletDirection.Normalize();
+        //}
 
         if (!sineVariablesX.Equals(default(LinearVariables)))
         {
-            float extraDirection = mathUtil.SolveSineEquation(sineVariablesX, timeAlive);
+            float sineEquation = mathUtil.SolveSineEquation(sineVariablesX, timeAlive);
+            Debug.Log($"Sine Equation: {sineEquation}");
+            float extraDirection = sineEquation;
             newBulletDirection.x += extraDirection;
             newBulletDirection.Normalize();
         }
 
-        if (!sineVariablesY.Equals(default(LinearVariables)))
-        {
-            float extraDirection = mathUtil.SolveSineEquation(sineVariablesY, timeAlive);
-            newBulletDirection.y += extraDirection;
-            newBulletDirection.Normalize();
-        }
+        //if (!sineVariablesY.Equals(default(LinearVariables)))
+        //{
+        //    float extraDirection = (sineVariablesX.amp / 2) - mathUtil.SolveSineEquation(sineVariablesY, timeAlive);
+        //    newBulletDirection.y += extraDirection;
+        //    newBulletDirection.Normalize();
+        //}
 
         transform.position += new Vector3(newBulletDirection.x * bulletSpeed * _deltaTime, newBulletDirection.y * bulletSpeed * _deltaTime, 0);
 
@@ -156,8 +158,8 @@ public class Bullet : MonoBehaviour
         sineVariablesX = new()
         {
             amp = 2f,
-            freq = 5f,
-            phase = 0
+            freq = 60f,
+            phase = 90
         };
 
         initialized = true;

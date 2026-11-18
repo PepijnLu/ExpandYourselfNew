@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: 8ConeDown
   m_EditorClassIdentifier: 
   bulletAmount: 8
-  bulletSpread: 90
-  attackAngle: -90
+  bulletSpread: 180
+  attackAngle: 191
   bulletType: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}
   allBulletsOverrideValues:
-    bulletSpeed: 4
+    bulletSpeed: 10
     bulletDamage: 0
     bulletSize: 1
     bulletAngle: 0
@@ -25,6 +25,41 @@ MonoBehaviour:
   individualBulletOverrides:
   - bulletSpeed: 0
     bulletDamage: 0
+    bulletSize: 2
+    bulletAngle: 0
+    posOffset: {x: 0, y: 0}
+  - bulletSpeed: 0
+    bulletDamage: 0
     bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: 0}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: 0}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: 0}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: 0}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: 0}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: 0}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 2
     bulletAngle: 0
     posOffset: {x: 0, y: 0}
