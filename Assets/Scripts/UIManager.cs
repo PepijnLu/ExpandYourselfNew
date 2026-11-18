@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
     public Transform heartsContainer;
     [SerializeField] Sprite heartFullSprite, heartEmptySprite;
     [SerializeField] Slider bossBarSlider;
-    [SerializeField] public TextMeshProUGUI bossBarText, bossNameText;
+    [SerializeField] public TextMeshProUGUI bossBarText, bossNameText, fpsCounterText;
 
     public TextMeshProUGUI timerText;
 

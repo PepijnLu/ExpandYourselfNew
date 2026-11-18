@@ -18,3 +18,25 @@ MonoBehaviour:
   - attackType: 1
     waitTime: 0
     bulletPattern: {fileID: 11400000, guid: bd3ea69684c15af4aa93979738a3e083, type: 2}
+    angleOffset: 3
+    positionOffset: {x: 0, y: 0}
+  - attackType: 0
+    waitTime: 1
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 0}
+    angleOffset: 5
+    positionOffset: {x: 0, y: 0}
+  - attackType: 0
+    waitTime: 5
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}
+  - attackType: 0
+    waitTime: 0
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}

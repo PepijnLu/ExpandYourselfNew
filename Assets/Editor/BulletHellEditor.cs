@@ -174,7 +174,7 @@ public class BulletHellEditor : EditorWindow
         rightPanel.Add(previewBox);
 
         //Add input handler
-        inputManager = new(root);
+        inputManager = new(root, this);
 
         // IMGUI preview
         IMGUIContainer previewGUI = new IMGUIContainer(PreviewGUIDraw);
@@ -488,6 +488,25 @@ public class BulletHellEditor : EditorWindow
 
             GUI.EndClip();
         }
+    }
+
+    public void DeselectPhaseRow()
+    {
+        phaseEditor.DeselectRow();
+    }
+
+    public void TrySelectPhaseRow(PhaseRow _row)
+    {
+        if (!phasePreview) return;
+
+        phaseEditor.SelectRow(_row);
+    }
+
+    public void TryMovePhaseRow(int _amount)
+    {
+        if (!phasePreview) return;
+
+        phaseEditor.MoveRow(_amount);
     }
 
     void UpdateRowHighlights()

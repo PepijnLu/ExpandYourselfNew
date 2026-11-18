@@ -1,7 +1,4 @@
 design a better system for animation
-
-implement different phases for boss
-
 freeze bullet sprite while keeping bullet rotation?
 rebuild breaks stuff
 
@@ -9,5 +6,11 @@ Saving
 - saving should change the name of the pattern
 	- only able to save if Pattern Name is the same as SelectedPattern.name OR if that name is free
 
+
+IDEAS TO ADD:
 make difference between bullet spread (cone) and bullet spread (line) in attack values
 	- changing the direction vs. changing the bullet spawn pos
+
+moving phase rows with arrow keys
+
+allowing a range for the position / angle etc of attacks for randomness

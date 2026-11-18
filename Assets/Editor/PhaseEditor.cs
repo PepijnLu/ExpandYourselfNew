@@ -8,10 +8,15 @@ public class PhaseEditor : VisualElement
 {
     public List<PhaseRow> phaseRows;
 
+    private PhaseRow selectedRow;
+
     TextField phaseNameField;
     Button createButton, saveButton;
     ObjectField phaseField;
     VisualElement rowContainer;
+
+    private readonly Color defaultRowColor = Color.grey;
+    private readonly Color selectedRowColor = Color.white;
 
     public EnemyPhase currentPhase;
     public PhaseEditor(BulletHellEditor _bulletHellEditor)
@@ -47,9 +52,7 @@ public class PhaseEditor : VisualElement
 
         Button newRowButton = new Button(() =>
         {
-            PhaseRow newRow = new PhaseRow(this);
-            rowContainer.Add(newRow);
-            phaseRows.Add(newRow);
+            CreateNewRow();
         })
         {
             text = "Add Row"
@@ -93,6 +96,16 @@ public class PhaseEditor : VisualElement
         phaseRows = new();
     }
 
+    public PhaseRow CreateNewRow()
+    {
+        PhaseRow newRow = new PhaseRow(this);
+        newRow.style.backgroundColor = defaultRowColor;
+        rowContainer.Add(newRow);
+        phaseRows.Add(newRow);
+
+        return newRow;
+    }
+
     public void SelectNewPhase(ChangeEvent<Object> evt)
     {
         EnemyPhase newPhase = evt.newValue as EnemyPhase;
@@ -109,10 +122,8 @@ public class PhaseEditor : VisualElement
 
             foreach (EnemyAttack attack in currentPhase.attacks)
             {
-                PhaseRow newRow = new(this);
+                PhaseRow newRow = CreateNewRow();
                 newRow.SetValues(attack.attackType, attack.waitTime, attack.bulletPattern, attack.angleOffset, attack.positionOffset);
-                phaseRows.Add(newRow);
-                rowContainer.Add(newRow);
 
                 switch (attack.attackType)
                 {
@@ -133,10 +144,54 @@ public class PhaseEditor : VisualElement
         }
     }
 
-    public void RemoveRow(PhaseRow row)
+    public void SelectRow(PhaseRow _row)
     {
-        phaseRows.Remove(row);
-        row.RemoveFromHierarchy();
+        DeselectRow();
+        selectedRow = _row;
+        selectedRow.style.backgroundColor = selectedRowColor;
+    }
+
+    public void DeselectRow()
+    {
+        if (selectedRow == null) return;
+
+        selectedRow.style.backgroundColor = defaultRowColor;
+        selectedRow = null;
+    }
+
+    public void MoveRow(int _amount)
+    {
+        if (selectedRow == null) return;
+
+        PhaseRow currentSelectedRow = selectedRow;
+
+        int indexOfCurrentRow = phaseRows.IndexOf(currentSelectedRow);
+        int indexOfOtherRow = indexOfCurrentRow + _amount;
+
+        if ((indexOfOtherRow < 0) || (indexOfOtherRow >= phaseRows.Count)) return;
+
+        PhaseRow otherRow = phaseRows[indexOfOtherRow];
+
+        phaseRows[indexOfOtherRow] = otherRow;
+        phaseRows[indexOfCurrentRow] = currentSelectedRow;
+
+        AttackType selectedRowAttackType = (AttackType)currentSelectedRow.phaseTypeField.value;
+        float selectedRowWaitTime = currentSelectedRow.waitTimeField.value;
+        BulletPattern selectedRowBulletPattern = (BulletPattern)currentSelectedRow.patternField.value;
+        float selectedRowAngleOffset = currentSelectedRow.angleOffsetField.value;
+        Vector2 selectedRowPositionOffset = new Vector2(currentSelectedRow.positionOffsetXField.value, currentSelectedRow.positionOffsetYField.value);
+
+        currentSelectedRow.SetValues((AttackType)otherRow.phaseTypeField.value, otherRow.waitTimeField.value, (BulletPattern)otherRow.patternField.value, otherRow.angleOffsetField.value, new Vector2(otherRow.positionOffsetXField.value, otherRow.positionOffsetYField.value));
+        otherRow.SetValues(selectedRowAttackType, selectedRowWaitTime, selectedRowBulletPattern, selectedRowAngleOffset, selectedRowPositionOffset);
+
+        DeselectRow();
+        SelectRow(otherRow);
+    }
+
+    public void RemoveRow(PhaseRow _row)
+    {
+        phaseRows.Remove(_row);
+        _row.RemoveFromHierarchy();
     }
     void SavePhaseSO()
     {

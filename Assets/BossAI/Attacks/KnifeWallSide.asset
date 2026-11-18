@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8dbada56314d074a8d96ccf9a200021, type: 3}
+  m_Name: KnifeWallSide
+  m_EditorClassIdentifier: 
+  bulletAmount: 4
+  bulletSpread: 0
+  attackAngle: 0
+  bulletType: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}
+  allBulletsOverrideValues:
+    bulletSpeed: 2
+    bulletDamage: 3
+    bulletSize: 1.5
+    bulletAngle: 0
+    posOffset: {x: 0, y: 0}
+  individualBulletOverrides:
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: 0}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: -1}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: -2}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: -3}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: -2}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 1, y: -2}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 0, y: -3}
+  - bulletSpeed: 0
+    bulletDamage: 0
+    bulletSize: 0
+    bulletAngle: 0
+    posOffset: {x: 1, y: -3}
