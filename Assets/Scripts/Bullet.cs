@@ -125,36 +125,30 @@ public class Bullet : MonoBehaviour
         timeAlive += _deltaTime;
     }
 
-    public void InitializeBullet(GameObject _owner, BossEnemy _owningBossEnemy, IFireable _firee, float _bulletSpeed, int _bulletDamage, float _bulletSize, Vector2 _bulletDirection, Vector3 _bulletStartPosition, bool _inTool, BHECollisionManager _collisionManager, int _attackIndex)
+    public void InitializeBullet(GameObject _owner, BossEnemy _owningBossEnemy, IFireable _firee, BulletValues bulletValues, bool _inTool, BHECollisionManager _collisionManager, int _attackIndex)
     {
         inTool = _inTool;
+        bulletStartPosition = transform.position;
 
         bulletOwner = _owner;
         bossEnemy = _owningBossEnemy;
-        bulletSpeed = _bulletSpeed;
-        bulletDamage = _bulletDamage;
-        bulletDirection = _bulletDirection;
-        bulletStartPosition = _bulletStartPosition;
-        attackIndex = _attackIndex;
         firee = _firee;
-
-        gameObject.transform.localScale = new Vector2(_bulletSize, _bulletSize);
-
         collisionManager = _collisionManager;
-        col = GetComponent<Collider2D>();
+        attackIndex = _attackIndex;
         mathUtil = _owningBossEnemy.mathUtil;
-        //testinggg
-        //linearVariablesX = new()
-        //{
-        //    coefficient = -.1f,
-        //    start = 0
-        //};
-        //testinggg
-        //linearVariablesY = new()
-        //{
-        //    coefficient = .2f,
-        //    start = 0
-        //};
+
+        bulletSpeed = bulletValues.bulletSpeed;
+        bulletDamage = bulletValues.bulletDamage;
+        bulletDirection = bulletValues.bulletDirection;
+
+        linearVariablesX = bulletValues.linearVariablesX;
+        linearVariablesY = bulletValues.linearVariablesY;
+        sineVariablesX = bulletValues.sineVariablesX;
+        sineVariablesY = bulletValues.sineVariablesY;
+
+        col = GetComponent<Collider2D>();
+        gameObject.transform.localScale = new Vector2(bulletValues.bulletSize, bulletValues.bulletSize);
+
         sineVariablesX = new()
         {
             amp = 2f,

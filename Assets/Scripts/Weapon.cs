@@ -66,10 +66,17 @@ public class Weapon : MonoBehaviour, IFireable
         Quaternion bulletRotation = Quaternion.Euler(new Vector3(0, 0, -angle));
 
         Bullet newBullet = Instantiate(bullet, transform.position, bulletRotation);
-
         bullets.Add(newBullet);
 
-        newBullet.InitializeBullet(owner, null, this, bullet.bulletSpeed, bullet.bulletDamage, bullet.gameObject.transform.localScale.x, bulletDirection, transform.position, false, null, 0);
+        BulletValues bulletValues = new()
+        {
+            bulletSpeed = bullet.bulletSpeed,
+            bulletDamage = bullet.bulletDamage,
+            bulletSize = bullet.transform.localScale.x,
+            bulletDirection = bulletDirection,
+        };
+
+        newBullet.InitializeBullet(owner, null, this, bulletValues, false, null, 0);
         Debug.Log("FIRE");
     }
 

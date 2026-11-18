@@ -356,20 +356,21 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
                 bulletSpeed = _bulletSpeed,
                 bulletDamage = _bulletDamage,
                 bulletSize = _bulletSize,
+                bulletDirection = bulletDirection
             };
 
-            Bullet newBullet = CreateBullet(bulletPrefab, bulletPosition, bulletDirection, overrideValues);
+            Bullet newBullet = CreateBullet(bulletPrefab, bulletPosition, overrideValues);
             newBullets.Add(newBullet);
         }
 
         _callback?.Invoke(newBullets);
     }
 
-    private Bullet CreateBullet(Bullet _bulletPrefab, Vector3 _bulletPosition, Vector2 _bulletDirection, BulletValues _bulletValues)
+    private Bullet CreateBullet(Bullet _bulletPrefab, Vector3 _bulletPosition, BulletValues _bulletValues)
     {
         Bullet newBullet = Instantiate(_bulletPrefab, _bulletPosition, Quaternion.identity);
 
-        newBullet.InitializeBullet(gameObject, this, this, _bulletValues.bulletSpeed, _bulletValues.bulletDamage, _bulletValues.bulletSize, _bulletDirection, _bulletPosition, inTool, bheCollisionManager, currentAttackInt);
+        newBullet.InitializeBullet(gameObject, this, this, _bulletValues, inTool, bheCollisionManager, currentAttackInt);
         
         bullets.Add(newBullet);
 
