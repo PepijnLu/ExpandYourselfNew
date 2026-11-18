@@ -22,6 +22,7 @@ public class Bullet : MonoBehaviour
     bool initialized;
 
     float startTime;
+    float timeAlive;
     Vector3 debugStartPosition;
 
     BHECollisionManager collisionManager;
@@ -29,6 +30,9 @@ public class Bullet : MonoBehaviour
     bool inTool;
     bool destructed;
     Animator animator;
+    MathUtil mathUtil;
+    SineVariables sineVariablesX, sineVariablesY;
+    LinearVariables linearVariablesX, linearVariablesY;
 
     private void Start()
     {
@@ -36,6 +40,8 @@ public class Bullet : MonoBehaviour
         startTime = 0;
 
         animator = GetComponent<Animator>();
+
+
     }
 
     public void Update()
@@ -59,7 +65,36 @@ public class Bullet : MonoBehaviour
 
     public void BulletUpdate(float _deltaTime)
     {
-        transform.position += new Vector3(bulletDirection.x * bulletSpeed * _deltaTime, bulletDirection.y * bulletSpeed * _deltaTime, 0);
+        Vector2 newBulletDirection = bulletDirection;
+        if (!linearVariablesX.Equals(default(LinearVariables)))
+        {
+            float extraDirection = mathUtil.SolveLinearEquation(linearVariablesX, timeAlive);
+            newBulletDirection.x += extraDirection;
+            newBulletDirection.Normalize();
+        }
+
+        if (!linearVariablesY.Equals(default(LinearVariables)))
+        {
+            float extraDirection = mathUtil.SolveLinearEquation(linearVariablesY, timeAlive);
+            newBulletDirection.y += extraDirection;
+            newBulletDirection.Normalize();
+        }
+
+        if (!sineVariablesX.Equals(default(LinearVariables)))
+        {
+            float extraDirection = mathUtil.SolveSineEquation(sineVariablesX, timeAlive);
+            newBulletDirection.x += extraDirection;
+            newBulletDirection.Normalize();
+        }
+
+        if (!sineVariablesY.Equals(default(LinearVariables)))
+        {
+            float extraDirection = mathUtil.SolveSineEquation(sineVariablesY, timeAlive);
+            newBulletDirection.y += extraDirection;
+            newBulletDirection.Normalize();
+        }
+
+        transform.position += new Vector3(newBulletDirection.x * bulletSpeed * _deltaTime, newBulletDirection.y * bulletSpeed * _deltaTime, 0);
 
         startTime += _deltaTime;
 
@@ -84,6 +119,8 @@ public class Bullet : MonoBehaviour
                 firee.DestroyBullet(this);
             }
         }
+
+        timeAlive += _deltaTime;
     }
 
     public void InitializeBullet(GameObject _owner, BossEnemy _owningBossEnemy, IFireable _firee, float _bulletSpeed, int _bulletDamage, float _bulletSize, Vector2 _bulletDirection, Vector3 _bulletStartPosition, bool _inTool, BHECollisionManager _collisionManager, int _attackIndex)
@@ -103,7 +140,26 @@ public class Bullet : MonoBehaviour
 
         collisionManager = _collisionManager;
         col = GetComponent<Collider2D>();
-        
+        mathUtil = _owningBossEnemy.mathUtil;
+        //testinggg
+        //linearVariablesX = new()
+        //{
+        //    coefficient = -.1f,
+        //    start = 0
+        //};
+        //testinggg
+        //linearVariablesY = new()
+        //{
+        //    coefficient = .2f,
+        //    start = 0
+        //};
+        sineVariablesX = new()
+        {
+            amp = 2f,
+            freq = 5f,
+            phase = 0
+        };
+
         initialized = true;
     }
 

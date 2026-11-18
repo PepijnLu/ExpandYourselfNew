@@ -17,62 +17,12 @@ MonoBehaviour:
   attackAngle: -90
   bulletType: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}
   allBulletsOverrideValues:
-    bulletSpeed: 5
+    bulletSpeed: 4
     bulletDamage: 0
     bulletSize: 1
-    bulletAngle: 5
-    posOffset: {x: 1, y: 1}
+    bulletAngle: 0
+    posOffset: {x: 0, y: 0}
   individualBulletOverrides:
-  - bulletSpeed: 1
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: -1, y: 0}
-  - bulletSpeed: 0
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: 0, y: 0}
-  - bulletSpeed: 0
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: 0, y: 0}
-  - bulletSpeed: 0
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: 0, y: 0}
-  - bulletSpeed: 0
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: 0, y: 0}
-  - bulletSpeed: 0
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: 0, y: 0}
-  - bulletSpeed: 0
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: 0, y: 0}
-  - bulletSpeed: 0
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: 0, y: 0}
-  - bulletSpeed: 0
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: 0, y: 0}
-  - bulletSpeed: 0
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: 0, y: 0}
   - bulletSpeed: 0
     bulletDamage: 0
     bulletSize: 0

@@ -28,6 +28,7 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
     [HideInInspector] public int hitAttackInPhaseIndex;
 
     [HideInInspector] public int attackIndex;
+    [HideInInspector] public MathUtil mathUtil;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Awaken()
@@ -37,12 +38,13 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
         StartCoroutine(StartFight());
     }
 
-    public void InitializeBoss(BHECollisionManager _bheCollisionManager)
+    public void InitializeBoss(BHECollisionManager _bheCollisionManager, MathUtil _mathUtil)
     {
         bulletsToDestroy = new();
         bullets = new();
         inTool = true;
         bheCollisionManager = _bheCollisionManager;
+        mathUtil = _mathUtil;
     }
 
     IEnumerator StartFight()

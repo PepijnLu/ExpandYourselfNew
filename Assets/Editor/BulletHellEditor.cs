@@ -14,6 +14,7 @@ public class BulletHellEditor : EditorWindow
     private BHECollisionManager collisionManager;
 
     public BossEnemy bossEnemy;
+    public MathUtil mathUtil;
     public Player player;
     Vector3 playerStart;
 
@@ -344,8 +345,9 @@ public class BulletHellEditor : EditorWindow
 
         //Set boss to in tool
         collisionManager = new();
+        mathUtil = new();
         bossEnemy = bossEnemyGO.GetComponent<BossEnemy>();
-        bossEnemy.InitializeBoss(collisionManager);
+        bossEnemy.InitializeBoss(collisionManager, mathUtil);
 
         //Add player
         GameObject playerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Player.prefab");
