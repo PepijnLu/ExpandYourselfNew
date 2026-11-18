@@ -29,9 +29,9 @@ MonoBehaviour:
     waitTime: 0
     bulletPattern: {fileID: 11400000, guid: 3c1558f4d26d1194487760aafae58973, type: 2}
     angleOffset: 0
-    positionOffset: {x: 2, y: 0}
+    positionOffset: {x: 4, y: 0}
   - attackType: 0
-    waitTime: 0.9
+    waitTime: 1
     bulletPattern: {fileID: 0}
     angleOffset: 0
     positionOffset: {x: 0, y: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
     angleOffset: 0
     positionOffset: {x: -1, y: 0}
   - attackType: 0
-    waitTime: 0.9
+    waitTime: 1
     bulletPattern: {fileID: 0}
     angleOffset: 0
     positionOffset: {x: 0, y: 0}
@@ -50,3 +50,48 @@ MonoBehaviour:
     bulletPattern: {fileID: 11400000, guid: 3c1558f4d26d1194487760aafae58973, type: 2}
     angleOffset: 0
     positionOffset: {x: 3, y: 0}
+  - attackType: 0
+    waitTime: 0.8
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 33a07349442b08f478a120c2137ca1f7, type: 2}
+    angleOffset: 0
+    positionOffset: {x: 5, y: 3.5}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 33a07349442b08f478a120c2137ca1f7, type: 2}
+    angleOffset: 0
+    positionOffset: {x: -5, y: 3.5}
+  - attackType: 0
+    waitTime: 0.2
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 3c1558f4d26d1194487760aafae58973, type: 2}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}
+  - attackType: 0
+    waitTime: 1
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 3c1558f4d26d1194487760aafae58973, type: 2}
+    angleOffset: 0
+    positionOffset: {x: 2, y: 0}
+  - attackType: 0
+    waitTime: 1
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}
+  - attackType: 1
+    waitTime: 0
+    bulletPattern: {fileID: 11400000, guid: 3c1558f4d26d1194487760aafae58973, type: 2}
+    angleOffset: 0
+    positionOffset: {x: -3, y: 0}

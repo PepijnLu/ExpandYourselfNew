@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8dbada56314d074a8d96ccf9a200021, type: 3}
   m_Name: KnifeWallKnives
   m_EditorClassIdentifier: 
-  bulletAmount: 8
+  bulletAmount: 16
   bulletSpread: 0
   attackAngle: 0
   bulletType: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}
   allBulletsOverrideValues:
-    bulletSpeed: 1.8
+    bulletSpeed: 1.5
     bulletDamage: 0
     bulletSize: 1.3
     bulletAngle: 0
@@ -67,42 +67,42 @@ MonoBehaviour:
     bulletDamage: 0
     bulletSize: 0
     bulletAngle: 0
-    posOffset: {x: 4, y: 0}
+    posOffset: {x: -5, y: 0}
   - bulletSpeed: 0
     bulletDamage: 0
     bulletSize: 0
     bulletAngle: 0
-    posOffset: {x: 0, y: 0}
+    posOffset: {x: -6, y: 0}
   - bulletSpeed: 0
     bulletDamage: 0
     bulletSize: 0
     bulletAngle: 0
-    posOffset: {x: 0, y: 0}
+    posOffset: {x: -7, y: 0}
   - bulletSpeed: 0
     bulletDamage: 0
     bulletSize: 0
     bulletAngle: 0
-    posOffset: {x: 0, y: 0}
+    posOffset: {x: -8, y: 0}
   - bulletSpeed: 0
     bulletDamage: 0
     bulletSize: 0
     bulletAngle: 0
-    posOffset: {x: 0, y: 0}
+    posOffset: {x: 5, y: 0}
   - bulletSpeed: 0
     bulletDamage: 0
     bulletSize: 0
     bulletAngle: 0
-    posOffset: {x: 0, y: 0}
+    posOffset: {x: 6, y: 0}
   - bulletSpeed: 0
     bulletDamage: 0
     bulletSize: 0
     bulletAngle: 0
-    posOffset: {x: 0, y: 0}
+    posOffset: {x: 7, y: 0}
   - bulletSpeed: 0
     bulletDamage: 0
     bulletSize: 0
     bulletAngle: 0
-    posOffset: {x: 0, y: 0}
+    posOffset: {x: 8, y: 0}
   - bulletSpeed: 0
     bulletDamage: 0
     bulletSize: 0

@@ -180,12 +180,13 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
         else
         {
             currentAttackPhase = null;
-            StartCoroutine(StartPhaseAfterTime(GetRandomEnemyPhase(), 2f));
+            StartCoroutine(StartPhaseAfterTime(GetRandomEnemyPhase(), .5f));
         }
     }
 
     IEnumerator StartPhaseAfterTime(EnemyPhase _newPhase, float _time)
     {
+        while(bullets.Count > 0) yield return null;
         yield return new WaitForSeconds(_time);
         StartPhase(_newPhase);
     }

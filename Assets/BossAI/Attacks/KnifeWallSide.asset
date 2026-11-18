@@ -17,7 +17,7 @@ MonoBehaviour:
   attackAngle: 0
   bulletType: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}
   allBulletsOverrideValues:
-    bulletSpeed: 2
+    bulletSpeed: 1.5
     bulletDamage: 3
     bulletSize: 1.5
     bulletAngle: 0
