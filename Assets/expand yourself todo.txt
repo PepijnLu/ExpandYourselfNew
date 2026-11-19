@@ -1,3 +1,10 @@
+UUUURGENT:
+
+- dictionaries cant be serialized: put objects in lists for saving, then recreate them during runtime. save to lists again
+	- fix the phase editor after this if its still broken
+
+- add individual bullet overrides back in
+
 design a better system for animation
 freeze bullet sprite while keeping bullet rotation?
 rebuild breaks stuff
