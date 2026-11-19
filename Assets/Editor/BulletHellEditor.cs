@@ -1,6 +1,8 @@
 using Mono.Cecil;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -36,6 +38,8 @@ public class BulletHellEditor : EditorWindow
 
     int currentAttackIndex;
 
+    public Dictionary<string, VisualElement> parameterInputFields;
+
     [MenuItem("Window/UI Toolkit/BulletHellEditor")]
     public static void ShowExample()
     {
@@ -45,6 +49,8 @@ public class BulletHellEditor : EditorWindow
 
     public void CreateGUI()
     {
+        parameterInputFields = new();
+
         playButtonTexture = EditorGUIUtility.IconContent("PlayButton").image;
         stopButtonTexture = EditorGUIUtility.IconContent("StopButton").image;
         pauseButtonTexture = EditorGUIUtility.IconContent("PauseButton").image;
@@ -76,11 +82,15 @@ public class BulletHellEditor : EditorWindow
 
         rootVisualElement.Add(splitView);
 
+
         patternEditor = new(this);
         leftPanel.Add(patternEditor);
 
+        Debug.Log($"pattern editor success");
+
         phaseEditor = new(this);
         leftPanel.Add(phaseEditor);
+
 
         VisualElement controlRow = new VisualElement();
         controlRow.style.flexDirection = FlexDirection.Row;
@@ -182,6 +192,7 @@ public class BulletHellEditor : EditorWindow
 
         previewBox.Add(previewGUI);
 
+
         // Keep repainting so the preview can animate.
         previewGUI.schedule.Execute(() =>
         {
@@ -190,6 +201,32 @@ public class BulletHellEditor : EditorWindow
         }).Every(16);
 
         PreviewStart();
+    }
+
+    public void AddParameterInputField(string _key, VisualElement _value)
+    {
+        try
+        {
+            parameterInputFields.Add(_key, _value);
+
+            if (_value is FloatField _floatField)
+            {
+                _floatField.RegisterValueChangedCallback(UpdateBulletCountFromPatternEditor);
+
+            }
+            else if (_value is IntegerField _integerField)
+            {
+                _integerField.RegisterValueChangedCallback(UpdateBulletCountFromPatternEditor);
+            }
+            else if (_value is ObjectField _objectField)
+            {
+                _objectField.RegisterValueChangedCallback(UpdateBulletCountFromPatternEditor);
+            }
+        }
+        catch(Exception ex)
+        {
+            Debug.Log($"Couldnt add param to dict: {ex.Message}");
+        }
     }
 
     public void AddBulletsToPreview(List<Bullet> _bulletsToAdd)
@@ -209,6 +246,7 @@ public class BulletHellEditor : EditorWindow
         patternEditor.Initialize();
 
         isPaused = false;
+
     }
 
     private void PreviewUpdate()
@@ -293,7 +331,7 @@ public class BulletHellEditor : EditorWindow
         if (!phasePreview) bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
     }
 
-    public void UpdateBulletCountFromPatternEditor(ChangeEvent<Object> evt)
+    public void UpdateBulletCountFromPatternEditor(ChangeEvent<UnityEngine.Object> evt)
     {
         if (!phasePreview) bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
     }
@@ -303,6 +341,7 @@ public class BulletHellEditor : EditorWindow
         EnemyAttack attack = new();
         
         BulletPattern pattern = CreateInstance<BulletPattern>();
+
         pattern = patternEditor.FillBulletPatternFromEditorFields(pattern);
 
         if(patternEditor.currentPattern != null)

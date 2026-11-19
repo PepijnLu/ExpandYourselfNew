@@ -32,34 +32,39 @@ public class PatternEditor : VisualElement
         Add(patternEditorLabel);
 
         bulletHellEditor = _bulletHellEditor;
+
         // Bullet Amount
         bulletAmountField = new IntegerField("Bullet Amount");
         bulletAmountField.value = 4;
         Add(bulletAmountField);
+       //bulletHellEditor.AddParameterInputField("bulletAmount", bulletAmountField);
 
         // Bullet Spread
         bulletSpreadField = new FloatField("Bullet Spread");
         bulletSpreadField.value = 180;
         Add(bulletSpreadField);
+        //bulletHellEditor.AddParameterInputField("bulletSpread", bulletSpreadField);
 
         // Bullet Angle
         attackAngleField = new FloatField("Attack Angle");
         attackAngleField.value = 45;
         Add(attackAngleField);
+        //bulletHellEditor.AddParameterInputField("attackAngle", attackAngleField);
 
         // Bullet type
         bulletTypeField = new ObjectField("Bullet Type");
         bulletTypeField.objectType = typeof(Bullet);
         bulletTypeField.value = AssetDatabase.LoadAssetAtPath<Bullet>("Assets/Prefabs/Bullets/StandardBullet.prefab"); 
         Add(bulletTypeField);
+        //bulletHellEditor.AddParameterInputField("bulletType", bulletTypeField);
 
         //Bullet overrides
-        Label overrideLabel = new Label("All Bullet Overrides:");
+        Label overrideLabel = new Label("Shared Bullet Overrides:");
         overrideLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
         overrideLabel.style.paddingTop = 20;
         Add(overrideLabel);
 
-        bulletOverrideFields = new BulletOverrideFields();
+        bulletOverrideFields = new BulletOverrideFields(bulletHellEditor);
         Add(bulletOverrideFields);
 
         // SO name
@@ -92,26 +97,13 @@ public class PatternEditor : VisualElement
         saveButton.enabledSelf = false;
         Add(saveButton);
 
-
-        bulletAmountField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-        bulletSpreadField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-        attackAngleField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-        bulletTypeField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-
-        bulletOverrideFields.bulletSpeedField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-        bulletOverrideFields.bulletDamageField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-        bulletOverrideFields.bulletSizeField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-        bulletOverrideFields.angleOffsetField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-        bulletOverrideFields.positionOffsetXField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-        bulletOverrideFields.positionOffsetYField.RegisterValueChangedCallback(bulletHellEditor.UpdateBulletCountFromPatternEditor);
-
         patternNameField.RegisterValueChangedCallback(CheckPatternName);
         patternField.RegisterValueChangedCallback(SelectNewPattern);
     }
 
     public void Initialize()
     {
-        bulletOverrideEditor = new(this);
+        bulletOverrideEditor = new(bulletHellEditor, this);
         Add(bulletOverrideEditor);
     }
 
@@ -124,18 +116,52 @@ public class PatternEditor : VisualElement
         {
             currentPattern = newPattern;
 
+            //keep the same (not bullet values)
             bulletAmountField.value = currentPattern.bulletAmount;
             bulletSpreadField.value = currentPattern.bulletSpread;
             attackAngleField.value = currentPattern.attackAngle;
             bulletTypeField.value = currentPattern.bulletType;
             patternNameField.value = currentPattern.name;
 
-            bulletOverrideFields.bulletSpeedField.value = currentPattern.allBulletsOverrideValues.bulletSpeed;
-            bulletOverrideFields.bulletDamageField.value = currentPattern.allBulletsOverrideValues.bulletDamage;
-            bulletOverrideFields.bulletSizeField.value = currentPattern.allBulletsOverrideValues.bulletSize;
-            bulletOverrideFields.angleOffsetField.value = currentPattern.allBulletsOverrideValues.bulletAngle;
-            bulletOverrideFields.positionOffsetXField.value = currentPattern.allBulletsOverrideValues.posOffset.x;
-            bulletOverrideFields.positionOffsetYField.value = currentPattern.allBulletsOverrideValues.posOffset.y;
+            //bullet values
+            foreach(KeyValuePair<string, VisualElement> _pair in bulletHellEditor.parameterInputFields)
+            {
+                bool hasOverride = currentPattern.allBulletsOverrideValues.ContainsKey(_pair.Key);
+
+                if (_pair.Value is FloatField _floatField)
+                {
+                    if(hasOverride)
+                    {
+                        _floatField.value = (currentPattern.allBulletsOverrideValues[_pair.Key] as FloatValue).value;
+                    }
+                    else
+                    {
+                        _floatField.value = 0;
+                    }
+                }
+                else if (_pair.Value is IntegerField _integerField)
+                {
+                    if (hasOverride)
+                    {
+                        _integerField.value = (currentPattern.allBulletsOverrideValues[_pair.Key] as IntValue).value;
+                    }
+                    else
+                    {
+                        _integerField.value = 0;
+                    }
+                }
+                else if (_pair.Value is ObjectField _objectField)
+                {
+                    if (hasOverride)
+                    {
+                        _objectField.value = (currentPattern.allBulletsOverrideValues[_pair.Key] as ObjectValue).value;
+                    }
+                    else
+                    {
+                        _objectField.value = null;
+                    }
+                }
+            }
 
             newAttack.bulletPattern = newPattern;
 
@@ -159,37 +185,37 @@ public class PatternEditor : VisualElement
             int difference = (bulletIndex + 1) - currentPattern.individualBulletOverrides.Count;
             for (int i = 0; i < difference; i++)
             {
-                currentPattern.individualBulletOverrides.Add(new BulletValues());
+                //currentPattern.individualBulletOverrides.Add(new BulletValues());
             }
         }
 
-        BulletValues overrideValues = currentPattern.individualBulletOverrides[bulletIndex];
+        //BulletValues overrideValues = currentPattern.individualBulletOverrides[bulletIndex];
 
-        switch(value)
-        {
-            case "speed":
-                overrideValues.bulletSpeed = newValue; 
-                break;
-            case "damage":
-                overrideValues.bulletDamage = (int)newValue; 
-                break;
-            case "size": 
-                overrideValues.bulletSize = newValue;
-                break;
-            case "angle":
-                overrideValues.bulletAngle = newValue;
-                break;
-            case "posX":
-                overrideValues.posOffset.x = newValue;
-                break;
-            case "posY":
-                overrideValues.posOffset.y = newValue;
-                break;
-        }
+        //switch(value)
+        //{
+        //    case "speed":
+        //        overrideValues.bulletSpeed = newValue; 
+        //        break;
+        //    case "damage":
+        //        overrideValues.bulletDamage = (int)newValue; 
+        //        break;
+        //    case "size": 
+        //        overrideValues.bulletSize = newValue;
+        //        break;
+        //    case "angle":
+        //        overrideValues.bulletAngle = newValue;
+        //        break;
+        //    case "posX":
+        //        overrideValues.posOffset.x = newValue;
+        //        break;
+        //    case "posY":
+        //        overrideValues.posOffset.y = newValue;
+        //        break;
+        //}
 
-        currentPattern.individualBulletOverrides[bulletIndex] = overrideValues;
+        //currentPattern.individualBulletOverrides[bulletIndex] = overrideValues;
 
-        bulletHellEditor.UpdateBulletCountFromPatternEditor(currentPattern.individualBulletOverrides);
+        //bulletHellEditor.UpdateBulletCountFromPatternEditor(currentPattern.individualBulletOverrides);
     }
 
     void CheckPatternName(string _newValue)
@@ -250,14 +276,59 @@ public class PatternEditor : VisualElement
         _pattern.attackAngle = attackAngleField.value;
         _pattern.bulletType = bulletTypeField.value as Bullet;
 
-        _pattern.allBulletsOverrideValues.bulletSpeed = bulletOverrideFields.bulletSpeedField.value;
-        _pattern.allBulletsOverrideValues.bulletDamage = bulletOverrideFields.bulletDamageField.value;
-        _pattern.allBulletsOverrideValues.bulletSize = bulletOverrideFields.bulletSizeField.value;
+        foreach(KeyValuePair<string, VisualElement> _pair in bulletHellEditor.parameterInputFields)
+        {
+            Debug.Log($"PARAMTER INPUT FIELD: {_pair.Key}");
+            Dictionary<string, Value> dictToAddTo = _pattern.allBulletsOverrideValues;
 
-        _pattern.allBulletsOverrideValues.bulletAngle = bulletOverrideFields.angleOffsetField.value;
-        _pattern.allBulletsOverrideValues.posOffset = new Vector2(bulletOverrideFields.positionOffsetXField.value, bulletOverrideFields.positionOffsetYField.value);
+            if (_pair.Value is FloatField _floatField)
+            {
+                if (_floatField.value == 0) continue;
+
+                if (dictToAddTo.ContainsKey(_pair.Key))
+                {
+                    (dictToAddTo[_pair.Key] as FloatValue).value = _floatField.value;
+                }
+                else
+                {
+                    dictToAddTo.Add(_pair.Key, new FloatValue(_floatField.value));
+                }
+            }
+            else if (_pair.Value is IntegerField _integerField)
+            {
+                if (_integerField.value == 0) continue;
+
+                if (dictToAddTo.ContainsKey(_pair.Key))
+                {
+                    (dictToAddTo[_pair.Key] as IntValue).value = _integerField.value;
+                }
+                else
+                {
+                    dictToAddTo.Add(_pair.Key, new IntValue(_integerField.value));
+                }
+            }
+            else if (_pair.Value is ObjectField _objectField)
+            {
+                if (_objectField.value == null) continue;
+
+                if (dictToAddTo.ContainsKey(_pair.Key))
+                {
+                    (dictToAddTo[_pair.Key] as ObjectValue).value = _objectField.value;
+                }
+                else
+                {
+                    dictToAddTo.Add(_pair.Key, new ObjectValue(_objectField.value));
+                }
+            }
+        }
 
         _pattern.name = patternNameField.value;
+
+        
+        //if (_pattern.allBulletsOverrideValues.ContainsKey("sharedBulletSpeed"))
+        //{
+        //    Debug.Log($"Changed Bullet Count, new speed = {(_pattern.allBulletsOverrideValues["sharedBulletSpeed"] as FloatValue).value}");
+        //}
 
         return _pattern;
     }

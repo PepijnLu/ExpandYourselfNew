@@ -58,26 +58,26 @@ public class Weapon : MonoBehaviour, IFireable
 
     void Fire()
     {
-        cooldownTimer = 0;
-        //get boss enemy differently here
-        Vector2 bulletDirection = (FindAnyObjectByType<BossEnemy>().transform.position - transform.position).normalized;
-        float angle = Mathf.Atan2(bulletDirection.x, bulletDirection.y) * Mathf.Rad2Deg;
+        //cooldownTimer = 0;
+        ////get boss enemy differently here
+        //Vector2 bulletDirection = (FindAnyObjectByType<BossEnemy>().transform.position - transform.position).normalized;
+        //float angle = Mathf.Atan2(bulletDirection.x, bulletDirection.y) * Mathf.Rad2Deg;
 
-        Quaternion bulletRotation = Quaternion.Euler(new Vector3(0, 0, -angle));
+        //Quaternion bulletRotation = Quaternion.Euler(new Vector3(0, 0, -angle));
 
-        Bullet newBullet = Instantiate(bullet, transform.position, bulletRotation);
-        bullets.Add(newBullet);
+        //Bullet newBullet = Instantiate(bullet, transform.position, bulletRotation);
+        //bullets.Add(newBullet);
 
-        BulletValues bulletValues = new()
-        {
-            bulletSpeed = bullet.bulletSpeed,
-            bulletDamage = bullet.bulletDamage,
-            bulletSize = bullet.transform.localScale.x,
-            bulletDirection = bulletDirection,
-        };
+        //BulletValues bulletValues = new()
+        //{
+        //    bulletSpeed = bullet.bulletSpeed,
+        //    bulletDamage = bullet.bulletDamage,
+        //    bulletSize = bullet.transform.localScale.x,
+        //    bulletDirection = bulletDirection,
+        //};
 
-        newBullet.InitializeBullet(owner, null, this, bulletValues, false, null, 0);
-        Debug.Log("FIRE");
+        //newBullet.InitializeBullet(owner, null, this, bulletValues, false, null, 0);
+        //Debug.Log("FIRE");
     }
 
     void IFireable.DestroyBullet(Bullet _bullet)

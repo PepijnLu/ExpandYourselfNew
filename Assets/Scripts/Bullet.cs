@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions.Comparers;
 
 public class Bullet : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public class Bullet : MonoBehaviour
 
     public float bulletSpeed;
     public int bulletDamage;
+    public float bulletAngle;
+    float angleOffset;
     public float range;
 
     [HideInInspector] public Vector2 bulletDirection;
@@ -33,6 +37,8 @@ public class Bullet : MonoBehaviour
     MathUtil mathUtil;
     SineVariables sineVariablesX, sineVariablesY;
     LinearVariables linearVariablesX, linearVariablesY;
+
+    Dictionary<string, Value> bulletValues;
 
     private void Start()
     {
@@ -125,8 +131,10 @@ public class Bullet : MonoBehaviour
         timeAlive += _deltaTime;
     }
 
-    public void InitializeBullet(GameObject _owner, BossEnemy _owningBossEnemy, IFireable _firee, BulletValues bulletValues, bool _inTool, BHECollisionManager _collisionManager, int _attackIndex)
+    public void InitializeBullet(GameObject _owner, BossEnemy _owningBossEnemy, IFireable _firee, Dictionary<string, Value> _bulletValues, bool _inTool, BHECollisionManager _collisionManager, int _attackIndex)
     {
+        if (initialized) return;
+
         inTool = _inTool;
         bulletStartPosition = transform.position;
 
@@ -137,26 +145,45 @@ public class Bullet : MonoBehaviour
         attackIndex = _attackIndex;
         mathUtil = _owningBossEnemy.mathUtil;
 
-        bulletSpeed = bulletValues.bulletSpeed;
-        bulletDamage = bulletValues.bulletDamage;
-        bulletDirection = bulletValues.bulletDirection;
+        bulletValues = _bulletValues;
 
-        linearVariablesX = bulletValues.linearVariablesX;
-        linearVariablesY = bulletValues.linearVariablesY;
-        sineVariablesX = bulletValues.sineVariablesX;
-        sineVariablesY = bulletValues.sineVariablesY;
+        //SHOULD ALWAYS HAVE A VALUE
+        bulletSpeed = (bulletValues["bulletSpeed"] as FloatValue).value;
+        bulletDamage = (bulletValues["bulletDamage"] as IntValue).value;
+        bulletAngle = (bulletValues["bulletAngle"] as FloatValue).value;
 
+        float bulletSize = (bulletValues["bulletSize"] as FloatValue).value;
+        gameObject.transform.localScale = new Vector2(bulletSize, bulletSize);
+
+
+        //CAN BE EMPTY
+        Value angleOffsetValue = BulletValueDict.TryGetValue(bulletValues, "angleOffset");
+        if (angleOffsetValue is FloatValue _ao) angleOffset = _ao.value;
+
+        Value linearVarsXValue = BulletValueDict.TryGetValue(bulletValues, "linearVariablesX");
+        if(linearVarsXValue is LinearVariablesValue _lvx) linearVariablesX = _lvx.value;
+
+        Value linearVarsYValue = BulletValueDict.TryGetValue(bulletValues, "linearVariablesY");
+        if (linearVarsYValue is LinearVariablesValue _lvy) linearVariablesY = _lvy.value;
+
+        Value sineVarsXValue = BulletValueDict.TryGetValue(bulletValues, "sineVariablesX");
+        if (sineVarsXValue is SineVariablesValue _svx) sineVariablesX = _svx.value;
+
+        Value sineVarsYValue = BulletValueDict.TryGetValue(bulletValues, "sineVariablesY");
+        if (sineVarsYValue is SineVariablesValue _svy) sineVariablesY = _svy.value;
+
+        bulletAngle += angleOffset;
+        bulletDirection = GetBulletDirection(bulletAngle);
         col = GetComponent<Collider2D>();
-        gameObject.transform.localScale = new Vector2(bulletValues.bulletSize, bulletValues.bulletSize);
-
-        sineVariablesX = new()
-        {
-            amp = 2f,
-            freq = 60f,
-            phase = 90
-        };
-
         initialized = true;
+    }
+
+    Vector2 GetBulletDirection(float _angle)
+    {
+        Quaternion directionRotation = Quaternion.Euler(0, 0, _angle);
+        Vector2 direction = directionRotation * Vector2.down;
+
+        return direction;
     }
 
     private void OnTriggerEnter2D(Collider2D collider)

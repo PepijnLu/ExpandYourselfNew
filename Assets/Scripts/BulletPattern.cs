@@ -8,10 +8,9 @@ public class BulletPattern : ScriptableObject
     public int bulletAmount;
     public float bulletSpread;
     public float attackAngle;
-
     public Bullet bulletType;
 
-    public BulletValues allBulletsOverrideValues = new();
+    public Dictionary<string, Value> allBulletsOverrideValues = new();
 
-    public List<BulletValues> individualBulletOverrides = new();
+    public List<Dictionary<string, Value>> individualBulletOverrides = new();
 }

@@ -280,29 +280,54 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
         BulletPattern pattern = _enemyAttack.bulletPattern;
         Bullet bulletPrefab = pattern.bulletType;
 
+        //Get the values from the bullet prefab
         float bulletAmount = pattern.bulletAmount;
         float bulletSpread = pattern.bulletSpread;
         float attackAngle = pattern.attackAngle;
 
-        Vector2 attackPosOffset = _enemyAttack.positionOffset;
+        Vector3 bulletPosition = transform.position;
+        Vector2 posOffset = _enemyAttack.positionOffset;
 
         float _attackBulletSpeed = bulletPrefab.bulletSpeed;
         int _attackBulletDamage = bulletPrefab.bulletDamage;
         float _attackBulletSize = bulletPrefab.gameObject.transform.localScale.x;
 
-        //Check for override for all bullets in attack
-        if (pattern.allBulletsOverrideValues.bulletSpeed != 0) _attackBulletSpeed = pattern.allBulletsOverrideValues.bulletSpeed;
-        if (pattern.allBulletsOverrideValues.bulletDamage != 0) _attackBulletDamage = pattern.allBulletsOverrideValues.bulletDamage;
-        if (pattern.allBulletsOverrideValues.bulletSize != 0) _attackBulletSize = pattern.allBulletsOverrideValues.bulletSize;
-
-        attackAngle += pattern.allBulletsOverrideValues.bulletAngle;
-        attackPosOffset += pattern.allBulletsOverrideValues.posOffset;
-
-        if (_destroyOld)
+        //Create the initial dictionary with bullet values
+        Dictionary<string, Value> bulletValues = new()
         {
-            DestroyAllBullets(true);
+            ["bulletSpeed"] = new FloatValue(_attackBulletSpeed),
+            ["bulletDamage"] = new IntValue(_attackBulletDamage),
+            ["bulletSize"] = new FloatValue(_attackBulletSize),
+            ["bulletAngle"] = new FloatValue(attackAngle)
+        };
+
+        //Override the previous dictionary with values from shared bullets overrides (if set, otherwise wont appear here)
+        foreach (KeyValuePair<string, Value> _pair in pattern.allBulletsOverrideValues)
+        {
+            if (bulletValues.ContainsKey(_pair.Key))
+            {
+                bulletValues[_pair.Key] = _pair.Value;
+            }
+            else
+            {
+                bulletValues.Add(_pair.Key, _pair.Value);
+            }
         }
 
+        //Position needs to be known before instantiating bullet, so do this manually
+        float posOffsetX = 0;
+        float posOffsetY = 0;
+
+        Value posOffsetXValue = BulletValueDict.TryGetValue(bulletValues, "posOffsetX");
+        if (posOffsetXValue is FloatValue _pox) posOffsetX = _pox.value;
+
+        Value posOffsetYValue = BulletValueDict.TryGetValue(bulletValues, "posOffsetY");
+        if (posOffsetYValue is FloatValue _poy) posOffsetY = _poy.value;
+
+        posOffset += new Vector2(posOffsetX, posOffsetY);
+        bulletPosition += new Vector3(posOffset.x, posOffset.y, 0);
+
+        //Calculate bullet angle
         float angleStep;
 
         if (bulletAmount == 1)
@@ -316,58 +341,78 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
         float startAngle = (bulletSpread / 2f) + _enemyAttack.angleOffset;
         startAngle += attackAngle;
 
+        //Destroy old bullets?
+        if (_destroyOld)
+        {
+            DestroyAllBullets(true);
+        }
+
+
         //Create New Bullets
         for (int i = 0; i < bulletAmount; i++)
         {
-            float _bulletSpeed = _attackBulletSpeed;
-            int _bulletDamage = _attackBulletDamage;
-            float _bulletSize = _attackBulletSize;
-
+            //Every bullet has a different angle in an attack regardless, so always check this manually
+            Dictionary<string, Value> individualBulletValues = BulletValueDict.GetCopyOfDict(bulletValues);
             float bulletAngle = startAngle + i * angleStep;
+            (individualBulletValues["bulletAngle"] as FloatValue).value = bulletAngle;
+            
 
-            Vector2 bulletDirection = GetBulletDirection(bulletAngle);
-
-            Vector3 bulletPosition = transform.position + new Vector3(attackPosOffset.x, attackPosOffset.y, 0);
+            //if(individualBulletValues.ContainsKey("angleOffset"))
+            //{
+            //    individualBulletValues["angleOffset"] = new FloatValue(angleOffset);
+            //}
+            //else
+            //{
+            //    individualBulletValues.Add("angleOffset", new FloatValue(angleOffset));
+            //}
 
             //Check for individual overrides
+            /*
             if (pattern.individualBulletOverrides != null)
             {
                 if (i < pattern.individualBulletOverrides.Count)
                 {
-                    BulletValues values = pattern.individualBulletOverrides[i];
-
-                    if (values.bulletSpeed != 0) _bulletSpeed = values.bulletSpeed;
-                    if (values.bulletDamage != 0) _bulletDamage = values.bulletDamage;
-                    if (values.bulletSize != 0) _bulletSize = values.bulletSize;
-
-                    bulletPosition += new Vector3(values.posOffset.x, values.posOffset.y, 0);
-                    
-                    if(values.bulletAngle != 0)
+                    Debug.Log($"Found individual overrides: {pattern.individualBulletOverrides[i].Count}");
+                    //Override the previous dictionary with values from individual bullets (if set, otherwise wont appear here)
+                    foreach(KeyValuePair<string, Value> _pair in pattern.individualBulletOverrides[i])
                     {
-                        float newBulletAngle = bulletAngle + values.bulletAngle;
-                        bulletDirection = GetBulletDirection(newBulletAngle);
+                        if(bulletValues.ContainsKey(_pair.Key))
+                        {
+                            bulletValues[_pair.Key] = _pair.Value;
+                        }
+                        else
+                        {
+                            bulletValues.Add(_pair.Key, _pair.Value);
+                        }
                     }
+
+                    //Check for a poss offset, since we need that for spawning the bullet at the right position
+                    if(bulletValues.TryGetValue("posOffset", out Value _value))
+                    {
+                        posOffset = (_value as Vector2Value).value;
+                    }
+
+                    //Increment bullet position by its position offset
+                    bulletPosition += new Vector3(posOffset.x, posOffset.y, 0);   
                 }
             }
             else Debug.LogWarning($"NO LIST FOUND FOR OVERRIDES");
+            */
 
-            BulletValues overrideValues = new()
-            {
-                bulletSpeed = _bulletSpeed,
-                bulletDamage = _bulletDamage,
-                bulletSize = _bulletSize,
-                bulletDirection = bulletDirection
-            };
-
-            Bullet newBullet = CreateBullet(bulletPrefab, bulletPosition, overrideValues);
+            //Instantiate bullet
+            Bullet newBullet = CreateBullet(bulletPrefab, bulletPosition, individualBulletValues);
             newBullets.Add(newBullet);
         }
 
+        //Invoke callback for tool
         _callback?.Invoke(newBullets);
     }
 
-    private Bullet CreateBullet(Bullet _bulletPrefab, Vector3 _bulletPosition, BulletValues _bulletValues)
+    private Bullet CreateBullet(Bullet _bulletPrefab, Vector3 _bulletPosition, Dictionary<string, Value> _bulletValues)
     {
+        float bulletSize = (_bulletValues["bulletSize"] as FloatValue).value;
+        Debug.Log($"Bullet size = {bulletSize}");
+
         Bullet newBullet = Instantiate(_bulletPrefab, _bulletPosition, Quaternion.identity);
 
         newBullet.InitializeBullet(gameObject, this, this, _bulletValues, inTool, bheCollisionManager, currentAttackInt);

@@ -9,7 +9,7 @@ public class BulletOverrideEditor : VisualElement
     BulletOverrideFields bulletOverrideFields;
     IntegerField selectedBulletField;
     PatternEditor patternEditor;
-    public BulletOverrideEditor(PatternEditor _patternEditor)
+    public BulletOverrideEditor(BulletHellEditor _bulletHellEditor, PatternEditor _patternEditor)
     {
         style.backgroundColor = new Color(.02f, 0.39f, 0.29f);
         style.marginTop = 20;
@@ -29,16 +29,16 @@ public class BulletOverrideEditor : VisualElement
         selectedBulletField.RegisterValueChangedCallback(ChangeSelectedBulletCallback);
 
         //Overrides
-        bulletOverrideFields = new BulletOverrideFields();
-        Add(bulletOverrideFields);
+        //bulletOverrideFields = new BulletOverrideFields(_bulletHellEditor, "individual");
+        //Add(bulletOverrideFields);
 
-        bulletOverrideFields.bulletSpeedField.RegisterValueChangedCallback(UpdateOverrideSpeed);
-        bulletOverrideFields.bulletDamageField.RegisterValueChangedCallback(UpdateOverrideDamage);
-        bulletOverrideFields.bulletSizeField.RegisterValueChangedCallback(UpdateOverrideSize);
+        //bulletOverrideFields.bulletSpeedField.RegisterValueChangedCallback(UpdateOverrideSpeed);
+        //bulletOverrideFields.bulletDamageField.RegisterValueChangedCallback(UpdateOverrideDamage);
+        //bulletOverrideFields.bulletSizeField.RegisterValueChangedCallback(UpdateOverrideSize);
 
-        bulletOverrideFields.angleOffsetField.RegisterValueChangedCallback(UpdateOverrideAngle);
-        bulletOverrideFields.positionOffsetXField.RegisterValueChangedCallback(UpdateOverridePosX);
-        bulletOverrideFields.positionOffsetYField.RegisterValueChangedCallback(UpdateOverridePosY);
+        //bulletOverrideFields.angleField.RegisterValueChangedCallback(UpdateOverrideAngle);
+        //bulletOverrideFields.positionOffsetXField.RegisterValueChangedCallback(UpdateOverridePosX);
+        //bulletOverrideFields.positionOffsetYField.RegisterValueChangedCallback(UpdateOverridePosY);
 
         //Clear override button
         Button clearOverrideButton = new Button(() =>
@@ -60,41 +60,41 @@ public class BulletOverrideEditor : VisualElement
 
     public void ChangeSelectedBullet(int newBulletIndex)
     {
-        if (!patternEditor.currentPattern) return;
+        //if (!patternEditor.currentPattern) return;
 
-        selectedBulletField.value = newBulletIndex;
-        int bulletCount = patternEditor.currentPattern.bulletAmount;
+        //selectedBulletField.value = newBulletIndex;
+        //int bulletCount = patternEditor.currentPattern.bulletAmount;
 
-        if (newBulletIndex >= bulletCount)
-        {
-            bulletOverrideFields.SetEnabled(false);
-        }
-        else
-        {
-            bulletOverrideFields.SetEnabled(true);
-        }
+        //if (newBulletIndex >= bulletCount)
+        //{
+        //    bulletOverrideFields.SetEnabled(false);
+        //}
+        //else
+        //{
+        //    bulletOverrideFields.SetEnabled(true);
+        //}
 
-        if (newBulletIndex < patternEditor.currentPattern.individualBulletOverrides.Count)
-        {
-            BulletValues values = patternEditor.currentPattern.individualBulletOverrides[newBulletIndex];
-            bulletOverrideFields.bulletSpeedField.value = values.bulletSpeed;
-            bulletOverrideFields.bulletDamageField.value = values.bulletDamage;
-            bulletOverrideFields.bulletSizeField.value = values.bulletSize;
+        //if (newBulletIndex < patternEditor.currentPattern.individualBulletOverrides.Count)
+        //{
+        //    BulletValues values = patternEditor.currentPattern.individualBulletOverrides[newBulletIndex];
+        //    bulletOverrideFields.bulletSpeedField.value = values.bulletSpeed;
+        //    bulletOverrideFields.bulletDamageField.value = values.bulletDamage;
+        //    bulletOverrideFields.bulletSizeField.value = values.bulletSize;
 
-            bulletOverrideFields.angleOffsetField.value = values.bulletAngle;
-            bulletOverrideFields.positionOffsetXField.value = values.posOffset.x;
-            bulletOverrideFields.positionOffsetYField.value = values.posOffset.y;
-        }
-        else
-        {
-            bulletOverrideFields.bulletSpeedField.value = 0;
-            bulletOverrideFields.bulletDamageField.value = 0;
-            bulletOverrideFields.bulletSizeField.value = 0;
+        //    bulletOverrideFields.angleOffsetField.value = values.bulletAngle;
+        //    bulletOverrideFields.positionOffsetXField.value = values.posOffset.x;
+        //    bulletOverrideFields.positionOffsetYField.value = values.posOffset.y;
+        //}
+        //else
+        //{
+        //    bulletOverrideFields.bulletSpeedField.value = 0;
+        //    bulletOverrideFields.bulletDamageField.value = 0;
+        //    bulletOverrideFields.bulletSizeField.value = 0;
 
-            bulletOverrideFields.angleOffsetField.value = 0;
-            bulletOverrideFields.positionOffsetXField.value = 0;
-            bulletOverrideFields.positionOffsetYField.value = 0;
-        }
+        //    bulletOverrideFields.angleOffsetField.value = 0;
+        //    bulletOverrideFields.positionOffsetXField.value = 0;
+        //    bulletOverrideFields.positionOffsetYField.value = 0;
+        //}
 
     }
 
@@ -108,7 +108,7 @@ public class BulletOverrideEditor : VisualElement
         bulletOverrideFields.bulletDamageField.value = 0;
         bulletOverrideFields.bulletSizeField.value = 0;
 
-        bulletOverrideFields.angleOffsetField.value = 0;
+        bulletOverrideFields.angleField.value = 0;
         bulletOverrideFields.positionOffsetXField.value = 0;
         bulletOverrideFields.positionOffsetYField.value = 0;
 

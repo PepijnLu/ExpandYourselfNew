@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
-public struct BulletValues
+public class BulletValues
 {
     public float bulletSpeed;
     public int bulletDamage;
@@ -12,4 +12,6 @@ public struct BulletValues
 
     public LinearVariables linearVariablesX, linearVariablesY;
     public SineVariables sineVariablesX, sineVariablesY;
+
+
 }
