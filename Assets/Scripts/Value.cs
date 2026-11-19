@@ -40,16 +40,7 @@ public class FloatValue : Value
         value = _value;
     }
 }
-//[System.Serializable]
-//public class Vector2Value : Value
-//{
-//    public Vector2 value;
 
-//    public Vector2Value(Vector2 _value)
-//    {
-//        value = _value;
-//    }
-//}
 [System.Serializable]
 public class ObjectValue : Value
 {
@@ -59,21 +50,4 @@ public class ObjectValue : Value
         value = _value;
     }
 }
-//[System.Serializable]
-//public class LinearVariablesValue : Value
-//{
-//    public LinearVariables value;
-//    public LinearVariablesValue(LinearVariables _value)
-//    {
-//        value = _value;
-//    }
-//}
-//[System.Serializable]
-//public class SineVariablesValue : Value
-//{
-//    public SineVariables value;
-//    public SineVariablesValue(SineVariables _value)
-//    {
-//        value = _value;
-//    }
-//}
+
