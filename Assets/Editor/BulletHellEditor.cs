@@ -302,6 +302,12 @@ public class BulletHellEditor : EditorWindow
             phasePreview = false;
             phaseEditor.enabledSelf = false;
             patternEditor.enabledSelf = true;
+
+            EnemyAttack startAttack = GetAttackFromSelectedPattern();
+            if (startAttack != null)
+            {
+                bossEnemy.UpdateBulletCount(startAttack, true, AddBulletsToPreview);
+            }
         }
     }
 
@@ -329,6 +335,21 @@ public class BulletHellEditor : EditorWindow
     public void UpdateBulletCountFromPatternEditor(ChangeEvent<UnityEngine.Object> evt)
     {
         if (!phasePreview) bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
+    }
+
+    private EnemyAttack GetAttackFromSelectedPattern()
+    {
+        if (patternEditor.currentPattern == null)
+        {
+            Debug.LogWarning($"No current pattern available");
+            return null;
+        }
+
+        EnemyAttack attack = new();
+        BulletPattern pattern = patternEditor.currentPattern as BulletPattern;
+        attack.bulletPattern = pattern;
+
+        return attack;
     }
 
     private EnemyAttack GetAttackFromEditorFields(List<BulletValues> _bulletOverrideValues = null)
