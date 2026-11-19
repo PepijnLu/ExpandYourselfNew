@@ -16,3 +16,33 @@ MonoBehaviour:
   bulletSpread: 180
   attackAngle: 191
   bulletType: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}
+  sharedOverrides:
+    strings:
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    floatValues:
+    - 2
+    - 0
+    - 2
+    - 2
+    - 2
+    - 2
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+    deserialized: 0
