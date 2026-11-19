@@ -33,6 +33,16 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Awaken()
     {
+        foreach(BossPhase _bossPhase in bossPhases)
+        {
+            foreach (EnemyPhase _enemyPhase in _bossPhase.enemyPhases)
+            {
+                foreach (EnemyAttack _enemyAttack in _enemyPhase.attacks)
+                {
+                    if(_enemyAttack.bulletPattern) _enemyAttack.bulletPattern.Deserialize();
+                }
+            }
+        }
         currentHP = totalHP * (startHPPercent / 100);
         damageCapped = true;
         StartCoroutine(StartFight());
@@ -301,9 +311,12 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
         };
 
         //Override the previous dictionary with values from shared bullets overrides
-        foreach (KeyValuePair<string, Value> _pair in pattern.sharedOverrides.dict)
+        if(pattern.sharedOverrides.dict != null)
         {
-            OverrideValues(bulletValues, _pair);
+            foreach (KeyValuePair<string, Value> _pair in pattern.sharedOverrides.dict)
+            {
+                OverrideValues(bulletValues, _pair);
+            }
         }
 
         //Position needs to be known before instantiating bullet, so do this manually

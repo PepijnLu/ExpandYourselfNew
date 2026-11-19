@@ -1090,6 +1090,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: a1517e59b0e93c344ace88f79a48ae26, type: 2}
     - target: {fileID: 3249192547453426024, guid: b71344ef021c4c14c9f7a857370a79f6, type: 3}
+      propertyPath: 'bossPhases.Array.data[0].enemyPhases.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: e88e9af95047b3446aa3b2b0b8e6bf7f, type: 2}
+    - target: {fileID: 3249192547453426024, guid: b71344ef021c4c14c9f7a857370a79f6, type: 3}
       propertyPath: 'phaseLists.Array.data[0].enemyPhases.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: 65833251f60dcd544926a8ba6c46b841, type: 2}
@@ -1324,7 +1328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3006105252611748961, guid: 9ff93eac11e49504a97bda0c03fe375f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6926731328497013513, guid: 9ff93eac11e49504a97bda0c03fe375f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1719,7 +1723,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &834971896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3503,7 +3507,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1661082884
 MonoBehaviour:
   m_ObjectHideFlags: 0

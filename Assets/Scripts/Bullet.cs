@@ -86,13 +86,13 @@ public class Bullet : MonoBehaviour
         //    newBulletDirection.Normalize();
         //}
 
-        if (!sineVariablesX.Equals(default(LinearVariables)))
-        {
-            float sineEquation = mathUtil.SolveSineEquation(sineVariablesX, timeAlive);
-            float extraDirection = sineEquation;
-            newBulletDirection.x += extraDirection;
-            newBulletDirection.Normalize();
-        }
+        //if (!sineVariablesX.Equals(default(LinearVariables)))
+        //{
+        //    float sineEquation = mathUtil.SolveSineEquation(sineVariablesX, timeAlive);
+        //    float extraDirection = sineEquation;
+        //    newBulletDirection.x += extraDirection;
+        //    newBulletDirection.Normalize();
+        //}
 
         //if (!sineVariablesY.Equals(default(LinearVariables)))
         //{
