@@ -273,10 +273,6 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
 
     public void UpdateBulletCount(EnemyAttack _enemyAttack, bool _destroyOld, Action<List<Bullet>> _callback)
     {
-        Debug.Log($"bossattack dict speed: {(_enemyAttack.bulletPattern.sharedOverrides.dict["bulletSpeed"] as FloatValue).value}");
-
-        Debug.Log($"UPDATE BULLET COUNT");
-
         List<Bullet> newBullets = new();
 
         BulletPattern pattern = _enemyAttack.bulletPattern;
@@ -307,33 +303,7 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
         //Override the previous dictionary with values from shared bullets overrides
         foreach (KeyValuePair<string, Value> _pair in pattern.sharedOverrides.dict)
         {
-            if (!bulletValues.ContainsKey(_pair.Key))
-            {
-                bulletValues.Add(_pair.Key, _pair.Value);
-            }
-            else
-            {
-                //Offsets are allowed to be 0, other values shouldnt be overridden
-                bool isOffset;
-                isOffset = _pair.Key.Contains("Offset");
-                
-                if (_pair.Value is FloatValue _float)
-                {
-                    if(_float.value == 0)
-                    {
-                        if (isOffset) bulletValues[_pair.Key] = _pair.Value;
-                    }
-                    else bulletValues[_pair.Key] = _pair.Value;
-                }
-                if (_pair.Value is IntValue _int)
-                {
-                    if (_int.value == 0)
-                    {
-                        if (isOffset) bulletValues[_pair.Key] = _pair.Value;
-                    }
-                    else bulletValues[_pair.Key] = _pair.Value;
-                }
-            }
+            OverrideValues(bulletValues, _pair);
         }
 
         //Position needs to be known before instantiating bullet, so do this manually
@@ -377,56 +347,71 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
             Dictionary<string, Value> individualBulletValues = BulletValueDict.GetCopyOfDict(bulletValues);
             float bulletAngle = startAngle + i * angleStep;
             (individualBulletValues["bulletAngle"] as FloatValue).value = bulletAngle;
-
-            //if(individualBulletValues.ContainsKey("angleOffset"))
-            //{
-            //    individualBulletValues["angleOffset"] = new FloatValue(angleOffset);
-            //}
-            //else
-            //{
-            //    individualBulletValues.Add("angleOffset", new FloatValue(angleOffset));
-            //}
+            Vector3 indivBulletPosition = bulletPosition;
 
             //Check for individual overrides
-            /*
-            if (pattern.individualBulletOverrides != null)
+            SerializedBulletValues bulletOverrideValues = BulletValueDict.GetIndividualBulletOverride(pattern, i);
+
+            //Apply individual overrides
+            if (bulletOverrideValues != null)
             {
-                if (i < pattern.individualBulletOverrides.Count)
+                //Override the previous dictionary with values from individual bullets
+                foreach (KeyValuePair<string, Value> _pair in bulletOverrideValues.dict)
                 {
-                    Debug.Log($"Found individual overrides: {pattern.individualBulletOverrides[i].Count}");
-                    //Override the previous dictionary with values from individual bullets (if set, otherwise wont appear here)
-                    foreach(KeyValuePair<string, Value> _pair in pattern.individualBulletOverrides[i])
-                    {
-                        if(bulletValues.ContainsKey(_pair.Key))
-                        {
-                            bulletValues[_pair.Key] = _pair.Value;
-                        }
-                        else
-                        {
-                            bulletValues.Add(_pair.Key, _pair.Value);
-                        }
-                    }
-
-                    //Check for a poss offset, since we need that for spawning the bullet at the right position
-                    if(bulletValues.TryGetValue("posOffset", out Value _value))
-                    {
-                        posOffset = (_value as Vector2Value).value;
-                    }
-
-                    //Increment bullet position by its position offset
-                    bulletPosition += new Vector3(posOffset.x, posOffset.y, 0);   
+                    OverrideValues(individualBulletValues, _pair);
                 }
+
+                //Manually do the position
+                float indivPosOffsetX = 0;
+                float indivposOffsetY = 0;
+
+                Value indivPosOffsetXValue = BulletValueDict.TryGetValue(bulletOverrideValues.dict, "posOffsetX");
+                if (indivPosOffsetXValue is FloatValue _indivPox) indivPosOffsetX = _indivPox.value;
+
+                Value indivPosOffsetYValue = BulletValueDict.TryGetValue(bulletOverrideValues.dict, "posOffsetY");
+                if (indivPosOffsetYValue is FloatValue _indivPoy) indivposOffsetY = _indivPoy.value;
+
+                indivBulletPosition += new Vector3(indivPosOffsetX, indivposOffsetY, 0);
             }
-            else Debug.LogWarning($"NO LIST FOUND FOR OVERRIDES");
-            */
 
             //Instantiate bullet
-            Bullet newBullet = CreateBullet(bulletPrefab, bulletPosition, individualBulletValues);
+            Bullet newBullet = CreateBullet(bulletPrefab, indivBulletPosition, individualBulletValues);
             newBullets.Add(newBullet);
         }
 
         //Invoke callback for tool
         _callback?.Invoke(newBullets);
+    }
+
+    void OverrideValues(Dictionary<string, Value> _bulletValues, KeyValuePair<string, Value> _pair)
+    {
+        if (!_bulletValues.ContainsKey(_pair.Key))
+        {
+            _bulletValues.Add(_pair.Key, _pair.Value);
+        }
+        else
+        {
+            //Offsets are allowed to be 0, other values shouldnt be overridden
+            bool isOffset;
+            isOffset = _pair.Key.Contains("Offset");
+
+            if (_pair.Value is FloatValue _float)
+            {
+                if (_float.value == 0)
+                {
+                    if (isOffset) _bulletValues[_pair.Key] = _pair.Value;
+                }
+                else _bulletValues[_pair.Key] = _pair.Value;
+            }
+            if (_pair.Value is IntValue _int)
+            {
+                if (_int.value == 0)
+                {
+                    if (isOffset) _bulletValues[_pair.Key] = _pair.Value;
+                }
+                else _bulletValues[_pair.Key] = _pair.Value;
+            }
+        }
     }
 
     private Bullet CreateBullet(Bullet _bulletPrefab, Vector3 _bulletPosition, Dictionary<string, Value> _bulletValues)
@@ -438,14 +423,6 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
         bullets.Add(newBullet);
 
         return newBullet;
-    }
-
-    public Vector2 GetBulletDirection(float _angle)
-    {
-        Quaternion directionRotation = Quaternion.Euler(0, 0, _angle);
-        Vector2 direction = directionRotation * Vector2.down;
-
-        return direction;
     }
 
     void IFireable.DestroyBullet(Bullet _bullet)

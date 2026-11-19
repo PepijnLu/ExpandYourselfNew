@@ -38,7 +38,8 @@ public class BulletHellEditor : EditorWindow
 
     int currentAttackIndex;
 
-    public Dictionary<string, VisualElement> parameterInputFields;
+    public Dictionary<string, VisualElement> sharedParameterInputFields;
+    public Dictionary<string, VisualElement> individualParameterInputFields;
 
     [MenuItem("Window/UI Toolkit/BulletHellEditor")]
     public static void ShowExample()
@@ -49,7 +50,8 @@ public class BulletHellEditor : EditorWindow
 
     public void CreateGUI()
     {
-        parameterInputFields = new();
+        sharedParameterInputFields = new();
+        individualParameterInputFields = new();
 
         playButtonTexture = EditorGUIUtility.IconContent("PlayButton").image;
         stopButtonTexture = EditorGUIUtility.IconContent("StopButton").image;
@@ -203,11 +205,11 @@ public class BulletHellEditor : EditorWindow
         PreviewStart();
     }
 
-    public void AddParameterInputField(string _key, VisualElement _value)
+    public void AddParameterInputField(string _key, VisualElement _value, Dictionary<string, VisualElement> _dict)
     {
         try
         {
-            parameterInputFields.Add(_key, _value);
+            _dict.Add(_key, _value);
 
             if (_value is FloatField _floatField)
             {

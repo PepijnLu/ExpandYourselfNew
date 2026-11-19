@@ -62,7 +62,7 @@ public class PatternEditor : VisualElement
         overrideLabel.style.paddingTop = 20;
         Add(overrideLabel);
 
-        bulletOverrideFields = new BulletOverrideFields(bulletHellEditor);
+        bulletOverrideFields = new BulletOverrideFields(bulletHellEditor, true);
         Add(bulletOverrideFields);
 
         // SO name
@@ -128,7 +128,7 @@ public class PatternEditor : VisualElement
             patternNameField.value = currentPattern.name;
 
             //bullet values
-            foreach (KeyValuePair<string, VisualElement> _pair in bulletHellEditor.parameterInputFields)
+            foreach (KeyValuePair<string, VisualElement> _pair in bulletHellEditor.sharedParameterInputFields)
             {
                 bool hasOverride = currentPattern.sharedOverrides.dict.ContainsKey(_pair.Key);
 
@@ -220,7 +220,7 @@ public class PatternEditor : VisualElement
     void CreateBulletPatternSO()
     {
         BulletPattern bulletPattern = ScriptableObject.CreateInstance<BulletPattern>();
-        bulletPattern.sharedOverrides = new(bulletPattern);
+        bulletPattern.sharedOverrides = new();
 
         bulletPattern = FillBulletPatternFromEditorFields(bulletPattern);
 
@@ -233,7 +233,6 @@ public class PatternEditor : VisualElement
         CheckPatternName(patternNameField.value);
     }
 
-    //Does not change individual bullet overrides!!
     public BulletPattern FillBulletPatternFromEditorFields(BulletPattern _pattern)
     {
         _pattern.bulletAmount = bulletAmountField.value;
@@ -241,51 +240,82 @@ public class PatternEditor : VisualElement
         _pattern.attackAngle = attackAngleField.value;
         _pattern.bulletType = bulletTypeField.value as Bullet;
 
-        if (_pattern.sharedOverrides.dict == null)
-        {
-            _pattern.sharedOverrides.dict = new();
-        }
+        //Loop over shared override fields
+        if (_pattern.sharedOverrides.dict == null) _pattern.sharedOverrides.dict = new();
         Dictionary<string, Value> dictToAddTo = _pattern.sharedOverrides.dict;
-
-        foreach(KeyValuePair<string, VisualElement> _pair in bulletHellEditor.parameterInputFields)
+        foreach(KeyValuePair<string, VisualElement> _pair in bulletHellEditor.sharedParameterInputFields)
         {
-            //Debug.Log($"adding new shared override: {_pair.Key}");
-            if (_pair.Value is FloatField _floatField)
+            FillValuesFromInputField(dictToAddTo, _pair);
+        }
+
+        //Loop over individual override fields
+        if (_pattern.individualBulletOverrides == null) _pattern.individualBulletOverrides = new();
+
+        //Fix this so it does find the correct int
+        if (bulletOverrideEditor != null)
+        {
+            int currentBulletInt = bulletOverrideEditor.selectedBulletField.value;
+            SerializedBulletValues bulletOverrideValues = BulletValueDict.GetIndividualBulletOverride(_pattern, currentBulletInt);
+
+            if (bulletOverrideValues != null)
             {
-                if (dictToAddTo.ContainsKey(_pair.Key))
-                {
-                    (dictToAddTo[_pair.Key] as FloatValue).value = _floatField.value;
-                }
-                else
-                {
-                    dictToAddTo.Add(_pair.Key, new FloatValue(_floatField.value));
-                }
+                //Found individual overrides
+                dictToAddTo = bulletOverrideValues.dict;
             }
-            else if (_pair.Value is IntegerField _integerField)
+            else
             {
-                if (dictToAddTo.ContainsKey(_pair.Key))
-                {
-                    (dictToAddTo[_pair.Key] as IntValue).value = _integerField.value;
-                }
-                else
-                {
-                    dictToAddTo.Add(_pair.Key, new IntValue(_integerField.value));
-                }
+                bulletOverrideValues = new();
+                bulletOverrideValues.dict = new();
+                dictToAddTo = bulletOverrideValues.dict;
+                _pattern.individualBulletOverrides.Add(bulletOverrideValues);
             }
-            else if (_pair.Value is ObjectField _objectField)
+
+            foreach (KeyValuePair<string, VisualElement> _pair in bulletHellEditor.individualParameterInputFields)
             {
-                if (dictToAddTo.ContainsKey(_pair.Key))
-                {
-                    (dictToAddTo[_pair.Key] as ObjectValue).value = _objectField.value;
-                }
-                else
-                {
-                    dictToAddTo.Add(_pair.Key, new ObjectValue(_objectField.value));
-                }
+                FillValuesFromInputField(dictToAddTo, _pair);
             }
         }
-        //Debug.Log($"dict speed: {(dictToAddTo["bulletSpeed"] as FloatValue).value}");
-        //Debug.Log($"pattern dict speed: {(_pattern.sharedOverrides.dict["bulletSpeed"] as FloatValue).value}");
+        else Debug.LogWarning($"Bullet Override Editor is null");
+
+        //Return
         return _pattern;
+    }
+
+    void FillValuesFromInputField(Dictionary<string, Value> dictToAddTo, KeyValuePair<string, VisualElement> _pair)
+    {
+        if (_pair.Value is FloatField _floatField)
+        {
+            if (dictToAddTo.ContainsKey(_pair.Key))
+            {
+                (dictToAddTo[_pair.Key] as FloatValue).value = _floatField.value;
+            }
+            else
+            {
+                dictToAddTo.Add(_pair.Key, new FloatValue(_floatField.value));
+            }
+        }
+        else if (_pair.Value is IntegerField _integerField)
+        {
+            if (dictToAddTo.ContainsKey(_pair.Key))
+            {
+                (dictToAddTo[_pair.Key] as IntValue).value = _integerField.value;
+            }
+            else
+            {
+                dictToAddTo.Add(_pair.Key, new IntValue(_integerField.value));
+            }
+        }
+        else if (_pair.Value is ObjectField _objectField)
+        {
+            if (dictToAddTo.ContainsKey(_pair.Key))
+            {
+                (dictToAddTo[_pair.Key] as ObjectValue).value = _objectField.value;
+            }
+            else
+            {
+                dictToAddTo.Add(_pair.Key, new ObjectValue(_objectField.value));
+            }
+        }
+        
     }
 }
