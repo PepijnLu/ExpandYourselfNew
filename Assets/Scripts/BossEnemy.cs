@@ -273,11 +273,11 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
 
     public void UpdateBulletCount(EnemyAttack _enemyAttack, bool _destroyOld, Action<List<Bullet>> _callback)
     {
-        Debug.Log($"UPDATE BULLET COUNT");
-
         List<Bullet> newBullets = new();
 
         BulletPattern pattern = _enemyAttack.bulletPattern;
+        pattern.Deserialize();
+
         Bullet bulletPrefab = pattern.bulletType;
 
         //Get the values from the bullet prefab
@@ -302,17 +302,17 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
         };
 
         //Override the previous dictionary with values from shared bullets overrides (if set, otherwise wont appear here)
-        foreach (KeyValuePair<string, Value> _pair in pattern.allBulletsOverrideValues)
-        {
-            if (bulletValues.ContainsKey(_pair.Key))
-            {
-                bulletValues[_pair.Key] = _pair.Value;
-            }
-            else
-            {
-                bulletValues.Add(_pair.Key, _pair.Value);
-            }
-        }
+        //foreach (KeyValuePair<string, Value> _pair in pattern.sharedOverrides.dict)
+        //{
+        //    if (bulletValues.ContainsKey(_pair.Key))
+        //    {
+        //        bulletValues[_pair.Key] = _pair.Value;
+        //    }
+        //    else
+        //    {
+        //        bulletValues.Add(_pair.Key, _pair.Value);
+        //    }
+        //}
 
         //Position needs to be known before instantiating bullet, so do this manually
         float posOffsetX = 0;
@@ -355,7 +355,8 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
             Dictionary<string, Value> individualBulletValues = BulletValueDict.GetCopyOfDict(bulletValues);
             float bulletAngle = startAngle + i * angleStep;
             (individualBulletValues["bulletAngle"] as FloatValue).value = bulletAngle;
-            
+
+            Debug.Log($"Bullet speed values =  {(individualBulletValues["bulletSpeed"] as FloatValue).value}");
 
             //if(individualBulletValues.ContainsKey("angleOffset"))
             //{
@@ -410,9 +411,6 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
 
     private Bullet CreateBullet(Bullet _bulletPrefab, Vector3 _bulletPosition, Dictionary<string, Value> _bulletValues)
     {
-        float bulletSize = (_bulletValues["bulletSize"] as FloatValue).value;
-        Debug.Log($"Bullet size = {bulletSize}");
-
         Bullet newBullet = Instantiate(_bulletPrefab, _bulletPosition, Quaternion.identity);
 
         newBullet.InitializeBullet(gameObject, this, this, _bulletValues, inTool, bheCollisionManager, currentAttackInt);

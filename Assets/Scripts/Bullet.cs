@@ -157,22 +157,23 @@ public class Bullet : MonoBehaviour
 
 
         //CAN BE EMPTY
-        Value angleOffsetValue = BulletValueDict.TryGetValue(bulletValues, "angleOffset");
-        if (angleOffsetValue is FloatValue _ao) angleOffset = _ao.value;
+        //Value angleOffsetValue = BulletValueDict.TryGetValue(bulletValues, "angleOffset");
+        //if (angleOffsetValue is FloatValue _ao) angleOffset = _ao.value;
 
-        Value linearVarsXValue = BulletValueDict.TryGetValue(bulletValues, "linearVariablesX");
-        if(linearVarsXValue is LinearVariablesValue _lvx) linearVariablesX = _lvx.value;
+        //Value linearVarsXValue = BulletValueDict.TryGetValue(bulletValues, "linearVariablesX");
+        //if(linearVarsXValue is LinearVariablesValue _lvx) linearVariablesX = _lvx.value;
 
-        Value linearVarsYValue = BulletValueDict.TryGetValue(bulletValues, "linearVariablesY");
-        if (linearVarsYValue is LinearVariablesValue _lvy) linearVariablesY = _lvy.value;
+        //Value linearVarsYValue = BulletValueDict.TryGetValue(bulletValues, "linearVariablesY");
+        //if (linearVarsYValue is LinearVariablesValue _lvy) linearVariablesY = _lvy.value;
 
-        Value sineVarsXValue = BulletValueDict.TryGetValue(bulletValues, "sineVariablesX");
-        if (sineVarsXValue is SineVariablesValue _svx) sineVariablesX = _svx.value;
+        //Value sineVarsXValue = BulletValueDict.TryGetValue(bulletValues, "sineVariablesX");
+        //if (sineVarsXValue is SineVariablesValue _svx) sineVariablesX = _svx.value;
 
-        Value sineVarsYValue = BulletValueDict.TryGetValue(bulletValues, "sineVariablesY");
-        if (sineVarsYValue is SineVariablesValue _svy) sineVariablesY = _svy.value;
+        //Value sineVarsYValue = BulletValueDict.TryGetValue(bulletValues, "sineVariablesY");
+        //if (sineVarsYValue is SineVariablesValue _svy) sineVariablesY = _svy.value;
 
         bulletAngle += angleOffset;
+
         bulletDirection = GetBulletDirection(bulletAngle);
         col = GetComponent<Collider2D>();
         initialized = true;

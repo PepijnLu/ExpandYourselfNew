@@ -242,11 +242,8 @@ public class BulletHellEditor : EditorWindow
         patternEditor.patternField.value = AssetDatabase.LoadAssetAtPath<BulletPattern>("Assets/BossAI/Attacks/8ConeDown.asset");
         bossEnemy.UpdateBulletCount(GetAttackFromEditorFields(), true, AddBulletsToPreview);
         SwitchPreviewMode(false);
-
         patternEditor.Initialize();
-
         isPaused = false;
-
     }
 
     private void PreviewUpdate()
@@ -340,7 +337,7 @@ public class BulletHellEditor : EditorWindow
     {
         EnemyAttack attack = new();
         
-        BulletPattern pattern = CreateInstance<BulletPattern>();
+        BulletPattern pattern = patternEditor.patternField.value as BulletPattern;
 
         pattern = patternEditor.FillBulletPatternFromEditorFields(pattern);
 

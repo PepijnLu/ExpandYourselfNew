@@ -115,7 +115,13 @@ public class PatternEditor : VisualElement
         if (newPattern != null)
         {
             currentPattern = newPattern;
+            currentPattern.Deserialize();
 
+            Debug.Log($"keyyyys");
+            foreach (var kvp in currentPattern.sharedOverrides.dict)
+            {
+                Debug.Log($"keyyyy: {kvp.Key}");
+            }
             //keep the same (not bullet values)
             bulletAmountField.value = currentPattern.bulletAmount;
             bulletSpreadField.value = currentPattern.bulletSpread;
@@ -124,15 +130,15 @@ public class PatternEditor : VisualElement
             patternNameField.value = currentPattern.name;
 
             //bullet values
-            foreach(KeyValuePair<string, VisualElement> _pair in bulletHellEditor.parameterInputFields)
+            foreach (KeyValuePair<string, VisualElement> _pair in bulletHellEditor.parameterInputFields)
             {
-                bool hasOverride = currentPattern.allBulletsOverrideValues.ContainsKey(_pair.Key);
+                bool hasOverride = currentPattern.sharedOverrides.dict.ContainsKey(_pair.Key);
 
                 if (_pair.Value is FloatField _floatField)
                 {
-                    if(hasOverride)
+                    if (hasOverride)
                     {
-                        _floatField.value = (currentPattern.allBulletsOverrideValues[_pair.Key] as FloatValue).value;
+                        _floatField.value = (currentPattern.sharedOverrides.dict[_pair.Key] as FloatValue).value;
                     }
                     else
                     {
@@ -143,7 +149,7 @@ public class PatternEditor : VisualElement
                 {
                     if (hasOverride)
                     {
-                        _integerField.value = (currentPattern.allBulletsOverrideValues[_pair.Key] as IntValue).value;
+                        _integerField.value = (currentPattern.sharedOverrides.dict[_pair.Key] as IntValue).value;
                     }
                     else
                     {
@@ -154,7 +160,7 @@ public class PatternEditor : VisualElement
                 {
                     if (hasOverride)
                     {
-                        _objectField.value = (currentPattern.allBulletsOverrideValues[_pair.Key] as ObjectValue).value;
+                        _objectField.value = (currentPattern.sharedOverrides.dict[_pair.Key] as ObjectValue).value;
                     }
                     else
                     {
@@ -247,6 +253,7 @@ public class PatternEditor : VisualElement
     void SaveBulletPatternSO()
     {
         currentPattern = FillBulletPatternFromEditorFields(currentPattern);
+        currentPattern.Serialize();
 
         EditorUtility.SetDirty(currentPattern);
 
@@ -256,6 +263,7 @@ public class PatternEditor : VisualElement
     void CreateBulletPatternSO()
     {
         BulletPattern bulletPattern = ScriptableObject.CreateInstance<BulletPattern>();
+        bulletPattern.sharedOverrides = new(bulletPattern);
 
         bulletPattern = FillBulletPatternFromEditorFields(bulletPattern);
 
@@ -275,11 +283,20 @@ public class PatternEditor : VisualElement
         _pattern.bulletSpread = bulletSpreadField.value;
         _pattern.attackAngle = attackAngleField.value;
         _pattern.bulletType = bulletTypeField.value as Bullet;
+        _pattern.name = patternNameField.value;
+
+        Debug.Log($"PATTERN NAME: {_pattern.name}");
+
+        if (_pattern.sharedOverrides.dict == null)
+        {
+            _pattern.sharedOverrides.dict = new();
+        }
+        Dictionary<string, Value> dictToAddTo = _pattern.sharedOverrides.dict;
 
         foreach(KeyValuePair<string, VisualElement> _pair in bulletHellEditor.parameterInputFields)
         {
             Debug.Log($"PARAMTER INPUT FIELD: {_pair.Key}");
-            Dictionary<string, Value> dictToAddTo = _pattern.allBulletsOverrideValues;
+
 
             if (_pair.Value is FloatField _floatField)
             {
@@ -322,14 +339,11 @@ public class PatternEditor : VisualElement
             }
         }
 
-        _pattern.name = patternNameField.value;
-
-        
         //if (_pattern.allBulletsOverrideValues.ContainsKey("sharedBulletSpeed"))
         //{
         //    Debug.Log($"Changed Bullet Count, new speed = {(_pattern.allBulletsOverrideValues["sharedBulletSpeed"] as FloatValue).value}");
         //}
-
+        Debug.Log($"NEW VALUES: {dictToAddTo.Count}");
         return _pattern;
     }
 }
