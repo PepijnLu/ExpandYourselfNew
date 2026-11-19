@@ -58,7 +58,8 @@ public class BulletOverrideEditor : VisualElement
     public void ChangeSelectedBullet(int _newBulletIndex)
     {
         if (patternEditor.currentPattern == null) return;
-        //Debug.Log($"Current bullet amount = {patternEditor.currentPattern.bulletAmount}");
+        if (selectedBulletField.value != _newBulletIndex) selectedBulletField.value = _newBulletIndex;
+
         if (_newBulletIndex >= patternEditor.currentPattern.bulletAmount)
         {
             bulletOverrideFields.SetEnabled(false);

@@ -58,26 +58,29 @@ public class Weapon : MonoBehaviour, IFireable
 
     void Fire()
     {
-        //cooldownTimer = 0;
-        ////get boss enemy differently here
-        //Vector2 bulletDirection = (FindAnyObjectByType<BossEnemy>().transform.position - transform.position).normalized;
-        //float angle = Mathf.Atan2(bulletDirection.x, bulletDirection.y) * Mathf.Rad2Deg;
+        cooldownTimer = 0;
+        //get boss enemy differently here
+        Vector2 bulletDirection = (GameManager.instance.currentBoss.transform.position - transform.position).normalized;
 
-        //Quaternion bulletRotation = Quaternion.Euler(new Vector3(0, 0, -angle));
+        float angle = Mathf.Atan2(bulletDirection.x, bulletDirection.y) * Mathf.Rad2Deg;
 
-        //Bullet newBullet = Instantiate(bullet, transform.position, bulletRotation);
-        //bullets.Add(newBullet);
+        Quaternion bulletRotation = Quaternion.Euler(new Vector3(0, 0, -angle));
 
-        //BulletValues bulletValues = new()
-        //{
-        //    bulletSpeed = bullet.bulletSpeed,
-        //    bulletDamage = bullet.bulletDamage,
-        //    bulletSize = bullet.transform.localScale.x,
-        //    bulletDirection = bulletDirection,
-        //};
+        Bullet newBullet = Instantiate(bullet, transform.position, bulletRotation);
+        bullets.Add(newBullet);
 
-        //newBullet.InitializeBullet(owner, null, this, bulletValues, false, null, 0);
-        //Debug.Log("FIRE");
+        //Create the initial dictionary with bullet values
+        Dictionary<string, Value> bulletValues = new()
+        {
+            ["bulletSpeed"] = new FloatValue(bullet.bulletSpeed),
+            ["bulletDamage"] = new IntValue(bullet.bulletDamage),
+            ["bulletSize"] = new FloatValue(bullet.transform.localScale.x),
+            ["bulletDirectionX"] = new FloatValue(bulletDirection.x),
+            ["bulletDirectionY"] = new FloatValue(bulletDirection.y)
+        };
+
+        newBullet.InitializeBullet(owner, null, this, bulletValues, false, null, 0);
+        Debug.Log("FIRE");
     }
 
     void IFireable.DestroyBullet(Bullet _bullet)

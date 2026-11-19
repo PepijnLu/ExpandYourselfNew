@@ -34,9 +34,6 @@ public class Bullet : MonoBehaviour
     bool inTool;
     bool destructed;
     Animator animator;
-    MathUtil mathUtil;
-    SineVariables sineVariablesX, sineVariablesY;
-    LinearVariables linearVariablesX, linearVariablesY;
 
     Dictionary<string, Value> bulletValues;
 
@@ -142,14 +139,39 @@ public class Bullet : MonoBehaviour
         firee = _firee;
         collisionManager = _collisionManager;
         attackIndex = _attackIndex;
-        mathUtil = _owningBossEnemy.mathUtil;
-
         bulletValues = _bulletValues;
+
+        //Get position if you already have one
+        bool noDirection = false;
+        Vector2 newBulletDirection = Vector2.zero;
+
+        Value bulletDirectionXValue = BulletValueDict.TryGetValue(bulletValues, "bulletDirectionX");
+        if (bulletDirectionXValue is FloatValue _bdx)
+        {
+            newBulletDirection.x = _bdx.value;
+        }
+        else noDirection = true;
+
+        Value bulletDirectionYValue = BulletValueDict.TryGetValue(bulletValues, "bulletDirectionY");
+        if (bulletDirectionYValue is FloatValue _bdy)
+        {
+            newBulletDirection.y = _bdy.value;
+        }
+        else noDirection = true;
 
         //SHOULD ALWAYS HAVE A VALUE
         bulletSpeed = (bulletValues["bulletSpeed"] as FloatValue).value;
         bulletDamage = (bulletValues["bulletDamage"] as IntValue).value;
-        bulletAngle = (bulletValues["bulletAngle"] as FloatValue).value;
+        if (noDirection)
+        {
+            bulletAngle = (bulletValues["bulletAngle"] as FloatValue).value;
+            bulletAngle += angleOffset;
+            bulletDirection = GetBulletDirection(bulletAngle);
+        }
+        else
+        {
+            bulletDirection = newBulletDirection;
+        }
 
         float bulletSize = (bulletValues["bulletSize"] as FloatValue).value;
         gameObject.transform.localScale = new Vector2(bulletSize, bulletSize);
@@ -171,9 +193,6 @@ public class Bullet : MonoBehaviour
         //Value sineVarsYValue = BulletValueDict.TryGetValue(bulletValues, "sineVariablesY");
         //if (sineVarsYValue is SineVariablesValue _svy) sineVariablesY = _svy.value;
 
-        bulletAngle += angleOffset;
-
-        bulletDirection = GetBulletDirection(bulletAngle);
         col = GetComponent<Collider2D>();
         initialized = true;
     }

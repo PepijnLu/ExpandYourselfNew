@@ -211,6 +211,7 @@ public class PatternEditor : VisualElement
     {
         currentPattern = FillBulletPatternFromEditorFields(currentPattern);
         currentPattern.Serialize();
+        RemoveEmptyValuesFromBulletValues(currentPattern);
 
         EditorUtility.SetDirty(currentPattern);
 
@@ -317,5 +318,53 @@ public class PatternEditor : VisualElement
             }
         }
         
+    }
+
+    void RemoveEmptyValuesFromBulletValues(BulletPattern _pattern)
+    {
+        List<SerializedBulletValues> valuesToRemove = new();
+        foreach(SerializedBulletValues _values in _pattern.individualBulletOverrides)
+        {
+            //no actual values in the override
+            if (_values.strings.Count == 0)
+            {
+                valuesToRemove.Add(_values);
+                continue;
+            }
+
+            //bullet int exceeds amount of bullet in attack
+            if (_values.strings.Contains("bulletInt"))
+            {
+                int indexOfBulletIntValue = _values.strings.IndexOf("bulletInt");
+                int bulletIntValue = (int)_values.floatValues[indexOfBulletIntValue];
+
+                if (bulletIntValue >= _pattern.bulletAmount)
+                {
+                    valuesToRemove.Add(_values);
+                    continue;
+                }
+            }
+
+            //all the overrides are 0
+            bool allZero = true;
+            foreach(float _float in  _values.floatValues)
+            {
+                if(_float != 0) allZero = false;
+            }
+            foreach(Object _obj in _values.objectValues)
+            {
+                if(_obj != null) allZero = false;
+            }
+            if(allZero)
+            {
+                valuesToRemove.Add(_values);
+                continue;
+            }
+        }
+
+        foreach(SerializedBulletValues _values in valuesToRemove)
+        {
+            _pattern.individualBulletOverrides.Remove(_values);  
+        }
     }
 }
