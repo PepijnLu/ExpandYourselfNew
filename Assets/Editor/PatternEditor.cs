@@ -181,47 +181,6 @@ public class PatternEditor : VisualElement
         if(bulletOverrideEditor != null) bulletOverrideEditor.ChangeSelectedBullet(0);
     }
 
-    //0 = speed, 1 = damage, 2 = size
-    public void SetBulletOverrideValue(int bulletIndex, float newValue, string value)
-    {
-        if (currentPattern.individualBulletOverrides.Count <= bulletIndex)
-        {
-            int difference = (bulletIndex + 1) - currentPattern.individualBulletOverrides.Count;
-            for (int i = 0; i < difference; i++)
-            {
-                //currentPattern.individualBulletOverrides.Add(new BulletValues());
-            }
-        }
-
-        //BulletValues overrideValues = currentPattern.individualBulletOverrides[bulletIndex];
-
-        //switch(value)
-        //{
-        //    case "speed":
-        //        overrideValues.bulletSpeed = newValue; 
-        //        break;
-        //    case "damage":
-        //        overrideValues.bulletDamage = (int)newValue; 
-        //        break;
-        //    case "size": 
-        //        overrideValues.bulletSize = newValue;
-        //        break;
-        //    case "angle":
-        //        overrideValues.bulletAngle = newValue;
-        //        break;
-        //    case "posX":
-        //        overrideValues.posOffset.x = newValue;
-        //        break;
-        //    case "posY":
-        //        overrideValues.posOffset.y = newValue;
-        //        break;
-        //}
-
-        //currentPattern.individualBulletOverrides[bulletIndex] = overrideValues;
-
-        //bulletHellEditor.UpdateBulletCountFromPatternEditor(currentPattern.individualBulletOverrides);
-    }
-
     void CheckPatternName(string _newValue)
     {
         bool valid = true;
@@ -282,8 +241,6 @@ public class PatternEditor : VisualElement
         _pattern.attackAngle = attackAngleField.value;
         _pattern.bulletType = bulletTypeField.value as Bullet;
 
-        Debug.Log($"PATTERN NAME: {_pattern.name}");
-
         if (_pattern.sharedOverrides.dict == null)
         {
             _pattern.sharedOverrides.dict = new();
@@ -292,13 +249,9 @@ public class PatternEditor : VisualElement
 
         foreach(KeyValuePair<string, VisualElement> _pair in bulletHellEditor.parameterInputFields)
         {
-            Debug.Log($"PARAMTER INPUT FIELD: {_pair.Key}");
-
-
+            //Debug.Log($"adding new shared override: {_pair.Key}");
             if (_pair.Value is FloatField _floatField)
             {
-                if (_floatField.value == 0) continue;
-
                 if (dictToAddTo.ContainsKey(_pair.Key))
                 {
                     (dictToAddTo[_pair.Key] as FloatValue).value = _floatField.value;
@@ -310,8 +263,6 @@ public class PatternEditor : VisualElement
             }
             else if (_pair.Value is IntegerField _integerField)
             {
-                if (_integerField.value == 0) continue;
-
                 if (dictToAddTo.ContainsKey(_pair.Key))
                 {
                     (dictToAddTo[_pair.Key] as IntValue).value = _integerField.value;
@@ -323,8 +274,6 @@ public class PatternEditor : VisualElement
             }
             else if (_pair.Value is ObjectField _objectField)
             {
-                if (_objectField.value == null) continue;
-
                 if (dictToAddTo.ContainsKey(_pair.Key))
                 {
                     (dictToAddTo[_pair.Key] as ObjectValue).value = _objectField.value;
@@ -335,12 +284,8 @@ public class PatternEditor : VisualElement
                 }
             }
         }
-
-        //if (_pattern.allBulletsOverrideValues.ContainsKey("sharedBulletSpeed"))
-        //{
-        //    Debug.Log($"Changed Bullet Count, new speed = {(_pattern.allBulletsOverrideValues["sharedBulletSpeed"] as FloatValue).value}");
-        //}
-        Debug.Log($"NEW VALUES: {dictToAddTo.Count}");
+        //Debug.Log($"dict speed: {(dictToAddTo["bulletSpeed"] as FloatValue).value}");
+        //Debug.Log($"pattern dict speed: {(_pattern.sharedOverrides.dict["bulletSpeed"] as FloatValue).value}");
         return _pattern;
     }
 }

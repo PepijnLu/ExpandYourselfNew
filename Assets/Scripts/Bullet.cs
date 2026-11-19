@@ -89,7 +89,6 @@ public class Bullet : MonoBehaviour
         if (!sineVariablesX.Equals(default(LinearVariables)))
         {
             float sineEquation = mathUtil.SolveSineEquation(sineVariablesX, timeAlive);
-            Debug.Log($"Sine Equation: {sineEquation}");
             float extraDirection = sineEquation;
             newBulletDirection.x += extraDirection;
             newBulletDirection.Normalize();
@@ -157,8 +156,8 @@ public class Bullet : MonoBehaviour
 
 
         //CAN BE EMPTY
-        //Value angleOffsetValue = BulletValueDict.TryGetValue(bulletValues, "angleOffset");
-        //if (angleOffsetValue is FloatValue _ao) angleOffset = _ao.value;
+        Value angleOffsetValue = BulletValueDict.TryGetValue(bulletValues, "angleOffset");
+        if (angleOffsetValue is FloatValue _ao) angleOffset = _ao.value;
 
         //Value linearVarsXValue = BulletValueDict.TryGetValue(bulletValues, "linearVariablesX");
         //if(linearVarsXValue is LinearVariablesValue _lvx) linearVariablesX = _lvx.value;
@@ -201,7 +200,6 @@ public class Bullet : MonoBehaviour
 
     private void CheckCollision(Collider2D _owner, Collider2D _other)
     {
-        Debug.Log($"{bulletOwner.name} fired and hit {_other.gameObject.name}");
         try
         {
             if (_other.TryGetComponent(out IDamagable damagable))
@@ -226,8 +224,6 @@ public class Bullet : MonoBehaviour
         {
             firee.DestroyBullet(this);
         }
-
-        Debug.Log($"Collision with {_other.gameObject.name}");
     }
 
     public void MarkForDestruction()

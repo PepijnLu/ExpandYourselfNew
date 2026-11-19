@@ -273,10 +273,13 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
 
     public void UpdateBulletCount(EnemyAttack _enemyAttack, bool _destroyOld, Action<List<Bullet>> _callback)
     {
+        Debug.Log($"bossattack dict speed: {(_enemyAttack.bulletPattern.sharedOverrides.dict["bulletSpeed"] as FloatValue).value}");
+
+        Debug.Log($"UPDATE BULLET COUNT");
+
         List<Bullet> newBullets = new();
 
         BulletPattern pattern = _enemyAttack.bulletPattern;
-        pattern.Deserialize();
 
         Bullet bulletPrefab = pattern.bulletType;
 
@@ -301,18 +304,37 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
             ["bulletAngle"] = new FloatValue(attackAngle)
         };
 
-        //Override the previous dictionary with values from shared bullets overrides (if set, otherwise wont appear here)
-        //foreach (KeyValuePair<string, Value> _pair in pattern.sharedOverrides.dict)
-        //{
-        //    if (bulletValues.ContainsKey(_pair.Key))
-        //    {
-        //        bulletValues[_pair.Key] = _pair.Value;
-        //    }
-        //    else
-        //    {
-        //        bulletValues.Add(_pair.Key, _pair.Value);
-        //    }
-        //}
+        //Override the previous dictionary with values from shared bullets overrides
+        foreach (KeyValuePair<string, Value> _pair in pattern.sharedOverrides.dict)
+        {
+            if (!bulletValues.ContainsKey(_pair.Key))
+            {
+                bulletValues.Add(_pair.Key, _pair.Value);
+            }
+            else
+            {
+                //Offsets are allowed to be 0, other values shouldnt be overridden
+                bool isOffset;
+                isOffset = _pair.Key.Contains("Offset");
+                
+                if (_pair.Value is FloatValue _float)
+                {
+                    if(_float.value == 0)
+                    {
+                        if (isOffset) bulletValues[_pair.Key] = _pair.Value;
+                    }
+                    else bulletValues[_pair.Key] = _pair.Value;
+                }
+                if (_pair.Value is IntValue _int)
+                {
+                    if (_int.value == 0)
+                    {
+                        if (isOffset) bulletValues[_pair.Key] = _pair.Value;
+                    }
+                    else bulletValues[_pair.Key] = _pair.Value;
+                }
+            }
+        }
 
         //Position needs to be known before instantiating bullet, so do this manually
         float posOffsetX = 0;
@@ -470,7 +492,6 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
 
             bullets.Remove(bullet);
             DestroyImmediate(bullet.gameObject);
-            Debug.Log("Clear Bullet");
         }
 
         bulletsToDestroy.Clear();

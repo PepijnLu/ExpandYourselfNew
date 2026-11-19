@@ -113,36 +113,6 @@ public class BulletOverrideEditor : VisualElement
         bulletOverrideFields.positionOffsetYField.value = 0;
 
         //Update bullets
-        patternEditor.SetBulletOverrideValue(selectedBulletField.value, 0, "speed");
-    }
-
-    public void UpdateOverrideSpeed(ChangeEvent<float> f)
-    {
-        patternEditor.SetBulletOverrideValue(selectedBulletField.value, f.newValue, "speed");
-    }
-
-    public void UpdateOverrideDamage(ChangeEvent<int> i)
-    {
-        patternEditor.SetBulletOverrideValue(selectedBulletField.value, i.newValue, "damage");
-    }
-
-    public void UpdateOverrideSize(ChangeEvent<float> f)
-    {
-        patternEditor.SetBulletOverrideValue(selectedBulletField.value, f.newValue, "size");
-    }
-
-    public void UpdateOverrideAngle(ChangeEvent<float> f)
-    {
-        patternEditor.SetBulletOverrideValue(selectedBulletField.value, f.newValue, "angle");
-    }
-
-    public void UpdateOverridePosX(ChangeEvent<float> f)
-    {
-        patternEditor.SetBulletOverrideValue(selectedBulletField.value, f.newValue, "posX");
-    }
-
-    public void UpdateOverridePosY(ChangeEvent<float> f)
-    {
-        patternEditor.SetBulletOverrideValue(selectedBulletField.value, f.newValue, "posY");
+        //patternEditor.SetBulletOverrideValue(selectedBulletField.value, 0, "speed");
     }
 }

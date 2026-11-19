@@ -68,13 +68,9 @@ public class BulletPattern : ScriptableObject
                 {
                     dict.Add(strings[i], new ObjectValue(objectValues[i]));
                 }
-                Debug.Log($"DESERIALIZING; {types[i]}");
             }
             deserialized = true;
-            foreach (var kvp in dict)
-            {
-                Debug.Log($"DESERIALIZING: {kvp.Key}");
-            }
+
             return dict;
         }
 
@@ -99,6 +95,10 @@ public class BulletPattern : ScriptableObject
                 if (_pair.Value is FloatValue _fv)
                 {
                     floatToAdd = _fv.value;
+                }
+                else if (_pair.Value is IntValue _iv)
+                {
+                    floatToAdd = _iv.value;
                 }
                 else if (_pair.Value is ObjectValue _ov)
                 {
