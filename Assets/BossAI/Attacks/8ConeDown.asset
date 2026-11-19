@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8dbada56314d074a8d96ccf9a200021, type: 3}
   m_Name: 8ConeDown
   m_EditorClassIdentifier: 
-  bulletAmount: 3
+  bulletAmount: 4
   bulletSpread: 180
   attackAngle: 45
   bulletType: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}

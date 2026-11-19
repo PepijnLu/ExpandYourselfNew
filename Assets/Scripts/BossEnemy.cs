@@ -273,6 +273,9 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
 
     public void UpdateBulletCount(EnemyAttack _enemyAttack, bool _destroyOld, Action<List<Bullet>> _callback)
     {
+        //return;
+
+        Debug.Log($"UPDATING BULLET COUNT");
         List<Bullet> newBullets = new();
 
         BulletPattern pattern = _enemyAttack.bulletPattern;
@@ -355,8 +358,6 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
             Dictionary<string, Value> individualBulletValues = BulletValueDict.GetCopyOfDict(bulletValues);
             float bulletAngle = startAngle + i * angleStep;
             (individualBulletValues["bulletAngle"] as FloatValue).value = bulletAngle;
-
-            Debug.Log($"Bullet speed values =  {(individualBulletValues["bulletSpeed"] as FloatValue).value}");
 
             //if(individualBulletValues.ContainsKey("angleOffset"))
             //{

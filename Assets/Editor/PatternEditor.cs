@@ -37,26 +37,28 @@ public class PatternEditor : VisualElement
         bulletAmountField = new IntegerField("Bullet Amount");
         bulletAmountField.value = 4;
         Add(bulletAmountField);
-       //bulletHellEditor.AddParameterInputField("bulletAmount", bulletAmountField);
+        bulletAmountField.RegisterValueChangedCallback(_bulletHellEditor.UpdateBulletCountFromPatternEditor);
+
+        //bulletHellEditor.AddParameterInputField("bulletAmount", bulletAmountField);
 
         // Bullet Spread
         bulletSpreadField = new FloatField("Bullet Spread");
         bulletSpreadField.value = 180;
         Add(bulletSpreadField);
-        //bulletHellEditor.AddParameterInputField("bulletSpread", bulletSpreadField);
+        bulletSpreadField.RegisterValueChangedCallback(_bulletHellEditor.UpdateBulletCountFromPatternEditor);
 
         // Bullet Angle
         attackAngleField = new FloatField("Attack Angle");
         attackAngleField.value = 45;
         Add(attackAngleField);
-        //bulletHellEditor.AddParameterInputField("attackAngle", attackAngleField);
+        attackAngleField.RegisterValueChangedCallback(_bulletHellEditor.UpdateBulletCountFromPatternEditor);
 
         // Bullet type
         bulletTypeField = new ObjectField("Bullet Type");
         bulletTypeField.objectType = typeof(Bullet);
         bulletTypeField.value = AssetDatabase.LoadAssetAtPath<Bullet>("Assets/Prefabs/Bullets/StandardBullet.prefab"); 
         Add(bulletTypeField);
-        //bulletHellEditor.AddParameterInputField("bulletType", bulletTypeField);
+        bulletTypeField.RegisterValueChangedCallback(_bulletHellEditor.UpdateBulletCountFromPatternEditor);
 
         //Bullet overrides
         Label overrideLabel = new Label("Shared Bullet Overrides:");
