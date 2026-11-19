@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a85d3cd598b87f14a9c11a7eee62228f, type: 3}
-  m_Name: test2
+  m_Name: test1
   m_EditorClassIdentifier: 
   duration: 0
   movementDirection: {x: 0, y: 0}
   attacks:
   - attackType: 1
     waitTime: 0
-    bulletPattern: {fileID: 11400000, guid: bd3ea69684c15af4aa93979738a3e083, type: 2}
+    bulletPattern: {fileID: 11400000, guid: 59f2ed13e2341a64d9a4589c1530465d, type: 2}
     angleOffset: 3
     positionOffset: {x: 0, y: 0}
   - attackType: 0
@@ -27,7 +27,7 @@ MonoBehaviour:
     positionOffset: {x: 0, y: 0}
   - attackType: 1
     waitTime: 0
-    bulletPattern: {fileID: 0}
+    bulletPattern: {fileID: 11400000, guid: 59f2ed13e2341a64d9a4589c1530465d, type: 2}
     angleOffset: 5
     positionOffset: {x: 0, y: 0}
   - attackType: 0

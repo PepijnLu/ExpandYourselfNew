@@ -16,40 +16,249 @@ MonoBehaviour:
   bulletSpread: 0
   attackAngle: 0
   bulletType: {fileID: 6154068675008969671, guid: 6dace72af72148c418b2a056634e9a38, type: 3}
-  allBulletsOverrideValues:
-    bulletSpeed: 0
-    bulletDamage: 0
-    bulletSize: 1
-    bulletAngle: 0
-    posOffset: {x: 0, y: 0}
+  sharedOverrides:
+    strings:
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    floatValues:
+    - 0
+    - 0
+    - 1
+    - 0
+    - 0
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
   individualBulletOverrides:
-  - bulletSpeed: 4
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: -0.8, y: 0}
-  - bulletSpeed: 4.3
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: -0.4, y: 0}
-  - bulletSpeed: 7
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: 0, y: 0}
-  - bulletSpeed: 4.3
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: 0.4, y: 0}
-  - bulletSpeed: 4
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: 0.8, y: 0}
-  - bulletSpeed: 0
-    bulletDamage: 0
-    bulletSize: 0
-    bulletAngle: 0
-    posOffset: {x: 0, y: 0}
+  - strings: []
+    floatValues: []
+    objectValues: []
+    types: []
+  - strings: []
+    floatValues: []
+    objectValues: []
+    types: []
+  - strings: []
+    floatValues: []
+    objectValues: []
+    types: []
+  - strings: []
+    floatValues: []
+    objectValues: []
+    types: []
+  - strings: []
+    floatValues: []
+    objectValues: []
+    types: []
+  - strings: []
+    floatValues: []
+    objectValues: []
+    types: []
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    floatValues:
+    - 0
+    - 4
+    - 0
+    - 0
+    - 0
+    - -0.8
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    floatValues:
+    - 1
+    - 4.3
+    - 0
+    - 0
+    - 0
+    - -0.4
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    floatValues:
+    - 2
+    - 7
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    floatValues:
+    - 3
+    - 4.3
+    - 0
+    - 0
+    - 0
+    - 0.4
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    floatValues:
+    - 4
+    - 4
+    - 0
+    - 0
+    - 0
+    - 0.8
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    floatValues:
+    - 5
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0.8
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
