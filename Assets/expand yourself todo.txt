@@ -1,7 +1,7 @@
 UUUURGENT:
 
-- dictionaries cant be serialized: put objects in lists for saving, then recreate them during runtime. save to lists again
-	- fix the phase editor after this if its still broken
+- after going in game, after opening the bullet hell tool, the scriptable object resets to its default 
+- fix the phase editor after this if its still broken
 
 - add individual bullet overrides back in
 

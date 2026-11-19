@@ -273,9 +273,6 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
 
     public void UpdateBulletCount(EnemyAttack _enemyAttack, bool _destroyOld, Action<List<Bullet>> _callback)
     {
-        //return;
-
-        Debug.Log($"UPDATING BULLET COUNT");
         List<Bullet> newBullets = new();
 
         BulletPattern pattern = _enemyAttack.bulletPattern;

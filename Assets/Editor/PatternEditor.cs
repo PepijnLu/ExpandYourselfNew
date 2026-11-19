@@ -35,7 +35,6 @@ public class PatternEditor : VisualElement
 
         // Bullet Amount
         bulletAmountField = new IntegerField("Bullet Amount");
-        bulletAmountField.value = 4;
         Add(bulletAmountField);
         bulletAmountField.RegisterValueChangedCallback(_bulletHellEditor.UpdateBulletCountFromPatternEditor);
 
@@ -43,20 +42,17 @@ public class PatternEditor : VisualElement
 
         // Bullet Spread
         bulletSpreadField = new FloatField("Bullet Spread");
-        bulletSpreadField.value = 180;
         Add(bulletSpreadField);
         bulletSpreadField.RegisterValueChangedCallback(_bulletHellEditor.UpdateBulletCountFromPatternEditor);
 
         // Bullet Angle
         attackAngleField = new FloatField("Attack Angle");
-        attackAngleField.value = 45;
         Add(attackAngleField);
         attackAngleField.RegisterValueChangedCallback(_bulletHellEditor.UpdateBulletCountFromPatternEditor);
 
         // Bullet type
         bulletTypeField = new ObjectField("Bullet Type");
         bulletTypeField.objectType = typeof(Bullet);
-        bulletTypeField.value = AssetDatabase.LoadAssetAtPath<Bullet>("Assets/Prefabs/Bullets/StandardBullet.prefab"); 
         Add(bulletTypeField);
         bulletTypeField.RegisterValueChangedCallback(_bulletHellEditor.UpdateBulletCountFromPatternEditor);
 
@@ -285,7 +281,6 @@ public class PatternEditor : VisualElement
         _pattern.bulletSpread = bulletSpreadField.value;
         _pattern.attackAngle = attackAngleField.value;
         _pattern.bulletType = bulletTypeField.value as Bullet;
-        _pattern.name = patternNameField.value;
 
         Debug.Log($"PATTERN NAME: {_pattern.name}");
 
