@@ -128,6 +128,23 @@ public class BulletOverrideEditor : VisualElement
         //Clear values
         patternEditor.currentPattern.individualBulletOverrides.Clear();
 
+        //Reset fields to 0
+        foreach(KeyValuePair<string, VisualElement> _pair in bulletHellEditor.individualParameterInputFields)
+        {
+            if(_pair.Value is IntegerField _intField)
+            {
+                _intField.value = 0;
+            }
+            else if (_pair.Value is FloatField _floatField)
+            {
+                _floatField.value = 0;
+            }
+            else if (_pair.Value is ObjectField _objectField)
+            {
+                _objectField.value = null;
+            }
+        }
+
         //Update bullets
         bulletHellEditor.UpdateBulletCountFromPatternEditor();
     }

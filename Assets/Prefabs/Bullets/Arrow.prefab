@@ -105,6 +105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletSpeed: 5
   bulletDamage: 4
+  bulletAngle: 0
   range: 4
   bulletDirection: {x: 0, y: 0}
   bulletStartPosition: {x: 0, y: 0, z: 0}

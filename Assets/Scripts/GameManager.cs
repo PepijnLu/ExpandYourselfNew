@@ -3,7 +3,6 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public MathUtil mathUtil;
 
     [HideInInspector] public BossEnemy currentBoss;
     float timeLastFrame;
@@ -18,8 +17,6 @@ public class GameManager : MonoBehaviour
         instance = this;
         Application.targetFrameRate = 144;
         timeLastFrame = Time.time;
-
-        mathUtil = new();
     }
 
     public void Update()

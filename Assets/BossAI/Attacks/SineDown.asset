@@ -1,0 +1,640 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8dbada56314d074a8d96ccf9a200021, type: 3}
+  m_Name: SineDown
+  m_EditorClassIdentifier: 
+  bulletAmount: 11
+  bulletSpread: 0
+  attackAngle: 0
+  bulletType: {fileID: 6154068675008969671, guid: 074b43a3e92951947923b85b2ce84989, type: 3}
+  sharedOverrides:
+    strings:
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    - linearCoefficient
+    - linearStart
+    - sineAmp
+    - sineFreq
+    - sinePhase
+    floatValues:
+    - 4
+    - 0
+    - 0.5
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 3
+    - 30
+    - 90
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+  individualBulletOverrides:
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    - linearCoefficient
+    - linearStart
+    - sineAmp
+    - sineFreq
+    - sinePhase
+    floatValues:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - -4
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    - linearCoefficient
+    - linearStart
+    - sineAmp
+    - sineFreq
+    - sinePhase
+    floatValues:
+    - 1
+    - 0
+    - 0
+    - 0
+    - 0
+    - -2.67
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    - linearCoefficient
+    - linearStart
+    - sineAmp
+    - sineFreq
+    - sinePhase
+    floatValues:
+    - 2
+    - 0
+    - 0
+    - 0
+    - 0
+    - -1.33
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    - linearCoefficient
+    - linearStart
+    - sineAmp
+    - sineFreq
+    - sinePhase
+    floatValues:
+    - 3
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    - linearCoefficient
+    - linearStart
+    - sineAmp
+    - sineFreq
+    - sinePhase
+    floatValues:
+    - 5
+    - 0
+    - 0
+    - 0
+    - 0
+    - 2.67
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    - linearCoefficient
+    - linearStart
+    - sineAmp
+    - sineFreq
+    - sinePhase
+    floatValues:
+    - 6
+    - 0
+    - 0
+    - 0
+    - 0
+    - 4
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    - linearCoefficient
+    - linearStart
+    - sineAmp
+    - sineFreq
+    - sinePhase
+    floatValues:
+    - 7
+    - 0
+    - 0
+    - 0
+    - 0
+    - 5.33
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    - linearCoefficient
+    - linearStart
+    - sineAmp
+    - sineFreq
+    - sinePhase
+    floatValues:
+    - 4
+    - 0
+    - 0
+    - 0
+    - 0
+    - 1.33
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    - linearCoefficient
+    - linearStart
+    - sineAmp
+    - sineFreq
+    - sinePhase
+    floatValues:
+    - 8
+    - 0
+    - 0
+    - 0
+    - 0
+    - -5.33
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    - linearCoefficient
+    - linearStart
+    - sineAmp
+    - sineFreq
+    - sinePhase
+    floatValues:
+    - 9
+    - 0
+    - 0
+    - 0
+    - 0
+    - -6.67
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+  - strings:
+    - bulletInt
+    - bulletSpeed
+    - bulletDamage
+    - bulletSize
+    - angleOffset
+    - posOffsetX
+    - posOffsetY
+    - linearCoefficient
+    - linearStart
+    - sineAmp
+    - sineFreq
+    - sinePhase
+    floatValues:
+    - 10
+    - 0
+    - 0
+    - 0
+    - 0
+    - 6.67
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    objectValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    types:
+    - int
+    - float
+    - int
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float
+    - float

@@ -24,10 +24,20 @@ MonoBehaviour:
     - angleOffset
     - posOffsetX
     - posOffsetY
+    - linearCoefficient
+    - linearStart
+    - sineAmp
+    - sineFreq
+    - sinePhase
     floatValues:
     - 1.5
     - 0
     - 1.5
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
@@ -38,9 +48,19 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     types:
     - float
     - int
+    - float
+    - float
+    - float
+    - float
+    - float
     - float
     - float
     - float

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6479632705089298009}
   - component: {fileID: 2124065600659275889}
   m_Layer: 0
-  m_Name: Bullet_Slow_01
+  m_Name: RedBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103,8 +103,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 710034cf30d6aaf40b0d79cbdbebc71f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 2
+  bulletSpeed: 5
   bulletDamage: 1
+  bulletAngle: 0
+  range: 0
   bulletDirection: {x: 0, y: 0}
   bulletStartPosition: {x: 0, y: 0, z: 0}
   col: {fileID: 0}

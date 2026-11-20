@@ -1,33 +1,21 @@
 using UnityEngine;
 
-public struct SineVariables
-{
-    public float amp;
-    public float freq;
-    public float phase;
-}
-
-public struct LinearVariables
-{
-    public float coefficient;
-    public float start;
-}
-public class MathUtil
+public static class MathUtil
 {
     //y = at + b
-    public float SolveLinearEquation(LinearVariables _vars, float t)
+    public static float SolveLinearEquation(float _coefficient, float _start, float t)
     {
-        return (_vars.coefficient * t) + _vars.start;
+        return (_coefficient * t) + _start;
     }
 
-    public float SolveSineEquation(SineVariables _vars, float t)
+    public static float SolveSineEquation(float _amp, float _freq, float _phase, float _t)
     {
-        float degrees = (2 * Mathf.PI * _vars.freq * t) + _vars.phase;
+        float degrees = (2 * Mathf.PI * _freq * _t) + _phase;
 
         float toRadians = degrees * Mathf.Deg2Rad;
 
         float radians = Mathf.Sin(toRadians);
 
-        return _vars.amp * Mathf.Sin(radians);
+        return _amp * Mathf.Sin(radians);
     }
 }

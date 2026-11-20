@@ -16,7 +16,6 @@ public class BulletHellEditor : EditorWindow
     private BHECollisionManager collisionManager;
 
     public BossEnemy bossEnemy;
-    public MathUtil mathUtil;
     public Player player;
     Vector3 playerStart;
 
@@ -241,7 +240,7 @@ public class BulletHellEditor : EditorWindow
 
     void PreviewStart()
     {
-        patternEditor.patternField.value = AssetDatabase.LoadAssetAtPath<BulletPattern>("Assets/BossAI/Attacks/8ConeDown.asset");
+        patternEditor.patternField.value = AssetDatabase.LoadAssetAtPath<BulletPattern>("Assets/BossAI/Attacks/25FullCover1.asset");
         SwitchPreviewMode(false);
         patternEditor.Initialize();
         isPaused = false;
@@ -402,9 +401,8 @@ public class BulletHellEditor : EditorWindow
 
         //Set boss to in tool
         collisionManager = new();
-        mathUtil = new();
         bossEnemy = bossEnemyGO.GetComponent<BossEnemy>();
-        bossEnemy.InitializeBoss(collisionManager, mathUtil);
+        bossEnemy.InitializeBoss(collisionManager);
 
         //Add player
         GameObject playerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Player.prefab");

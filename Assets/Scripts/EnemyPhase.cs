@@ -25,3 +25,10 @@ public class BossPhase
     //Enemy phases in this boss phase
     public List<EnemyPhase> enemyPhases;
 }
+
+[System.Serializable]
+public class WeightedPhase
+{
+    public EnemyPhase phase;
+    public float weight;
+}

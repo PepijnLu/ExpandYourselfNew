@@ -10,8 +10,4 @@ public class BulletValues
     public float bulletAngle;
     public Vector2 posOffset;
 
-    public LinearVariables linearVariablesX, linearVariablesY;
-    public SineVariables sineVariablesX, sineVariablesY;
-
-
 }

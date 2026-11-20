@@ -16,7 +16,6 @@ public class Bullet : MonoBehaviour
     public float bulletSpeed;
     public int bulletDamage;
     public float bulletAngle;
-    float angleOffset;
     public float range;
 
     [HideInInspector] public Vector2 bulletDirection;
@@ -27,7 +26,17 @@ public class Bullet : MonoBehaviour
 
     float startTime;
     float timeAlive;
-    Vector3 debugStartPosition;
+
+    float angleOffset;
+
+    //sine wave stuff
+    float sineWaveAmp;
+    float sineWaveFreq;
+    float sineWavePhase;
+
+    //linear stuff
+    float linearCoefficient;
+    float linearStart;
 
     BHECollisionManager collisionManager;
 
@@ -39,7 +48,6 @@ public class Bullet : MonoBehaviour
 
     private void Start()
     {
-        debugStartPosition = transform.position;
         startTime = 0;
 
         animator = GetComponent<Animator>();
@@ -69,34 +77,25 @@ public class Bullet : MonoBehaviour
     public void BulletUpdate(float _deltaTime)
     {
         Vector2 newBulletDirection = bulletDirection;
-        //if (!linearVariablesX.Equals(default(LinearVariables)))
-        //{
-        //    float extraDirection = mathUtil.SolveLinearEquation(linearVariablesX, timeAlive);
-        //    newBulletDirection.x += extraDirection;
-        //    newBulletDirection.Normalize();
-        //}
 
-        //if (!linearVariablesY.Equals(default(LinearVariables)))
-        //{
-        //    float extraDirection = mathUtil.SolveLinearEquation(linearVariablesY, timeAlive);
-        //    newBulletDirection.y += extraDirection;
-        //    newBulletDirection.Normalize();
-        //}
+        //Handle Linear in X
+        if(linearCoefficient != 0)
+        {
+            float linearEquation = MathUtil.SolveLinearEquation(linearCoefficient, linearStart, timeAlive);
+            float extraDirection = linearEquation;
+            newBulletDirection.x += extraDirection;
+            newBulletDirection.Normalize();
 
-        //if (!sineVariablesX.Equals(default(LinearVariables)))
-        //{
-        //    float sineEquation = mathUtil.SolveSineEquation(sineVariablesX, timeAlive);
-        //    float extraDirection = sineEquation;
-        //    newBulletDirection.x += extraDirection;
-        //    newBulletDirection.Normalize();
-        //}
-
-        //if (!sineVariablesY.Equals(default(LinearVariables)))
-        //{
-        //    float extraDirection = (sineVariablesX.amp / 2) - mathUtil.SolveSineEquation(sineVariablesY, timeAlive);
-        //    newBulletDirection.y += extraDirection;
-        //    newBulletDirection.Normalize();
-        //}
+        }
+        //Handle Sine Wave in X
+        if(sineWaveAmp != 0 && sineWaveFreq != 0)
+        {
+            float sineEquation = MathUtil.SolveSineEquation(sineWaveAmp, sineWaveFreq, sineWavePhase, timeAlive);
+            float extraDirection = sineEquation;
+            newBulletDirection.x += extraDirection;
+            newBulletDirection.Normalize();
+        }
+        
 
         transform.position += new Vector3(newBulletDirection.x * bulletSpeed * _deltaTime, newBulletDirection.y * bulletSpeed * _deltaTime, 0);
 
@@ -181,17 +180,23 @@ public class Bullet : MonoBehaviour
         Value angleOffsetValue = BulletValueDict.TryGetValue(bulletValues, "angleOffset");
         if (angleOffsetValue is FloatValue _ao) angleOffset = _ao.value;
 
-        //Value linearVarsXValue = BulletValueDict.TryGetValue(bulletValues, "linearVariablesX");
-        //if(linearVarsXValue is LinearVariablesValue _lvx) linearVariablesX = _lvx.value;
+        //Linear
+        Value linearCoefficientValue = BulletValueDict.TryGetValue(bulletValues, "linearCoefficient");
+        if (linearCoefficientValue is FloatValue _lc) linearCoefficient = _lc.value;
 
-        //Value linearVarsYValue = BulletValueDict.TryGetValue(bulletValues, "linearVariablesY");
-        //if (linearVarsYValue is LinearVariablesValue _lvy) linearVariablesY = _lvy.value;
+        Value linearStartValue = BulletValueDict.TryGetValue(bulletValues, "linearStart");
+        if (linearStartValue is FloatValue _ls) linearStart = _ls.value;
 
-        //Value sineVarsXValue = BulletValueDict.TryGetValue(bulletValues, "sineVariablesX");
-        //if (sineVarsXValue is SineVariablesValue _svx) sineVariablesX = _svx.value;
+        //Sine wave
+        Value sineWaveAmpValue = BulletValueDict.TryGetValue(bulletValues, "sineAmp");
+        if (sineWaveAmpValue is FloatValue _swa) sineWaveAmp = _swa.value;
 
-        //Value sineVarsYValue = BulletValueDict.TryGetValue(bulletValues, "sineVariablesY");
-        //if (sineVarsYValue is SineVariablesValue _svy) sineVariablesY = _svy.value;
+        Value sineWaveFreqValue = BulletValueDict.TryGetValue(bulletValues, "sineFreq");
+        if (sineWaveFreqValue is FloatValue _swv) sineWaveFreq = _swv.value;
+
+        Value sineWavePhaseValue = BulletValueDict.TryGetValue(bulletValues, "sinePhase");
+        if (sineWavePhaseValue is FloatValue _swp) sineWavePhase = _swp.value;
+
 
         col = GetComponent<Collider2D>();
         initialized = true;

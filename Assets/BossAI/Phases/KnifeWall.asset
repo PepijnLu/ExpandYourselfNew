@@ -31,7 +31,7 @@ MonoBehaviour:
     angleOffset: 0
     positionOffset: {x: 4, y: 0}
   - attackType: 0
-    waitTime: 1
+    waitTime: 1.1
     bulletPattern: {fileID: 0}
     angleOffset: 0
     positionOffset: {x: 0, y: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
     angleOffset: 0
     positionOffset: {x: -1, y: 0}
   - attackType: 0
-    waitTime: 1
+    waitTime: 1.1
     bulletPattern: {fileID: 0}
     angleOffset: 0
     positionOffset: {x: 0, y: 0}
@@ -66,7 +66,7 @@ MonoBehaviour:
     angleOffset: 0
     positionOffset: {x: -5, y: 3.5}
   - attackType: 0
-    waitTime: 0.2
+    waitTime: 0.3
     bulletPattern: {fileID: 0}
     angleOffset: 0
     positionOffset: {x: 0, y: 0}
@@ -76,7 +76,7 @@ MonoBehaviour:
     angleOffset: 0
     positionOffset: {x: 0, y: 0}
   - attackType: 0
-    waitTime: 1
+    waitTime: 1.1
     bulletPattern: {fileID: 0}
     angleOffset: 0
     positionOffset: {x: 0, y: 0}
@@ -86,7 +86,7 @@ MonoBehaviour:
     angleOffset: 0
     positionOffset: {x: 2, y: 0}
   - attackType: 0
-    waitTime: 1
+    waitTime: 1.1
     bulletPattern: {fileID: 0}
     angleOffset: 0
     positionOffset: {x: 0, y: 0}
