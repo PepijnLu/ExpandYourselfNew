@@ -104,7 +104,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalHP: 0
   startHPPercent: 0
-  bossPhases: []
+  bossPhases:
+  - hpPercentThreshold: 100
+    enemyPhases:
+    - phase: {fileID: 11400000, guid: 65833251f60dcd544926a8ba6c46b841, type: 2}
+      weight: 1
+    - phase: {fileID: 11400000, guid: 054368b91f1ae144a85f0d56d13bcfa2, type: 2}
+      weight: 0
+    - phase: {fileID: 11400000, guid: a1517e59b0e93c344ace88f79a48ae26, type: 2}
+      weight: 0
+    - phase: {fileID: 11400000, guid: 76b50ac743e07f648903425efec4246e, type: 2}
+      weight: 0
+    - phase: {fileID: 11400000, guid: 5a7939b2abc5f3d418523bb77c8a8a16, type: 2}
+      weight: 0
+  - hpPercentThreshold: 66
+    enemyPhases: []
   teleporterPrefab: {fileID: 2669892203088097872, guid: 00a2a953ced19cc4f96ac5b3d1fc2606, type: 3}
   currentHP: 0
   currentAttackPhase: {fileID: 0}

@@ -50,3 +50,8 @@ MonoBehaviour:
     bulletPattern: {fileID: 11400000, guid: 59f2ed13e2341a64d9a4589c1530465d, type: 2}
     angleOffset: 0
     positionOffset: {x: 0, y: 0}
+  - attackType: 0
+    waitTime: 2
+    bulletPattern: {fileID: 0}
+    angleOffset: 0
+    positionOffset: {x: 0, y: 0}

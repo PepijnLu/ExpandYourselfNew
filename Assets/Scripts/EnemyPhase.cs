@@ -23,12 +23,12 @@ public class BossPhase
     //Below this % this phase will activate. Can only be 1 at a time
     public float hpPercentThreshold;
     //Enemy phases in this boss phase
-    public List<EnemyPhase> enemyPhases;
+    public List<WeightedPhase> enemyPhases;
 }
 
 [System.Serializable]
 public class WeightedPhase
 {
     public EnemyPhase phase;
-    public float weight;
+    public int weight;
 }

@@ -34,9 +34,9 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
     {
         foreach(BossPhase _bossPhase in bossPhases)
         {
-            foreach (EnemyPhase _enemyPhase in _bossPhase.enemyPhases)
+            foreach (WeightedPhase _weightedPhase in _bossPhase.enemyPhases)
             {
-                foreach (EnemyAttack _enemyAttack in _enemyPhase.attacks)
+                foreach (EnemyAttack _enemyAttack in _weightedPhase.phase.attacks)
                 {
                     if(_enemyAttack.bulletPattern) _enemyAttack.bulletPattern.Deserialize();
                 }
@@ -269,10 +269,21 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
             return null;
         }
 
-        int possiblePhasesCount = currentBossPhase.enemyPhases.Count;
+        List<int> options = new();
+        for(int i = 0; i < currentBossPhase.enemyPhases.Count; i++)
+        {
+            int phaseWeight = currentBossPhase.enemyPhases[i].weight;
 
-        int randomPhaseInt = UnityEngine.Random.Range(0, possiblePhasesCount);
-        EnemyPhase randomPhase = currentBossPhase.enemyPhases[randomPhaseInt];
+            for (int j = 0; j < phaseWeight; j++)
+            {
+                options.Add(i);
+            }
+        }
+        int possiblePhasesCount = options.Count;
+
+        int randomInt = UnityEngine.Random.Range(0, possiblePhasesCount);
+        int randomPhaseInt = options[randomInt];
+        EnemyPhase randomPhase = currentBossPhase.enemyPhases[randomPhaseInt].phase;
 
         return randomPhase;
     }
