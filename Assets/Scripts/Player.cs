@@ -81,6 +81,7 @@ public class Player : MonoBehaviour, IDamagable
     {
         health = Mathf.Max((health - (int)_amount), 0);
         UpdateHealth(health);
+        UIManager.instance.ScreenShake(.3f, .05f, GameManager.instance.currentDefaultCameraPosition);
 
         Debug.Log("PLAYER HIT");
     }
@@ -106,7 +107,9 @@ public class Player : MonoBehaviour, IDamagable
     public void TeleportPlayer(Vector3 _teleportPosition, Vector3 _cameraPosition)
     {
         transform.position = _teleportPosition;
-        cam.transform.position = new Vector3(_cameraPosition.x, _cameraPosition.y, -10);
+        Vector3 newCamraPos = new Vector3(_cameraPosition.x, _cameraPosition.y, -10);
+        cam.transform.position = newCamraPos;
+        GameManager.instance.currentDefaultCameraPosition = newCamraPos;
     }
 
     public List<Collider2D> GetOverlappingBlockingColliders()

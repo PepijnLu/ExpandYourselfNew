@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     [HideInInspector] public BossEnemy currentBoss;
+    [HideInInspector] public Vector3 currentDefaultCameraPosition;
     float timeLastFrame;
 
     float frameCount = 0;

@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -60,6 +61,28 @@ public class UIManager : MonoBehaviour
         {
             Destroy(heartsContainer.GetChild(heartsContainer.childCount - 1).gameObject);
         }
+    }
+
+    public void ScreenShake(float _duration, float _shakeAmount, Vector3 _originalPosition)
+    {
+        StartCoroutine(ScreenShakeCoroutine(_duration, _shakeAmount, _originalPosition));
+    }
+
+    IEnumerator ScreenShakeCoroutine(float _duration, float _shakeAmount, Vector3 _originalPosition)
+    {
+        float time = 0;
+
+        while (time < _duration)
+        {
+            Vector3 randomShake =  Random.insideUnitSphere * _shakeAmount;
+
+            Camera.main.transform.position += new Vector3(randomShake.x, randomShake.y, 0);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        Camera.main.transform.position = _originalPosition;
+        yield return null;
     }
 
     public void UpdateBossHealthBar(float _newHealthPercent, float _newHealthAmount, float _totalHealth)
