@@ -269,6 +269,7 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
             return null;
         }
 
+        //if phase weights are 0 will not choose a phase
         List<int> options = new();
         for(int i = 0; i < currentBossPhase.enemyPhases.Count; i++)
         {
@@ -283,6 +284,7 @@ public class BossEnemy : MonoBehaviour, IDamagable, IFireable
 
         int randomInt = UnityEngine.Random.Range(0, possiblePhasesCount);
         int randomPhaseInt = options[randomInt];
+
         EnemyPhase randomPhase = currentBossPhase.enemyPhases[randomPhaseInt].phase;
 
         return randomPhase;
